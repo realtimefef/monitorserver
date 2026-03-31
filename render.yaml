@@ -1,0 +1,89 @@
+databases:
+  - name: monitor-db
+    plan: free
+    databaseName: monitor_db
+    user: monitor_user
+
+services:
+  # Backend — Spring Boot API
+  - type: web
+    name: monitor-server-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: monitor-db
+          property: connectionString
+      - key: DB_USERNAME
+        fromDatabase:
+          name: monitor-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: monitor-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://monitorserver.in
+      - key: MAIL_ENABLED
+        value: "true"
+      - key: MAIL_HOST
+        value: smtp.larksuite.com
+      - key: MAIL_PORT
+        value: "587"
+      - key: MAIL_USERNAME
+        value: noreply@monitorserver.in
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: MAIL_FROM
+        value: noreply@monitorserver.in
+      - key: MAIL_ALERTS_HOST
+        value: smtp.larksuite.com
+      - key: MAIL_ALERTS_PORT
+        value: "587"
+      - key: MAIL_ALERTS_USERNAME
+        value: alerts@monitorserver.in
+      - key: MAIL_ALERTS_PASSWORD
+        sync: false
+      - key: MAIL_ALERTS_FROM
+        value: alerts@monitorserver.in
+      - key: METRICS_RETENTION_DAYS
+        value: "30"
+      - key: ALERT_DAILY_LIMIT_PER_USER
+        value: "50"
+    healthCheckPath: /actuator/health
+
+  # Frontend — React Static Site
+  - type: web
+    name: monitor-server-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    plan: free
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=()
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://monitor-server-api.onrender.com/api/v1
