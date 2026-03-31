@@ -49,6 +49,8 @@ const Features = lazy(() => import("./pages/Features"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const Trial = lazy(() => import("./pages/Trial"));
 const HelpSupport = lazy(() => import("./pages/HelpSupport"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -111,6 +113,8 @@ const AppRoutes = () => (
       <Route path="/features" element={<Features />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
+      <Route path="/trial" element={<Trial />} />
       <Route path="/how-it-works" element={<HowItWorks />} />
       <Route path="/help" element={<HelpSupport />} />
       <Route path="/privacy" element={<Privacy />} />

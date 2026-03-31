@@ -4,69 +4,21 @@ import { Button } from '@/components/ui/button';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { getBlogPosts } from './BlogPost';
 
-const posts = [
-  {
-    title: 'How Monitor Server Tracks Servers in Real-Time with WebSocket Streaming',
-    excerpt: 'Deep dive into our real-time architecture — from lightweight shell agents to STOMP-over-WebSocket metric delivery that updates your dashboard in under a second.',
-    date: 'January 15, 2025',
-    author: 'Gautam Kumar',
-    category: 'Engineering',
-    readTime: '8 min read',
-    featured: true,
-  },
-  {
-    title: 'Building GPU-Accelerated Monitoring with NVIDIA CUDA',
-    excerpt: 'How we leverage NVIDIA GPU infrastructure through the Inception program to power our upcoming AI features — from anomaly detection to predictive capacity planning.',
-    date: 'January 10, 2025',
-    author: 'Gautam Kumar',
-    category: 'AI & ML',
-    readTime: '10 min read',
-    featured: true,
-  },
-  {
-    title: 'Our AI Roadmap: Auto-Solve Alerts and Intelligent Recommendations',
-    excerpt: 'A look at the future of infrastructure monitoring — AI agents that automatically resolve common issues and recommend fixes before humans even notice a problem.',
-    date: 'January 5, 2025',
-    author: 'Gautam Kumar',
-    category: 'Product',
-    readTime: '6 min read',
-    featured: false,
-  },
-  {
-    title: 'Why We Chose AWS for Our Cloud Infrastructure',
-    excerpt: 'From EC2 instances to RDS PostgreSQL, here is why AWS Activate was the perfect foundation for Monitor Server — and how it powers our 99.9% uptime guarantee.',
-    date: 'December 28, 2024',
-    author: 'Gautam Kumar',
-    category: 'Infrastructure',
-    readTime: '7 min read',
-    featured: false,
-  },
-  {
-    title: 'From Spring Boot to Production: Building a Java 21 Monitoring Backend',
-    excerpt: 'Technical deep-dive into our backend architecture — Spring Boot 3.4, Java 21, WebSocket STOMP, and how we handle thousands of metric ingestions per second.',
-    date: 'December 20, 2024',
-    author: 'Gautam Kumar',
-    category: 'Engineering',
-    readTime: '12 min read',
-    featured: false,
-  },
-  {
-    title: 'The 5-Minute Server Monitoring Setup: A Step-by-Step Guide',
-    excerpt: 'Go from zero to full infrastructure observability in under five minutes. Install the agent, configure alerts, and start monitoring — no complex setup required.',
-    date: 'December 15, 2024',
-    author: 'Gautam Kumar',
-    category: 'Tutorial',
-    readTime: '5 min read',
-    featured: false,
-  },
-];
-
+const allPosts = getBlogPosts();
 const categories = ['All', 'Engineering', 'AI & ML', 'Product', 'Infrastructure', 'Tutorial'];
 
 export default function Blog() {
-  const featured = posts.filter(p => p.featured);
-  const regular = posts.filter(p => !p.featured);
+  const [activeCategory, setActiveCategory] = useState('All');
+
+  const filteredPosts = activeCategory === 'All'
+    ? allPosts
+    : allPosts.filter(p => p.category === activeCategory);
+
+  const featured = filteredPosts.slice(0, 2);
+  const regular = filteredPosts.slice(2);
 
   return (
     <div className="min-h-screen bg-background">
@@ -108,11 +60,12 @@ export default function Blog() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          {categories.map((cat, i) => (
+          {categories.map((cat) => (
             <button
-              key={i}
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                i === 0
+                activeCategory === cat
                   ? 'bg-primary text-primary-foreground'
                   : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground border border-border'
               }`}
@@ -125,70 +78,80 @@ export default function Blog() {
         {/* Featured posts */}
         <div className="grid md:grid-cols-2 gap-6 mb-12">
           {featured.map((post, i) => (
-            <motion.article
-              key={i}
-              className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/40 transition-all duration-300"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + i * 0.1 }}
-              whileHover={{ y: -4 }}
-            >
-              <div className="h-48 bg-gradient-to-br from-primary/10 via-primary/5 to-violet-500/10 flex items-center justify-center gap-6">
-                {i === 0 ? (
-                  <img src="/aws-logo.webp" alt="AWS" className="h-14 object-contain opacity-40" />
-                ) : (
-                  <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-14 object-contain opacity-40" />
-                )}
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">{post.category}</span>
-                  <span className="text-xs text-muted-foreground">{post.readTime}</span>
+            <Link key={i} to={`/blog/${post.slug}`}>
+              <motion.article
+                className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/40 transition-all duration-300 h-full"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + i * 0.1 }}
+                whileHover={{ y: -4 }}
+              >
+                <div className="h-48 bg-gradient-to-br from-primary/10 via-primary/5 to-violet-500/10 flex items-center justify-center gap-6">
+                  {i === 0 ? (
+                    <img src="/aws-logo.webp" alt="AWS" className="h-14 object-contain opacity-40" />
+                  ) : (
+                    <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-14 object-contain opacity-40" />
+                  )}
                 </div>
-                <h2 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors leading-tight">
-                  {post.title}
-                </h2>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4">{post.excerpt}</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <User className="h-3 w-3" /> {post.author}
-                    <span className="mx-1">·</span>
-                    <Clock className="h-3 w-3" /> {post.date}
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">{post.category}</span>
+                    <span className="text-xs text-muted-foreground">{post.readTime}</span>
+                  </div>
+                  <h2 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors leading-tight">
+                    {post.title}
+                  </h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{post.excerpt}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <User className="h-3 w-3" /> {post.author}
+                      <span className="mx-1">·</span>
+                      <Clock className="h-3 w-3" /> {post.date}
+                    </div>
+                    <span className="text-xs font-medium text-primary flex items-center gap-1">
+                      Read Article <ArrowRight className="h-3 w-3" />
+                    </span>
                   </div>
                 </div>
-              </div>
-            </motion.article>
+              </motion.article>
+            </Link>
           ))}
         </div>
 
         {/* Regular posts */}
         <div className="space-y-6 mb-16">
           {regular.map((post, i) => (
-            <motion.article
-              key={i}
-              className="group rounded-2xl border border-border bg-card p-6 hover:border-primary/40 transition-all duration-300"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + i * 0.06 }}
-            >
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground">{post.category}</span>
-                    <span className="text-xs text-muted-foreground">{post.readTime}</span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                    {post.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{post.excerpt}</p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <User className="h-3 w-3" /> {post.author}
-                    <span className="mx-1">·</span>
-                    <Clock className="h-3 w-3" /> {post.date}
+            <Link key={i} to={`/blog/${post.slug}`}>
+              <motion.article
+                className="group rounded-2xl border border-border bg-card p-6 hover:border-primary/40 transition-all duration-300"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + i * 0.06 }}
+              >
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground">{post.category}</span>
+                      <span className="text-xs text-muted-foreground">{post.readTime}</span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-3">{post.excerpt}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <User className="h-3 w-3" /> {post.author}
+                        <span className="mx-1">·</span>
+                        <Clock className="h-3 w-3" /> {post.date}
+                      </div>
+                      <span className="text-xs font-medium text-primary flex items-center gap-1">
+                        Read Article <ArrowRight className="h-3 w-3" />
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.article>
+              </motion.article>
+            </Link>
           ))}
         </div>
 
@@ -221,7 +184,7 @@ export default function Blog() {
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-center gap-6">
               <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
-              <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+              <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
               <span>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a></span>
@@ -230,6 +193,7 @@ export default function Blog() {
                 <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
                 <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
                 <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
               </nav>
             </div>
           </div>

@@ -313,7 +313,7 @@ export default function Login() {
               'Email notifications on threshold breaches',
               'Export historical data as CSV, PDF, or Excel',
               'Per-user data isolation with JWT authentication',
-              'Backed by NVIDIA Inception & AWS Activate programs',
+              'Built on NVIDIA GPU & AWS Cloud infrastructure',
             ].map((feature, i) => (
               <div key={i} className="flex items-center gap-3">
                 <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
@@ -362,7 +362,7 @@ export default function Login() {
           {/* Bottom trust */}
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mt-6">
             <Shield className="h-3.5 w-3.5 text-primary" />
-            Backed by AWS Activate & NVIDIA Inception
+            Built on AWS Cloud & NVIDIA GPU
           </div>
         </div>
       </div>

@@ -119,6 +119,7 @@ export default function Cookies() {
           <nav className="flex gap-4">
             <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+            <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
           </nav>
         </div>
       </footer>

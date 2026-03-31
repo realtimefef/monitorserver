@@ -50,7 +50,7 @@ const plans = [
       'Priority email support',
     ],
     cta: 'Start 14-Day Free Trial',
-    ctaLink: '/register',
+    ctaLink: '/trial',
     highlight: true,
   },
   {
@@ -79,7 +79,7 @@ const faqs = [
   { q: 'Can I really use Monitor Server for free?', a: 'Yes. The Free tier includes unlimited servers, real-time metrics, custom alerts, and email notifications — no credit card required, no time limit.' },
   { q: 'What happens when I exceed the free tier limits?', a: 'The Free tier has no server limits. The main differences are metric retention (7 days vs 90 days), AI features, and support level. You can upgrade anytime.' },
   { q: 'Can I deploy Monitor Server on my own AWS account?', a: 'Enterprise customers can get a dedicated deployment on their own AWS infrastructure. Contact our sales team for custom deployment options and SLAs.' },
-  { q: 'Do you offer discounts for startups?', a: 'Yes! As part of the NVIDIA Inception and AWS Activate programs, we offer special startup pricing. Contact us for details.' },
+  { q: 'Do you offer discounts for startups?', a: 'Yes! We offer special startup-friendly pricing for teams building on our platform. Contact us for details.' },
   { q: 'What payment methods do you accept?', a: 'We accept all major credit cards, PayPal, and wire transfers for Enterprise plans. All payments are processed securely through Stripe.' },
   { q: 'Can I cancel anytime?', a: 'Yes. There are no long-term contracts. Cancel your subscription at any time and keep access until the end of your billing period.' },
 ];
@@ -123,7 +123,7 @@ export default function Pricing() {
           </p>
           <div className="flex items-center justify-center gap-8 mt-8">
             <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-10 object-contain opacity-50" />
-            <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-10 object-contain opacity-50" />
+            <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-10 object-contain opacity-50" />
           </div>
         </motion.div>
 
@@ -211,7 +211,7 @@ export default function Pricing() {
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-center gap-6">
               <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
-              <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+              <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
               <span>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a></span>
@@ -220,6 +220,7 @@ export default function Pricing() {
                 <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
                 <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
                 <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
               </nav>
             </div>
           </div>

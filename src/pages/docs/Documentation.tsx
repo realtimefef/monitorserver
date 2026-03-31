@@ -202,6 +202,7 @@ export default function Documentation() {
             <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
             <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
             <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+            <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
           </nav>
         </div>
       </footer>

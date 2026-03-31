@@ -186,7 +186,7 @@ export default function Register() {
           {/* Bottom trust line */}
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <Shield className="h-3.5 w-3.5 text-primary" />
-            Backed by AWS Activate & NVIDIA Inception
+            Built on AWS Cloud & NVIDIA GPU
           </div>
         </div>
       </div>

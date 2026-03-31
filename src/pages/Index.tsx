@@ -141,11 +141,11 @@ export default function Index() {
       <div className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 border-b border-primary/20 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-1.5 flex items-center justify-center gap-2 text-xs sm:text-sm">
           <Sparkles className="h-3.5 w-3.5 text-primary shrink-0" />
-          <span className="text-muted-foreground">Backed by</span>
-          <span className="font-semibold text-foreground">NVIDIA Inception</span>
+          <span className="text-muted-foreground">Built on</span>
+          <span className="font-semibold text-foreground">NVIDIA GPU</span>
           <span className="text-muted-foreground">&amp;</span>
-          <span className="font-semibold text-foreground">AWS Activate</span>
-          <span className="text-muted-foreground hidden sm:inline">— AI-powered monitoring coming soon</span>
+          <span className="font-semibold text-foreground">AWS Cloud</span>
+          <span className="text-muted-foreground hidden sm:inline">— AI chatbot & smart monitoring coming soon</span>
         </div>
       </div>
 
@@ -372,7 +372,7 @@ export default function Index() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
-            Infrastructure Partners
+            Our Technology Stack
           </motion.p>
           <motion.h3
             className="text-center text-2xl sm:text-3xl font-bold text-foreground mb-10"
@@ -380,7 +380,7 @@ export default function Index() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Backed by industry leaders
+            Built on industry-leading platforms
           </motion.h3>
 
           {/* Large partner logos */}
@@ -393,7 +393,7 @@ export default function Index() {
               transition={{ delay: 0.1 }}
             >
               <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-14 sm:h-20 object-contain" />
-              <span className="text-xs text-muted-foreground font-medium">AWS Activate Program</span>
+              <span className="text-xs text-muted-foreground font-medium">AWS Cloud Platform</span>
             </motion.div>
             <motion.div
               className="flex flex-col items-center gap-3 hover:scale-105 transition-transform"
@@ -403,7 +403,7 @@ export default function Index() {
               transition={{ delay: 0.2 }}
             >
               <img src="/powered-by-nvidia.png" alt="Powered by NVIDIA" className="h-14 sm:h-20 object-contain" />
-              <span className="text-xs text-muted-foreground font-medium">NVIDIA Inception Program</span>
+              <span className="text-xs text-muted-foreground font-medium">NVIDIA GPU Platform</span>
             </motion.div>
             <motion.div
               className="flex flex-col items-center gap-3 hover:scale-105 transition-transform"
@@ -972,141 +972,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── FAQ ─── */}
-      <section id="faq" className="py-28 border-t border-border">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
-            <motion.div
-              className="lg:col-span-2"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-sm font-medium text-primary mb-3 block">FAQ</span>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
-                Common questions
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                Can't find what you're looking for? Check our detailed FAQ page or reach out.
-              </p>
-              <Button variant="outline" asChild>
-                <Link to="/faq">View all FAQs <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
-            </motion.div>
-
-            <div className="lg:col-span-3">
-              <Accordion type="single" collapsible className="w-full">
-                {faqs.map((faq, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.06 }}
-                  >
-                    <AccordionItem value={`item-${i}`} className="border-border">
-                      <AccordionTrigger className="text-base font-medium text-left">{faq.q}</AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground leading-relaxed">
-                        {faq.a}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </motion.div>
-                ))}
-              </Accordion>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Cloud Infrastructure ─── */}
-      <section className="py-28">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, x: -24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-sm font-medium text-emerald-500 mb-3 block">Cloud Infrastructure</span>
-              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
-                Enterprise-grade cloud,<br />startup-friendly pricing.
-              </h2>
-              <p className="text-muted-foreground text-lg leading-relaxed mb-8 max-w-lg">
-                Deployed on AWS infrastructure with NVIDIA GPU acceleration for AI workloads. 
-                Your data is secured with enterprise-level encryption and per-user isolation.
-              </p>
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                {[
-                  { icon: Cloud, label: 'AWS Cloud', desc: 'Hosted on AWS infrastructure' },
-                  { icon: Shield, label: 'SOC 2 Ready', desc: 'Enterprise security posture' },
-                  { icon: Lock, label: 'Data Isolation', desc: 'Per-user encrypted data' },
-                  { icon: Zap, label: '99.9% Uptime', desc: 'SLA-backed reliability' },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border">
-                    <item.icon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <div className="text-sm font-medium text-foreground">{item.label}</div>
-                      <div className="text-xs text-muted-foreground">{item.desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <Button asChild className="shadow-lg shadow-primary/20">
-                <Link to="/register">
-                  Start monitoring free <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              {/* Infrastructure stack card */}
-              <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-xl">
-                <div className="px-6 py-4 border-b border-border">
-                  <span className="text-sm font-semibold text-foreground">Infrastructure Stack</span>
-                </div>
-                <div className="p-6 space-y-4">
-                  {[
-                    { layer: 'Compute', tech: 'AWS EC2 + Auto Scaling', color: 'bg-amber-500' },
-                    { layer: 'AI / ML', tech: 'NVIDIA CUDA + TensorRT', color: 'bg-emerald-500' },
-                    { layer: 'Database', tech: 'AWS RDS PostgreSQL', color: 'bg-blue-500' },
-                    { layer: 'Real-time', tech: 'WebSocket + STOMP', color: 'bg-violet-500' },
-                    { layer: 'API', tech: 'Spring Boot 3 + Java 21', color: 'bg-sky-500' },
-                    { layer: 'Frontend', tech: 'React + TypeScript + Vite', color: 'bg-red-500' },
-                  ].map((item, i) => (
-                    <motion.div
-                      key={i}
-                      className="flex items-center gap-4"
-                      initial={{ opacity: 0, x: 16 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.08 }}
-                    >
-                      <div className={`h-2 w-2 rounded-full ${item.color} shrink-0`} />
-                      <div className="flex-1 flex items-center justify-between gap-2">
-                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{item.layer}</span>
-                        <span className="text-sm font-medium text-foreground font-mono">{item.tech}</span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-                <div className="px-6 py-4 border-t border-border bg-muted/20">
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    <img src="/powered-by-aws-logo.webp" alt="AWS" className="h-5 object-contain opacity-70" />
-                    <span>+</span>
-                    <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-5 object-contain opacity-70" />
-                    <span className="ml-1">Backed by industry leaders</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* ─── Developer Resources ─── */}
       <section className="py-28 border-t border-border">
         <div className="container mx-auto px-4 sm:px-6">
@@ -1200,8 +1065,8 @@ export default function Index() {
               The future of monitoring is intelligent
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-6">
-              Leveraging NVIDIA GPU infrastructure and AWS cloud, we're building AI-powered features 
-              that don't just detect problems — they solve them automatically.
+              We use NVIDIA GPUs to train AI models that power a smart chatbot — ask it about your server health,
+              get instant diagnoses, and receive fix recommendations in plain language.
             </p>
             <div className="flex items-center justify-center gap-6">
               <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-8 sm:h-10 object-contain opacity-70" />
@@ -1287,7 +1152,7 @@ export default function Index() {
             viewport={{ once: true }}
           >
             <p className="text-sm text-muted-foreground mb-4">
-              AI features are currently in development, powered by NVIDIA CUDA and AWS SageMaker.
+              We train AI models on NVIDIA GPUs to power an intelligent chatbot that answers your monitoring questions, diagnoses server issues, and suggests fixes — all from a user-friendly chat interface.
             </p>
             <Button variant="outline" asChild>
               <Link to="/blog">
@@ -1380,7 +1245,7 @@ export default function Index() {
                   ))}
                 </ul>
                 <Button className="w-full shadow-lg shadow-primary/20" asChild>
-                  <Link to="/register">Start 14-Day Trial</Link>
+                  <Link to="/trial">Start 14-Day Trial</Link>
                 </Button>
               </div>
             </div>
@@ -1391,6 +1256,141 @@ export default function Index() {
               </Link>
             </Button>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ─── Cloud Infrastructure ─── */}
+      <section className="py-28 border-t border-border">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, x: -24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <span className="text-sm font-medium text-emerald-500 mb-3 block">Cloud Infrastructure</span>
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
+                Enterprise-grade cloud,<br />startup-friendly pricing.
+              </h2>
+              <p className="text-muted-foreground text-lg leading-relaxed mb-8 max-w-lg">
+                Deployed on AWS infrastructure with NVIDIA GPU acceleration for AI workloads. 
+                Your data is secured with enterprise-level encryption and per-user isolation.
+              </p>
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                {[
+                  { icon: Cloud, label: 'AWS Cloud', desc: 'Hosted on AWS infrastructure' },
+                  { icon: Shield, label: 'SOC 2 Ready', desc: 'Enterprise security posture' },
+                  { icon: Lock, label: 'Data Isolation', desc: 'Per-user encrypted data' },
+                  { icon: Zap, label: '99.9% Uptime', desc: 'SLA-backed reliability' },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border">
+                    <item.icon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <div className="text-sm font-medium text-foreground">{item.label}</div>
+                      <div className="text-xs text-muted-foreground">{item.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Button asChild className="shadow-lg shadow-primary/20">
+                <Link to="/register">
+                  Start monitoring free <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              {/* Infrastructure stack card */}
+              <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-xl">
+                <div className="px-6 py-4 border-b border-border">
+                  <span className="text-sm font-semibold text-foreground">Infrastructure Stack</span>
+                </div>
+                <div className="p-6 space-y-4">
+                  {[
+                    { layer: 'Compute', tech: 'AWS EC2 + Auto Scaling', color: 'bg-amber-500' },
+                    { layer: 'AI / ML', tech: 'NVIDIA CUDA + TensorRT', color: 'bg-emerald-500' },
+                    { layer: 'Database', tech: 'AWS RDS PostgreSQL', color: 'bg-blue-500' },
+                    { layer: 'Real-time', tech: 'WebSocket + STOMP', color: 'bg-violet-500' },
+                    { layer: 'API', tech: 'Spring Boot 3 + Java 21', color: 'bg-sky-500' },
+                    { layer: 'Frontend', tech: 'React + TypeScript + Vite', color: 'bg-red-500' },
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      className="flex items-center gap-4"
+                      initial={{ opacity: 0, x: 16 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.08 }}
+                    >
+                      <div className={`h-2 w-2 rounded-full ${item.color} shrink-0`} />
+                      <div className="flex-1 flex items-center justify-between gap-2">
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{item.layer}</span>
+                        <span className="text-sm font-medium text-foreground font-mono">{item.tech}</span>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+                <div className="px-6 py-4 border-t border-border bg-muted/20">
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    <img src="/powered-by-aws-logo.webp" alt="AWS" className="h-5 object-contain opacity-70" />
+                    <span>+</span>
+                    <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-5 object-contain opacity-70" />
+                    <span className="ml-1">Backed by industry leaders</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FAQ ─── */}
+      <section id="faq" className="py-28 border-t border-border">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
+            <motion.div
+              className="lg:col-span-2"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <span className="text-sm font-medium text-primary mb-3 block">FAQ</span>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
+                Common questions
+              </h2>
+              <p className="text-muted-foreground leading-relaxed mb-6">
+                Can't find what you're looking for? Check our detailed FAQ page or reach out.
+              </p>
+              <Button variant="outline" asChild>
+                <Link to="/faq">View all FAQs <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+            </motion.div>
+
+            <div className="lg:col-span-3">
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.06 }}
+                  >
+                    <AccordionItem value={`item-${i}`} className="border-border">
+                      <AccordionTrigger className="text-base font-medium text-left">{faq.q}</AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground leading-relaxed">
+                        {faq.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </motion.div>
+                ))}
+              </Accordion>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1476,6 +1476,7 @@ export default function Index() {
                 <Link to="/blog" className="hover:text-foreground transition-colors">Blog</Link>
                 <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
                 <Link to="/status" className="hover:text-foreground transition-colors">Status</Link>
+                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
               </nav>
             </div>
             <div>
@@ -1499,7 +1500,7 @@ export default function Index() {
           <div className="border-t border-border mt-10 pt-8">
             <div className="flex flex-wrap items-center justify-center gap-8 mb-6">
               <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-10 opacity-70 hover:opacity-100 transition-opacity object-contain" />
-              <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-10 opacity-70 hover:opacity-100 transition-opacity object-contain" />
+              <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-10 opacity-70 hover:opacity-100 transition-opacity object-contain" />
               <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-8 opacity-70 hover:opacity-100 transition-opacity object-contain" />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">

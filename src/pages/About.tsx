@@ -101,26 +101,26 @@ export default function About() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <h2 className="text-2xl font-semibold mb-6">Backed By</h2>
+          <h2 className="text-2xl font-semibold mb-6">Powered By</h2>
           <div className="grid sm:grid-cols-2 gap-5">
             <div className="rounded-xl border border-border bg-card p-6">
               <div className="flex items-center gap-3 mb-3">
                 <img src="/powered-by-nvidia.png" alt="NVIDIA" className="h-12 object-contain" />
               </div>
-              <h3 className="font-semibold mb-2 text-foreground">NVIDIA Inception Program</h3>
+              <h3 className="font-semibold mb-2 text-foreground">NVIDIA GPU Platform</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Selected for NVIDIA's startup accelerator, giving us access to GPU infrastructure,
-                deep learning tools, and technical expertise to build AI-powered monitoring features.
+                We use NVIDIA GPUs to train AI models for anomaly detection and an intelligent
+                chatbot that helps users diagnose server issues and get fixes in plain language.
               </p>
             </div>
             <div className="rounded-xl border border-border bg-card p-6">
               <div className="flex items-center gap-3 mb-3">
                 <img src="/powered-by-aws.png" alt="AWS" className="h-12 object-contain" />
               </div>
-              <h3 className="font-semibold mb-2 text-foreground">AWS Activate Program</h3>
+              <h3 className="font-semibold mb-2 text-foreground">AWS Cloud Platform</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Part of AWS Activate, leveraging world-class cloud infrastructure for reliable,
-                scalable server monitoring with 99.9% uptime backed by AWS services.
+                Built on AWS cloud infrastructure for reliable, scalable server monitoring
+                with 99.9% uptime backed by EC2, RDS PostgreSQL, and CloudWatch.
               </p>
             </div>
           </div>
@@ -173,7 +173,7 @@ export default function About() {
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-center gap-6">
               <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
-              <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+              <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
               <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
@@ -182,6 +182,7 @@ export default function About() {
                 <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
                 <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
                 <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
               </nav>
             </div>
           </div>
