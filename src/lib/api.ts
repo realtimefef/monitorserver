@@ -448,6 +448,7 @@ export interface ServerNotificationPreferences {
     quietHoursEnabled: boolean;
     quietHoursStart?: number | null;
     quietHoursEnd?: number | null;
+    timezone?: string;
 }
 
 export interface NotificationHistoryItem {

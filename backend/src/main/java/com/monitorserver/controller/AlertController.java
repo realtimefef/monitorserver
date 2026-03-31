@@ -8,6 +8,7 @@ import com.monitorserver.entity.AlertStatus;
 import com.monitorserver.entity.User;
 import com.monitorserver.service.AlertRuleService;
 import com.monitorserver.service.AlertService;
+import com.monitorserver.service.ServerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class AlertController {
 
     private final AlertService alertService;
     private final AlertRuleService alertRuleService;
+    private final ServerService serverService;
 
     /**
      * GET /api/v1/alerts
@@ -37,6 +39,8 @@ public class AlertController {
             @AuthenticationPrincipal User user) {
 
         if (serverId != null) {
+            // Verify server belongs to user before returning alerts
+            serverService.findByIdAndOwner(serverId, user.getId());
             return ResponseEntity.ok(alertService.getByServer(serverId));
         }
         return ResponseEntity.ok(alertService.getActiveByUser(user.getId()));

@@ -26,4 +26,6 @@ public interface AgentActivityRepository extends JpaRepository<AgentActivity, Lo
 
     @Modifying
     void deleteByTimestampBefore(LocalDateTime cutoff);
+
+    void deleteByServerId(Long serverId);
 }

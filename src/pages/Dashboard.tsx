@@ -3,11 +3,14 @@ import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { MainLayout } from '@/components/layout/MainLayout';
+import { useTimezone } from '@/contexts/TimezoneContext';
 import { MetricCard } from '@/components/MetricCard';
 import { ServerCard } from '@/components/ServerCard';
 import { AlertCard } from '@/components/AlertCard';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 import {
   Server,
   AlertTriangle,
@@ -15,6 +18,7 @@ import {
   Shield,
   Plus,
   ArrowRight,
+  ArrowLeft,
   Loader2,
   Wifi,
   TrendingUp,
@@ -160,6 +164,7 @@ export default function Dashboard() {
   }, [stats.totalServers, stats.onlineServers, stats.activeAlerts, stats.criticalAlerts, isLoading]);
 
   const health = getHealthScore(servers, alerts);
+  const { formatDate } = useTimezone();
 
   const formatBytes = (bytes: number) => {
     if (bytes >= 1e9) return `${(bytes / 1e9).toFixed(1)} GB/s`;
@@ -184,6 +189,11 @@ export default function Dashboard() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
+            <Link to="/">
+              <Button variant="ghost" size="sm" className="mb-2 -ml-2 text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="mr-1 h-4 w-4" /> Back to Home
+              </Button>
+            </Link>
             <h1 className="font-display text-3xl font-bold text-foreground">Dashboard</h1>
             <p className="mt-1 text-muted-foreground">
               Monitor your infrastructure at a glance
@@ -348,18 +358,121 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Server Status Overview */}
+        {/* Server Status Overview — Charts */}
         {servers.length > 0 && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display text-xl font-semibold text-foreground">Server Status Overview</h2>
-              <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-emerald-500 inline-block" /> Online</span>
-                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-amber-500 inline-block" /> Warning</span>
-                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-red-500 inline-block" /> Offline</span>
+            <h2 className="font-display text-xl font-semibold text-foreground">Server Status Overview</h2>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {/* Pie Chart — Server Status Distribution */}
+              <div className="rounded-xl border border-border bg-card p-6">
+                <h3 className="text-sm font-medium text-muted-foreground mb-4">Status Distribution</h3>
+                <div className="h-[250px] flex items-center justify-center">
+                  <ChartContainer
+                    config={{
+                      online: { label: 'Online', color: '#10b981' },
+                      warning: { label: 'Warning', color: '#f59e0b' },
+                      critical: { label: 'Critical', color: '#dc2626' },
+                      offline: { label: 'Offline', color: '#6b7280' },
+                    }}
+                    className="w-full h-full"
+                  >
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Online', value: stats.onlineServers, fill: '#10b981' },
+                          { name: 'Warning', value: stats.warningServers, fill: '#f59e0b' },
+                          { name: 'Offline', value: stats.offlineServers, fill: '#6b7280' },
+                        ].filter(d => d.value > 0)}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={90}
+                        paddingAngle={3}
+                        dataKey="value"
+                        stroke="none"
+                      >
+                        {[
+                          { name: 'Online', value: stats.onlineServers, fill: '#10b981' },
+                          { name: 'Warning', value: stats.warningServers, fill: '#f59e0b' },
+                          { name: 'Offline', value: stats.offlineServers, fill: '#6b7280' },
+                        ].filter(d => d.value > 0).map((entry, index) => (
+                          <Cell key={index} fill={entry.fill} />
+                        ))}
+                      </Pie>
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <text x="50%" y="48%" textAnchor="middle" className="fill-foreground text-2xl font-bold">
+                        {stats.totalServers}
+                      </text>
+                      <text x="50%" y="58%" textAnchor="middle" className="fill-muted-foreground text-xs">
+                        Total
+                      </text>
+                    </PieChart>
+                  </ChartContainer>
+                </div>
+                <div className="flex justify-center gap-6 mt-2">
+                  <span className="flex items-center gap-1.5 text-xs">
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 inline-block" /> Online ({stats.onlineServers})
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs">
+                    <span className="h-2.5 w-2.5 rounded-full bg-amber-500 inline-block" /> Warning ({stats.warningServers})
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs">
+                    <span className="h-2.5 w-2.5 rounded-full bg-gray-500 inline-block" /> Offline ({stats.offlineServers})
+                  </span>
+                </div>
+              </div>
+
+              {/* Bar Chart — Alert Severity Breakdown */}
+              <div className="rounded-xl border border-border bg-card p-6">
+                <h3 className="text-sm font-medium text-muted-foreground mb-4">Alert Severity Breakdown</h3>
+                <div className="h-[250px]">
+                  <ChartContainer
+                    config={{
+                      critical: { label: 'Critical', color: '#dc2626' },
+                      warning: { label: 'Warning', color: '#f59e0b' },
+                      info: { label: 'Info', color: '#3b82f6' },
+                    }}
+                    className="w-full h-full"
+                  >
+                    <BarChart
+                      data={[
+                        { name: 'Critical', count: stats.criticalAlerts, fill: '#dc2626' },
+                        { name: 'Warning', count: stats.warningAlerts, fill: '#f59e0b' },
+                        { name: 'Info', count: alerts.filter(a => a.severity === 'INFO').length, fill: '#3b82f6' },
+                      ]}
+                      margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="name" tick={{ fontSize: 12 }} className="fill-muted-foreground" />
+                      <YAxis allowDecimals={false} tick={{ fontSize: 12 }} className="fill-muted-foreground" />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="count" radius={[6, 6, 0, 0]}>
+                        {[
+                          { fill: '#dc2626' },
+                          { fill: '#f59e0b' },
+                          { fill: '#3b82f6' },
+                        ].map((entry, index) => (
+                          <Cell key={index} fill={entry.fill} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ChartContainer>
+                </div>
+                <div className="flex justify-center gap-6 mt-2">
+                  <span className="flex items-center gap-1.5 text-xs">
+                    <span className="h-2.5 w-2.5 rounded-full bg-red-600 inline-block" /> Critical ({stats.criticalAlerts})
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs">
+                    <span className="h-2.5 w-2.5 rounded-full bg-amber-500 inline-block" /> Warning ({stats.warningAlerts})
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs">
+                    <span className="h-2.5 w-2.5 rounded-full bg-blue-500 inline-block" /> Info ({alerts.filter(a => a.severity === 'INFO').length})
+                  </span>
+                </div>
               </div>
             </div>
 
+            {/* Server List */}
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {servers.map((server) => (
                 <Link key={server.id} to={`/servers/${server.id}`}>
@@ -377,7 +490,7 @@ export default function Dashboard() {
                       )}
                       {server.lastHeartbeat && (
                         <span className="text-xs text-muted-foreground whitespace-nowrap">
-                          {formatDistanceToNow(new Date(server.lastHeartbeat), { addSuffix: true })}
+                          {formatDate(server.lastHeartbeat, 'relative')}
                         </span>
                       )}
                     </div>

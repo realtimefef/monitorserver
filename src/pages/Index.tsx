@@ -7,8 +7,10 @@ import { useRef, useEffect, useState } from 'react';
 import {
   Server, Bell, Shield, Zap, LineChart, ChevronRight,
   CheckCircle2, Cpu, HardDrive, Wifi, BarChart3, ArrowRight,
-  Terminal, AlertTriangle, Eye, Layers, Lock, Gauge, Heart,
-  Globe, Clock, Menu, X, Play
+  Terminal, AlertTriangle, Eye, Layers, Lock, Gauge,
+  Clock, Menu, X, Play, Sparkles, Brain, Bot,
+  Cloud, Network, Container, Users, TrendingUp,
+  Rocket, Target, Building2, DollarSign
 } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import {
@@ -33,7 +35,7 @@ const faqs = [
   { q: 'How are alerts configured?', a: 'You create rules in the dashboard — pick a metric, set a threshold, choose a severity. When the value crosses that line, you get notified immediately.' },
   { q: 'What if I have dozens of servers?', a: 'Monitor Server is built for scale. Each server runs its own lightweight agent. The dashboard aggregates everything so you can see fleet-wide health at a glance.' },
   { q: 'Is my data secure?', a: 'All data is stored securely in PostgreSQL with per-user isolation. Each user can only see their own servers and metrics. Auth is handled via secure JWT tokens.' },
-  { q: 'Is it really free?', a: 'Yes. Monitor Server is free and open-source. Self-host it on your own infrastructure with no restrictions or licensing fees.' },
+  { q: 'Is it really free?', a: 'Yes — the free tier includes unlimited servers, real-time metrics, and custom alert rules with no credit card required. When you need AI-powered features, advanced integrations, and longer metric history, upgrade to Pro.' },
 ];
 
 export default function Index() {
@@ -59,8 +61,9 @@ export default function Index() {
           <nav className="hidden md:flex items-center gap-1">
             {[
               { label: 'Features', to: '/features' },
+              { label: 'Pricing', to: '/pricing' },
               { label: 'How It Works', to: '/how-it-works' },
-              { label: 'FAQ', to: '/faq' },
+              { label: 'Blog', to: '/blog' },
               { label: 'Docs', to: '/docs' },
             ].map((item) => (
               <Link
@@ -106,8 +109,9 @@ export default function Index() {
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
               {[
                 { label: 'Features', to: '/features' },
+                { label: 'Pricing', to: '/pricing' },
                 { label: 'How It Works', to: '/how-it-works' },
-                { label: 'FAQ', to: '/faq' },
+                { label: 'Blog', to: '/blog' },
                 { label: 'Docs', to: '/docs' },
               ].map((item) => (
                 <Link
@@ -133,8 +137,20 @@ export default function Index() {
         )}
       </header>
 
+      {/* ─── Announcement Bar ─── */}
+      <div className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 border-b border-primary/20 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-1.5 flex items-center justify-center gap-2 text-xs sm:text-sm">
+          <Sparkles className="h-3.5 w-3.5 text-primary shrink-0" />
+          <span className="text-muted-foreground">Backed by</span>
+          <span className="font-semibold text-foreground">NVIDIA Inception</span>
+          <span className="text-muted-foreground">&amp;</span>
+          <span className="font-semibold text-foreground">AWS Activate</span>
+          <span className="text-muted-foreground hidden sm:inline">— AI-powered monitoring coming soon</span>
+        </div>
+      </div>
+
       {/* ─── Hero ─── */}
-      <section ref={heroRef} className="relative min-h-[100svh] flex items-center pt-16 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[100svh] flex items-center pt-24 overflow-hidden">
         {/* Animated background */}
         <div className="absolute inset-0 pointer-events-none">
           {/* Gradient mesh blobs — subtle, professional */}
@@ -178,7 +194,10 @@ export default function Index() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
               </span>
-              Now with real-time WebSocket streaming
+              <img src="/powered-by-aws-logo.webp" alt="AWS" className="h-4 sm:h-5 object-contain" />
+              <span className="mx-1">&amp;</span>
+              <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-4 sm:h-5 object-contain" />
+              GPU Infrastructure
             </motion.div>
 
             <motion.h1
@@ -187,9 +206,9 @@ export default function Index() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              Your servers,
+              Infrastructure monitoring,
               <br />
-              <span className="text-gradient-primary">crystal clear.</span>
+              <span className="text-gradient-primary">reimagined with AI.</span>
             </motion.h1>
 
             <motion.p
@@ -198,8 +217,8 @@ export default function Index() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
             >
-              Deploy a lightweight agent. See CPU, memory, disk and network metrics
-              stream live. Set thresholds. Get alerts before your users do.
+              Real-time server monitoring for DevOps teams, SaaS startups, and cloud infrastructure engineers.
+              Deploy a lightweight agent and get instant visibility into CPU, memory, disk &amp; network — powered by AWS cloud and NVIDIA GPU acceleration.
             </motion.p>
 
             <motion.div
@@ -250,7 +269,7 @@ export default function Index() {
                   <div className="h-3 w-3 rounded-full bg-green-500/80" />
                 </div>
                 <div className="flex-1 text-center">
-                  <span className="text-xs text-muted-foreground font-mono">cloudmonitor.app/dashboard</span>
+                  <span className="text-xs text-muted-foreground font-mono">monitorserver.in/dashboard</span>
                 </div>
               </div>
 
@@ -344,35 +363,161 @@ export default function Index() {
         </motion.div>
       </section>
 
-      {/* ─── Scrolling logo / trust bar ─── */}
-      <section className="py-16 border-y border-border bg-muted/20">
+      {/* ─── Powered By / Trust Bar ─── */}
+      <section className="py-20 border-y border-border bg-muted/20">
         <div className="container mx-auto px-4 sm:px-6">
+          <motion.p
+            className="text-center text-sm text-muted-foreground mb-4 uppercase tracking-widest"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            Infrastructure Partners
+          </motion.p>
+          <motion.h3
+            className="text-center text-2xl sm:text-3xl font-bold text-foreground mb-10"
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Backed by industry leaders
+          </motion.h3>
+
+          {/* Large partner logos */}
+          <div className="flex flex-wrap items-center justify-center gap-10 sm:gap-16 mb-14">
+            <motion.div
+              className="flex flex-col items-center gap-3 hover:scale-105 transition-transform"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-14 sm:h-20 object-contain" />
+              <span className="text-xs text-muted-foreground font-medium">AWS Activate Program</span>
+            </motion.div>
+            <motion.div
+              className="flex flex-col items-center gap-3 hover:scale-105 transition-transform"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <img src="/powered-by-nvidia.png" alt="Powered by NVIDIA" className="h-14 sm:h-20 object-contain" />
+              <span className="text-xs text-muted-foreground font-medium">NVIDIA Inception Program</span>
+            </motion.div>
+            <motion.div
+              className="flex flex-col items-center gap-3 hover:scale-105 transition-transform"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-14 sm:h-20 object-contain" />
+              <span className="text-xs text-muted-foreground font-medium">NVIDIA TensorRT</span>
+            </motion.div>
+          </div>
+
+          {/* Social proof stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
-              { icon: Gauge, label: 'Real-time metrics' },
-              { icon: Shield, label: 'Secure by default' },
-              { icon: Layers, label: 'Multi-server' },
-              { icon: Heart, label: 'Open source' },
-            ].map((item, i) => (
+              { value: '99.9%', label: 'Uptime SLA', icon: Shield },
+              { value: '5s', label: 'Metric Refresh', icon: Gauge },
+              { value: '<50ms', label: 'Alert Latency', icon: Zap },
+              { value: '∞', label: 'Servers Supported', icon: Server },
+            ].map((stat, i) => (
               <motion.div
                 key={i}
-                className="flex flex-col items-center gap-3 text-center"
+                className="flex flex-col items-center gap-2 text-center"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
               >
-                <div className="h-11 w-11 rounded-xl bg-primary/[0.08] flex items-center justify-center">
-                  <item.icon className="h-5 w-5 text-primary" />
-                </div>
-                <span className="text-sm font-medium text-foreground">{item.label}</span>
+                <stat.icon className="h-5 w-5 text-primary mb-1" />
+                <span className="text-2xl sm:text-3xl font-bold text-foreground">{stat.value}</span>
+                <span className="text-sm text-muted-foreground">{stat.label}</span>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── Stats Counter ─── */}
+      {/* ─── Who It's For ─── */}
+      <section className="py-24">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-sm font-medium text-primary mb-3 block">Use Cases</span>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Built for teams who ship
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              Whether you're managing a single server or an entire fleet, Monitor Server scales with you.
+            </p>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              {
+                icon: Rocket,
+                title: 'SaaS Startups',
+                desc: 'Monitor your production infrastructure from day one. Catch performance issues before they impact customers and churn.',
+                color: 'bg-emerald-500/10 text-emerald-500',
+              },
+              {
+                icon: Target,
+                title: 'DevOps Engineers',
+                desc: 'Replace fragmented monitoring with a single pane of glass. Track CPU, memory, disk, and network across every server.',
+                color: 'bg-blue-500/10 text-blue-500',
+              },
+              {
+                icon: Building2,
+                title: 'Cloud Infrastructure Teams',
+                desc: 'Manage AWS EC2 instances, on-premise servers, and hybrid environments from one dashboard with real-time alerts.',
+                color: 'bg-violet-500/10 text-violet-500',
+              },
+              {
+                icon: Container,
+                title: 'Container & Kubernetes',
+                desc: 'Monitor nodes running Docker and Kubernetes workloads. Track resource utilization across your orchestrated infrastructure.',
+                color: 'bg-amber-500/10 text-amber-500',
+              },
+              {
+                icon: Network,
+                title: 'Multi-Cloud Deployments',
+                desc: 'A single monitoring agent works across AWS EC2, GCP, Azure, and bare-metal. One consistent interface for all your infrastructure.',
+                color: 'bg-red-500/10 text-red-500',
+              },
+              {
+                icon: Users,
+                title: 'Managed Service Providers',
+                desc: 'Monitor client infrastructure with per-user data isolation, custom alert rules, and branded email notifications.',
+                color: 'bg-cyan-500/10 text-cyan-500',
+              },
+            ].map((useCase, i) => (
+              <motion.div
+                key={i}
+                className="group rounded-2xl border border-border bg-card p-7 hover:border-primary/40 transition-all duration-300"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 }}
+                whileHover={{ y: -4 }}
+              >
+                <div className={`h-12 w-12 rounded-xl ${useCase.color} flex items-center justify-center mb-5`}>
+                  <useCase.icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-2">{useCase.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{useCase.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
       {/* ─── Core Technology Demos ─── */}
       <section className="py-28 bg-muted/5">
         <div className="container mx-auto px-6">
@@ -827,95 +972,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── Alert Showcase ─── */}
-      <section className="py-28">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-sm font-medium text-red-500 mb-3 block">Alerting</span>
-              <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
-                Know before<br />your users do.
-              </h2>
-              <p className="text-muted-foreground text-lg leading-relaxed mb-8 max-w-lg">
-                Define threshold rules for any metric. When a value crosses the line,
-                Monitor Server fires an alert instantly — so you can act, not react.
-              </p>
-              <ul className="space-y-4 mb-8">
-                {[
-                  'Per-server & per-metric rules',
-                  'INFO, WARNING, and CRITICAL severities',
-                  'Cooldown periods to avoid alert fatigue',
-                  'One-click acknowledge and resolve',
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-foreground/80">
-                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" /> 
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Button asChild className="shadow-lg shadow-primary/20">
-                <Link to="/register">
-                  Try it free <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              {/* Alert demo card */}
-              <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-xl">
-                <div className="px-6 py-4 border-b border-border flex items-center justify-between">
-                  <span className="text-sm font-semibold text-foreground">CPU Usage — prod-web-01</span>
-                  <span className="text-xs text-muted-foreground">Last 60 min</span>
-                </div>
-                <div className="p-6">
-                  <div className="h-36 flex items-end gap-[3px] relative mb-5">
-                    <div className="absolute top-[25%] left-0 right-0 border-t border-dashed border-red-500/40 z-10">
-                      <span className="absolute -top-2.5 right-0 text-[10px] text-red-500 bg-card px-1.5 rounded">80%</span>
-                    </div>
-                    {[20, 25, 22, 28, 35, 30, 38, 42, 45, 50, 55, 60, 58, 65, 72, 78, 82, 88, 94, 91, 85, 78, 70, 62].map((h, i) => (
-                      <motion.div
-                        key={i}
-                        className={`flex-1 rounded-t transition-colors ${h > 80 ? 'bg-red-500' : h > 60 ? 'bg-amber-500/70' : 'bg-primary/50'}`}
-                        initial={{ height: 0 }}
-                        whileInView={{ height: `${h}%` }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.3 + i * 0.04, duration: 0.3 }}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Alert notification card */}
-                  <motion.div
-                    className="flex items-center gap-4 rounded-xl bg-red-500/10 border border-red-500/20 p-4"
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 1.2 }}
-                  >
-                    <div className="h-10 w-10 rounded-lg bg-red-500 flex items-center justify-center shrink-0">
-                      <AlertTriangle className="h-5 w-5 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-foreground">Critical: CPU &gt; 80%</div>
-                      <div className="text-xs text-muted-foreground truncate">prod-web-01 — triggered 2 min ago</div>
-                    </div>
-                    <span className="text-xs bg-red-500/20 text-red-500 font-medium px-2.5 py-1 rounded-full shrink-0">ACTIVE</span>
-                  </motion.div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* ─── FAQ ─── */}
       <section id="faq" className="py-28 border-t border-border">
         <div className="container mx-auto px-4 sm:px-6">
@@ -962,7 +1018,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── Open Source & Self-Hosted Banner ─── */}
+      {/* ─── Cloud Infrastructure ─── */}
       <section className="py-28">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
@@ -971,20 +1027,20 @@ export default function Index() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <span className="text-sm font-medium text-emerald-500 mb-3 block">Open Source</span>
+              <span className="text-sm font-medium text-emerald-500 mb-3 block">Cloud Infrastructure</span>
               <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
-                Your data, your servers,<br />your rules.
+                Enterprise-grade cloud,<br />startup-friendly pricing.
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8 max-w-lg">
-                Monitor Server is fully open-source. Self-host on your own infrastructure.
-                No vendor lock-in, no data leaving your network, no surprise bills.
+                Deployed on AWS infrastructure with NVIDIA GPU acceleration for AI workloads. 
+                Your data is secured with enterprise-level encryption and per-user isolation.
               </p>
               <div className="grid grid-cols-2 gap-4 mb-8">
                 {[
-                  { icon: Lock, label: 'Self-hosted', desc: 'Runs on your infra' },
-                  { icon: Globe, label: 'Open source', desc: 'MIT licensed' },
-                  { icon: Shield, label: 'Data privacy', desc: 'Nothing leaves your VPC' },
-                  { icon: Zap, label: 'No limits', desc: 'Unlimited servers & metrics' },
+                  { icon: Cloud, label: 'AWS Cloud', desc: 'Hosted on AWS infrastructure' },
+                  { icon: Shield, label: 'SOC 2 Ready', desc: 'Enterprise security posture' },
+                  { icon: Lock, label: 'Data Isolation', desc: 'Per-user encrypted data' },
+                  { icon: Zap, label: '99.9% Uptime', desc: 'SLA-backed reliability' },
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border">
                     <item.icon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
@@ -996,8 +1052,8 @@ export default function Index() {
                 ))}
               </div>
               <Button asChild className="shadow-lg shadow-primary/20">
-                <Link to="/docs">
-                  Read the docs <ArrowRight className="ml-2 h-4 w-4" />
+                <Link to="/register">
+                  Start monitoring free <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </motion.div>
@@ -1007,19 +1063,19 @@ export default function Index() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              {/* Tech stack card */}
+              {/* Infrastructure stack card */}
               <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-xl">
                 <div className="px-6 py-4 border-b border-border">
-                  <span className="text-sm font-semibold text-foreground">Tech Stack</span>
+                  <span className="text-sm font-semibold text-foreground">Infrastructure Stack</span>
                 </div>
                 <div className="p-6 space-y-4">
                   {[
-                    { layer: 'Frontend', tech: 'React + TypeScript + Vite', color: 'bg-sky-500' },
-                    { layer: 'UI', tech: 'Tailwind CSS + shadcn/ui', color: 'bg-violet-500' },
-                    { layer: 'Backend', tech: 'Spring Boot 3 + Java 21', color: 'bg-emerald-500' },
-                    { layer: 'Database', tech: 'PostgreSQL', color: 'bg-blue-500' },
-                    { layer: 'Real-time', tech: 'WebSocket + STOMP', color: 'bg-amber-500' },
-                    { layer: 'Agent', tech: 'Bash + PowerShell', color: 'bg-red-500' },
+                    { layer: 'Compute', tech: 'AWS EC2 + Auto Scaling', color: 'bg-amber-500' },
+                    { layer: 'AI / ML', tech: 'NVIDIA CUDA + TensorRT', color: 'bg-emerald-500' },
+                    { layer: 'Database', tech: 'AWS RDS PostgreSQL', color: 'bg-blue-500' },
+                    { layer: 'Real-time', tech: 'WebSocket + STOMP', color: 'bg-violet-500' },
+                    { layer: 'API', tech: 'Spring Boot 3 + Java 21', color: 'bg-sky-500' },
+                    { layer: 'Frontend', tech: 'React + TypeScript + Vite', color: 'bg-red-500' },
                   ].map((item, i) => (
                     <motion.div
                       key={i}
@@ -1038,9 +1094,11 @@ export default function Index() {
                   ))}
                 </div>
                 <div className="px-6 py-4 border-t border-border bg-muted/20">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Heart className="h-3.5 w-3.5 text-red-500" />
-                    Built with modern, battle-tested technologies
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    <img src="/powered-by-aws-logo.webp" alt="AWS" className="h-5 object-contain opacity-70" />
+                    <span>+</span>
+                    <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-5 object-contain opacity-70" />
+                    <span className="ml-1">Backed by industry leaders</span>
                   </div>
                 </div>
               </div>
@@ -1126,6 +1184,216 @@ export default function Index() {
         </div>
       </section>
 
+      {/* ─── AI-Powered Future ─── */}
+      <section className="py-28 bg-gradient-to-b from-muted/10 to-background">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-500 text-xs font-medium mb-6">
+              <Brain className="h-3 w-3" /> Coming Soon — AI-Powered
+            </div>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
+              The future of monitoring is intelligent
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-6">
+              Leveraging NVIDIA GPU infrastructure and AWS cloud, we're building AI-powered features 
+              that don't just detect problems — they solve them automatically.
+            </p>
+            <div className="flex items-center justify-center gap-6">
+              <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-8 sm:h-10 object-contain opacity-70" />
+              <img src="/tensorrt-logo.png" alt="TensorRT" className="h-7 sm:h-9 object-contain opacity-70" />
+              <img src="/powered-by-aws-logo.webp" alt="AWS" className="h-7 sm:h-9 object-contain opacity-70" />
+            </div>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              {
+                icon: Bot,
+                title: 'Auto-Solve Alerts',
+                desc: 'AI-powered remediation that automatically resolves common infrastructure issues — from restarting services to scaling resources — without human intervention.',
+                tag: 'AI Agent',
+                tagColor: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+              },
+              {
+                icon: Brain,
+                title: 'AI Recommendations',
+                desc: 'Get intelligent suggestions for resolving errors and alerts. Our AI analyzes patterns across your infrastructure and recommends the most effective fix.',
+                tag: 'ML Engine',
+                tagColor: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+              },
+              {
+                icon: Sparkles,
+                title: 'Predictive Analytics',
+                desc: 'Forecast CPU spikes, memory exhaustion, and disk capacity issues before they happen. Plan infrastructure scaling with confidence.',
+                tag: 'GPU Accelerated',
+                tagColor: 'bg-violet-500/10 text-violet-500 border-violet-500/20',
+              },
+              {
+                icon: TrendingUp,
+                title: 'Anomaly Detection',
+                desc: 'Machine learning models trained on your metric baselines detect unusual patterns and alert you to silent failures that thresholds miss.',
+                tag: 'Neural Network',
+                tagColor: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+              },
+              {
+                icon: Cloud,
+                title: 'Smart Capacity Planning',
+                desc: 'AI-driven insights on resource utilization trends help you right-size your infrastructure and cut cloud costs by up to 40%.',
+                tag: 'Cost Optimizer',
+                tagColor: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20',
+              },
+              {
+                icon: Network,
+                title: 'Root Cause Analysis',
+                desc: 'When an incident occurs, AI traces through correlated metrics across your fleet to pinpoint the exact root cause in seconds.',
+                tag: 'Deep Analysis',
+                tagColor: 'bg-red-500/10 text-red-500 border-red-500/20',
+              },
+            ].map((feature, i) => (
+              <motion.div
+                key={i}
+                className="group relative rounded-2xl border border-border bg-card p-7 overflow-hidden"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 }}
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/[0.03] to-transparent pointer-events-none" />
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <feature.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <span className={`text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full border ${feature.tagColor}`}>
+                      {feature.tag}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{feature.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            className="text-center mt-12"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-sm text-muted-foreground mb-4">
+              AI features are currently in development, powered by NVIDIA CUDA and AWS SageMaker.
+            </p>
+            <Button variant="outline" asChild>
+              <Link to="/blog">
+                Read our AI roadmap <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── Integration Badges ─── */}
+      <section className="py-20 border-y border-border">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-3">
+              Works everywhere your servers run
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              One agent, any platform — cloud, on-premise, or hybrid.
+            </p>
+          </motion.div>
+
+          <div className="flex flex-wrap justify-center gap-4">
+            {[
+              'AWS EC2', 'Google Cloud', 'Microsoft Azure', 'DigitalOcean',
+              'Docker', 'Kubernetes', 'Ubuntu', 'CentOS', 'Debian',
+              'Windows Server', 'Red Hat', 'Bare Metal',
+            ].map((platform, i) => (
+              <motion.div
+                key={i}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/40 transition-colors"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.03 }}
+              >
+                <Server className="h-3.5 w-3.5 text-muted-foreground" />
+                {platform}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Pricing Teaser ─── */}
+      <section className="py-28">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.div
+            className="max-w-4xl mx-auto text-center"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-medium mb-6">
+              <DollarSign className="h-3 w-3" /> Simple, Transparent Pricing
+            </div>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Free to start. Scale when you're ready.
+            </h2>
+            <p className="text-muted-foreground text-lg mb-10 max-w-2xl mx-auto">
+              Get started with unlimited servers on our free tier. Upgrade to Pro for AI-powered features,
+              priority support, and advanced integrations.
+            </p>
+
+            <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto mb-10">
+              <div className="rounded-2xl border border-border bg-card p-8 text-left">
+                <h3 className="text-lg font-semibold text-foreground mb-1">Free</h3>
+                <p className="text-3xl font-bold text-foreground mb-4">$0<span className="text-base font-normal text-muted-foreground">/mo</span></p>
+                <ul className="space-y-2.5 text-sm text-muted-foreground mb-6">
+                  {['Unlimited servers', 'Real-time metrics', 'Custom alert rules', 'Email notifications', '7-day metric history'].map((f, i) => (
+                    <li key={i} className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0" />{f}</li>
+                  ))}
+                </ul>
+                <Button className="w-full" variant="outline" asChild>
+                  <Link to="/register">Get Started Free</Link>
+                </Button>
+              </div>
+              <div className="rounded-2xl border-2 border-primary bg-card p-8 text-left relative">
+                <div className="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold">Popular</div>
+                <h3 className="text-lg font-semibold text-foreground mb-1">Pro</h3>
+                <p className="text-3xl font-bold text-foreground mb-4">$29<span className="text-base font-normal text-muted-foreground">/mo</span></p>
+                <ul className="space-y-2.5 text-sm text-muted-foreground mb-6">
+                  {['Everything in Free', 'AI auto-solve alerts', 'AI recommendations', '90-day metric history', 'Webhook integrations', 'Priority support'].map((f, i) => (
+                    <li key={i} className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0" />{f}</li>
+                  ))}
+                </ul>
+                <Button className="w-full shadow-lg shadow-primary/20" asChild>
+                  <Link to="/register">Start 14-Day Trial</Link>
+                </Button>
+              </div>
+            </div>
+
+            <Button variant="link" asChild>
+              <Link to="/pricing" className="text-primary">
+                View full pricing details <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ─── CTA ─── */}
       <section className="py-32 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
@@ -1161,7 +1429,7 @@ export default function Index() {
               </Button>
             </div>
             <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
-              {['No credit card required', 'Unlimited servers', 'Open source', '5-minute setup'].map((t, i) => (
+              {['No credit card required', 'Unlimited servers', 'AWS cloud infrastructure', '5-minute setup'].map((t, i) => (
                 <span key={i} className="flex items-center gap-1.5">
                   <CheckCircle2 className="h-4 w-4 text-primary" /> {t}
                 </span>
@@ -1184,7 +1452,7 @@ export default function Index() {
                 <span className="font-display text-base font-bold tracking-tight">Monitor Server</span>
               </div>
               <p className="text-sm text-muted-foreground max-w-xs mb-6 leading-relaxed">
-                Open-source server monitoring with real-time metrics, intelligent alerts, and a beautiful dashboard. Built for developers and DevOps teams.
+                AI-powered server monitoring with real-time metrics, intelligent alerts, and a beautiful dashboard. Deployed on AWS cloud with NVIDIA GPU acceleration.
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -1196,8 +1464,8 @@ export default function Index() {
               <h4 className="text-sm font-semibold mb-4 text-foreground">Product</h4>
               <nav className="flex flex-col gap-2.5 text-sm text-muted-foreground">
                 <Link to="/features" className="hover:text-foreground transition-colors">Features</Link>
+                <Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
                 <Link to="/how-it-works" className="hover:text-foreground transition-colors">How It Works</Link>
-                <Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link>
                 <Link to="/docs" className="hover:text-foreground transition-colors">Documentation</Link>
               </nav>
             </div>
@@ -1205,9 +1473,9 @@ export default function Index() {
               <h4 className="text-sm font-semibold mb-4 text-foreground">Company</h4>
               <nav className="flex flex-col gap-2.5 text-sm text-muted-foreground">
                 <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
+                <Link to="/blog" className="hover:text-foreground transition-colors">Blog</Link>
                 <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
                 <Link to="/status" className="hover:text-foreground transition-colors">Status</Link>
-                <Link to="/help" className="hover:text-foreground transition-colors">Help & Support</Link>
               </nav>
             </div>
             <div>
@@ -1228,12 +1496,19 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="border-t border-border mt-10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-            <span>&copy; {new Date().getFullYear()} Monitor Server. All rights reserved.</span>
-            <div className="flex items-center gap-6">
-              <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-              <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-              <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
+          <div className="border-t border-border mt-10 pt-8">
+            <div className="flex flex-wrap items-center justify-center gap-8 mb-6">
+              <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-10 opacity-70 hover:opacity-100 transition-opacity object-contain" />
+              <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-10 opacity-70 hover:opacity-100 transition-opacity object-contain" />
+              <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-8 opacity-70 hover:opacity-100 transition-opacity object-contain" />
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+              <span>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a>. All rights reserved.</span>
+              <div className="flex items-center gap-6">
+                <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+                <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+                <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
+              </div>
             </div>
           </div>
         </div>

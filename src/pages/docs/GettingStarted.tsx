@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ArrowLeft } from 'lucide-react';
 
 export default function GettingStarted() {
   return (
     <article className="space-y-10">
       <header className="space-y-2">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-          <Link to="/docs" className="hover:text-foreground transition-colors">Docs</Link>
+          <Link to="/docs" className="hover:text-foreground transition-colors inline-flex items-center gap-1">
+            <ArrowLeft className="h-3.5 w-3.5" /> Docs
+          </Link>
           <ChevronRight className="h-3.5 w-3.5" />
           <span className="text-foreground">Getting Started</span>
         </div>
@@ -167,51 +169,35 @@ npm run dev`}</code>
       <section className="space-y-4">
         <h2 className="font-display text-xl font-semibold text-foreground">5. Running the Agent</h2>
 
-        <h3 className="font-semibold text-foreground">Linux / macOS (Bash)</h3>
-        <p className="text-muted-foreground">Copy the generated script to your server and run it:</p>
+        <p className="text-muted-foreground">
+          After adding a server, the dashboard shows a ready-to-paste command. Just copy it and run it on your server — it downloads the agent and starts sending metrics automatically.
+        </p>
+
+        <h3 className="font-semibold text-foreground">Linux / macOS — One-liner</h3>
+        <p className="text-muted-foreground">SSH into your server and paste:</p>
         <pre className="rounded-lg bg-muted p-4 text-sm overflow-x-auto">
-          <code>{`#!/usr/bin/env bash
-# monitor-agent.sh — Monitor Server agent script
-# Set your agent key before running
+          <code>{`# Replace YOUR_API_URL and YOUR_AGENT_KEY with the values from your dashboard
+curl -fsSL "YOUR_API_URL/agent/monitor-agent.sh" -o monitor-agent.sh && chmod +x monitor-agent.sh
+MONITOR_API_URL="YOUR_API_URL" AGENT_KEY="YOUR_AGENT_KEY" ./monitor-agent.sh`}</code>
+        </pre>
+        <p className="text-xs text-muted-foreground mt-1">
+          The agent collects CPU, memory, disk, network, process count, load average, and uptime every 5 seconds.
+        </p>
 
-export MONITOR_AGENT_KEY="your-agent-key-here"
-export MONITOR_API_URL="https://api.monitorserver.io"
-export INTERVAL=60   # seconds between metric pushes
-
-while true; do
-  CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}')
-  MEM_TOTAL=$(free -m | awk '/^Mem:/{print $2}')
-  MEM_AVAIL=$(free -m | awk '/^Mem:/{print $7}')
-  DISK_USED=$(df / | awk 'NR==2{print $5}' | tr -d '%')
-  DISK_TOTAL=$(df -BG / | awk 'NR==2{print $2}' | tr -d 'G')
-  UPTIME=$(cat /proc/uptime | awk '{print int($1)}')
-  LOAD=$(cat /proc/loadavg | awk '{print $1}')
-  PROCS=$(ps aux | wc -l)
-
-  curl -s -X POST "\${MONITOR_API_URL}/metrics/ingest" \\
-    -H "Content-Type: application/json" \\
-    -d "[
-      {\\"agent_key\\":\\"\${MONITOR_AGENT_KEY}\\",\\"metric_type\\":\\"CPU_USAGE\\",\\"value\\":$CPU},
-      {\\"agent_key\\":\\"\${MONITOR_AGENT_KEY}\\",\\"metric_type\\":\\"MEMORY_TOTAL\\",\\"value\\":$MEM_TOTAL},
-      {\\"agent_key\\":\\"\${MONITOR_AGENT_KEY}\\",\\"metric_type\\":\\"MEMORY_AVAILABLE\\",\\"value\\":$MEM_AVAIL},
-      {\\"agent_key\\":\\"\${MONITOR_AGENT_KEY}\\",\\"metric_type\\":\\"DISK_USAGE\\",\\"value\\":$DISK_USED},
-      {\\"agent_key\\":\\"\${MONITOR_AGENT_KEY}\\",\\"metric_type\\":\\"DISK_TOTAL\\",\\"value\\":$DISK_TOTAL},
-      {\\"agent_key\\":\\"\${MONITOR_AGENT_KEY}\\",\\"metric_type\\":\\"UPTIME\\",\\"value\\":$UPTIME},
-      {\\"agent_key\\":\\"\${MONITOR_AGENT_KEY}\\",\\"metric_type\\":\\"LOAD_AVERAGE\\",\\"value\\":$LOAD},
-      {\\"agent_key\\":\\"\${MONITOR_AGENT_KEY}\\",\\"metric_type\\":\\"PROCESS_COUNT\\",\\"value\\":$PROCS}
-    ]"
-
-  sleep "\${INTERVAL}"
-done`}</code>
+        <h3 className="font-semibold text-foreground mt-6">Windows — PowerShell</h3>
+        <p className="text-muted-foreground">Open PowerShell on your server and paste:</p>
+        <pre className="rounded-lg bg-muted p-4 text-sm overflow-x-auto">
+          <code>{`# Replace YOUR_API_URL and YOUR_AGENT_KEY with the values from your dashboard
+Invoke-WebRequest -Uri "YOUR_API_URL/agent/monitor-agent.ps1" -OutFile monitor-agent.ps1
+.\\monitor-agent.ps1 -ApiUrl "YOUR_API_URL" -AgentKey "YOUR_AGENT_KEY"`}</code>
         </pre>
 
-        <h3 className="font-semibold text-foreground mt-6">Running as a systemd service (Linux)</h3>
+        <h3 className="font-semibold text-foreground mt-6">Keep it running (Linux — systemd)</h3>
         <p className="text-muted-foreground">
-          To keep the agent running across reboots, create a systemd service unit:
+          To auto-start the agent on boot:
         </p>
         <pre className="rounded-lg bg-muted p-4 text-sm overflow-x-auto">
-          <code>{`# Create the service file
-sudo tee /etc/systemd/system/monitor-agent.service << 'EOF'
+          <code>{`sudo tee /etc/systemd/system/monitor-agent.service << 'EOF'
 [Unit]
 Description=Monitor Server Agent
 After=network-online.target
@@ -219,49 +205,20 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=nobody
-Environment="MONITOR_AGENT_KEY=your-agent-key-here"
-Environment="MONITOR_API_URL=https://api.monitorserver.io"
-Environment="INTERVAL=60"
-ExecStart=/opt/monitor-agent.sh
+Environment="MONITOR_API_URL=YOUR_API_URL"
+Environment="AGENT_KEY=YOUR_AGENT_KEY"
+ExecStart=/opt/monitor/monitor-agent.sh
 Restart=on-failure
-RestartSec=30
-StandardOutput=journal
-StandardError=journal
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-# Copy the agent script
-sudo cp monitor-agent.sh /opt/monitor-agent.sh
-sudo chmod +x /opt/monitor-agent.sh
-
-# Enable and start the service
+sudo cp monitor-agent.sh /opt/monitor/monitor-agent.sh
+sudo chmod +x /opt/monitor/monitor-agent.sh
 sudo systemctl daemon-reload
-sudo systemctl enable --now monitor-agent
-
-# Check service status
-sudo systemctl status monitor-agent
-
-# View live logs
-sudo journalctl -fu monitor-agent`}</code>
-        </pre>
-
-        <h3 className="font-semibold text-foreground mt-6">Windows (PowerShell)</h3>
-        <p className="text-muted-foreground">
-          On Windows, run the generated PowerShell script in an elevated PowerShell session:
-        </p>
-        <pre className="rounded-lg bg-muted p-4 text-sm overflow-x-auto">
-          <code>{`# Set the agent key and run the agent
-$env:MONITOR_AGENT_KEY = "your-agent-key-here"
-$env:MONITOR_API_URL   = "https://api.monitorserver.io"
-.\monitor-agent.ps1
-
-# To run as a background Windows service, use NSSM:
-# nssm install MonitorAgent "powershell.exe" "-File C:\monitor-agent.ps1"
-# nssm set MonitorAgent AppEnvironmentExtra MONITOR_AGENT_KEY=your-key
-# nssm start MonitorAgent`}</code>
+sudo systemctl enable --now monitor-agent`}</code>
         </pre>
       </section>
 

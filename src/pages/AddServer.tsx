@@ -45,21 +45,31 @@ const operatingSystems = [
 function buildBashScript(apiUrl: string, agentKey: string): string {
   return [
     '#!/bin/bash',
+    `# Download and run the Monitor Server agent`,
     `MONITOR_API_URL="${apiUrl}"`,
     `AGENT_KEY="${agentKey}"`,
+    ``,
+    `# Step 1: Download the agent script`,
     `curl -fsSL "\${MONITOR_API_URL}/agent/monitor-agent.sh" -o monitor-agent.sh || \\`,
     `  wget -q "\${MONITOR_API_URL}/agent/monitor-agent.sh" -O monitor-agent.sh`,
     'chmod +x monitor-agent.sh',
-    `echo "Agent script downloaded. Run: MONITOR_API_URL='\${MONITOR_API_URL}' AGENT_KEY='\${AGENT_KEY}' ./monitor-agent.sh"`,
+    ``,
+    `# Step 2: Run the agent (it loops automatically)`,
+    `MONITOR_API_URL="\${MONITOR_API_URL}" AGENT_KEY="\${AGENT_KEY}" ./monitor-agent.sh`,
   ].join('\n');
 }
 
 function buildPsScript(apiUrl: string, agentKey: string): string {
   return [
+    `# Download and run the Monitor Server agent`,
     `$MONITOR_API_URL = "${apiUrl}"`,
     `$AGENT_KEY = "${agentKey}"`,
+    ``,
+    `# Step 1: Download the agent script`,
     `Invoke-WebRequest -Uri "$MONITOR_API_URL/agent/monitor-agent.ps1" -OutFile monitor-agent.ps1`,
-    `Write-Host "Agent script downloaded. Run: .\\monitor-agent.ps1 -ApiUrl '$MONITOR_API_URL' -AgentKey '$AGENT_KEY'"`,
+    ``,
+    `# Step 2: Run the agent (it loops automatically)`,
+    `.\\monitor-agent.ps1 -ApiUrl $MONITOR_API_URL -AgentKey $AGENT_KEY`,
   ].join('\n');
 }
 
@@ -228,26 +238,26 @@ export default function AddServer() {
           {/* OS-specific instructions */}
           <div className="rounded-lg bg-muted/50 border border-border p-4 space-y-2">
             <p className="text-sm font-medium text-foreground">
-              {isWindows ? 'Windows Instructions' : 'Linux / macOS Instructions'}
+              {isWindows ? 'Windows — Quick Start' : 'Linux / macOS — Quick Start'}
             </p>
             {isWindows ? (
               <ol className="space-y-1.5 text-sm text-muted-foreground list-decimal list-inside">
-                <li>Open PowerShell as Administrator on your server</li>
-                <li>Run the downloaded script or paste the script above</li>
-                <li>Follow the on-screen instructions to start the agent service</li>
-                <li>The agent will begin sending metrics within a few minutes</li>
+                <li>Open <strong>PowerShell</strong> on your server (Run as Administrator recommended)</li>
+                <li>Paste the script above — it downloads the agent and starts it automatically</li>
+                <li>Metrics will appear on your dashboard within seconds</li>
+                <li>To keep it running permanently, set it up as a Windows Service or Scheduled Task</li>
               </ol>
             ) : (
               <ol className="space-y-1.5 text-sm text-muted-foreground list-decimal list-inside">
-                <li>Copy or download the script to your server</li>
+                <li>SSH into your server and paste the script above — it downloads and runs the agent</li>
+                <li>Metrics will appear on your dashboard within seconds</li>
                 <li>
-                  Make it executable:{' '}
+                  To keep it running in the background:{' '}
                   <code className="rounded bg-muted px-1 py-0.5 text-xs font-mono text-primary">
-                    chmod +x monitor-agent.sh
+                    nohup ./monitor-agent.sh &amp;
                   </code>
                 </li>
-                <li>Run the script with the environment variables set as shown</li>
-                <li>Optionally add a cron job or systemd service to keep the agent running</li>
+                <li>For auto-start on boot, set up a systemd service (see docs for details)</li>
               </ol>
             )}
           </div>

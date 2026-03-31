@@ -7,7 +7,7 @@ import {
   Cpu, HardDrive, Wifi, Bell, Eye, Lock,
   BarChart3, Zap, Shield, Clock, Download, Globe, Server,
   TrendingUp, Layers, ArrowRight, CheckCircle2, ArrowLeft,
-  FileText, Settings, Mail, RefreshCw,
+  FileText, Settings, Mail, RefreshCw, Brain, Bot, Sparkles,
 } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 
@@ -159,8 +159,8 @@ export default function Features() {
           <nav className="hidden md:flex items-center gap-1">
             {[
               { label: 'Features', to: '/features' },
+              { label: 'Pricing', to: '/pricing' },
               { label: 'How It Works', to: '/how-it-works' },
-              { label: 'FAQ', to: '/faq' },
             ].map((n) => (
               <Link key={n.to} to={n.to} className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-all">
                 {n.label}
@@ -248,6 +248,45 @@ export default function Features() {
         </section>
       ))}
 
+      {/* ─── AI-Powered Roadmap ─── */}
+      <section className="py-20 sm:py-28 bg-gradient-to-b from-muted/10 to-background">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.div className="max-w-2xl mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-500 text-xs font-medium mb-4">
+              <Brain className="h-3 w-3" /> Coming Soon — Powered by NVIDIA &amp; AWS
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">AI-powered monitoring</h2>
+            <p className="text-muted-foreground text-lg">
+              We're building intelligent features that go beyond dashboards — AI that automatically detects, diagnoses, and resolves infrastructure issues.
+            </p>
+            <div className="flex items-center gap-6 mt-6">
+              <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-8 object-contain opacity-50" />
+              <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-8 object-contain opacity-50" />
+              <img src="/aws-logo.webp" alt="AWS" className="h-8 object-contain opacity-50" />
+            </div>
+          </motion.div>
+
+          <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" variants={container} initial="hidden" whileInView="show" viewport={{ once: true }}>
+            {[
+              { icon: Bot, title: 'Auto-Solve Alerts', desc: 'AI agents that automatically remediate common issues — restart services, clear disk space, scale resources — without human intervention.', tag: 'AI Agent' },
+              { icon: Brain, title: 'AI Recommendations', desc: 'Intelligent fix suggestions based on pattern analysis across your infrastructure. Know the best action before you even open the terminal.', tag: 'ML Engine' },
+              { icon: Sparkles, title: 'Predictive Analytics', desc: 'Forecast resource exhaustion days in advance. GPU-accelerated models analyze baseline patterns to predict CPU spikes and memory leaks.', tag: 'GPU Accelerated' },
+            ].map((f, i) => (
+              <motion.div key={i} variants={item} className="rounded-2xl border border-dashed border-primary/30 bg-card/50 p-6 sm:p-8">
+                <div className="flex items-center justify-between mb-5">
+                  <div className="h-12 w-12 rounded-xl bg-violet-500/10 flex items-center justify-center">
+                    <f.icon className="h-5 w-5 text-violet-500" />
+                  </div>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-violet-500/10 text-violet-500 border border-violet-500/20">{f.tag}</span>
+                </div>
+                <h3 className="font-display text-xl font-semibold text-foreground mb-2">{f.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{f.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* ─── CTA ─── */}
       <section className="py-24 sm:py-28 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
@@ -274,14 +313,20 @@ export default function Features() {
       {/* ─── Footer ─── */}
       <footer className="border-t border-border bg-card/50">
         <div className="container mx-auto px-4 sm:px-6 py-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>&copy; {new Date().getFullYear()} Monitor Server. All rights reserved.</p>
-            <nav className="flex flex-wrap gap-4">
-              <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
-              <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-              <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-              <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-            </nav>
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-center gap-6">
+              <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+              <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+              <p>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a>. All rights reserved.</p>
+              <nav className="flex flex-wrap gap-4">
+                <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
+                <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+                <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+                <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+              </nav>
+            </div>
           </div>
         </div>
       </footer>

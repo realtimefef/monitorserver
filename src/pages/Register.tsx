@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import {
   Eye, EyeOff, Loader2, Shield, CheckCircle2, Circle,
   ArrowRight, Server, Bell, Cpu, HardDrive, Wifi, BarChart3,
-  Lock, Zap, Clock, Globe, Terminal, Heart, ArrowLeft, UserPlus
+  Lock, Zap, Clock, Globe, Terminal, ArrowLeft, UserPlus
 } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { useToast } from '@/hooks/use-toast';
@@ -105,8 +105,8 @@ export default function Register() {
             Real-Time Server Monitoring, Built for Engineers
           </h2>
           <p className="text-center text-muted-foreground mb-8">
-            Monitor Server is an open-source platform built with Spring Boot 3  and React 18.
-            Deploy a lightweight agent, stream 12 metric types every 5 seconds, and gain full visibility into your infrastructure.
+            Monitor Server is an AI-powered platform built with Spring Boot 3 and React 18, deployed on AWS cloud.
+            Install a lightweight agent, stream 12 metric types every 5 seconds, and gain full visibility into your infrastructure.
           </p>
 
           {/* Architecture */}
@@ -185,8 +185,8 @@ export default function Register() {
 
           {/* Bottom trust line */}
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-            <Heart className="h-3.5 w-3.5 text-red-500" />
-            Open source · Self-hosted · Free forever
+            <Shield className="h-3.5 w-3.5 text-primary" />
+            Backed by AWS Activate & NVIDIA Inception
           </div>
         </div>
       </div>
@@ -344,8 +344,8 @@ export default function Register() {
             <div className="mb-6">
               <h4 className="text-sm font-bold text-foreground mb-2">About Monitor Server</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                A self-hosted, open-source server monitoring platform. The backend runs on Spring Boot 3 (Java 21)
-                with PostgreSQL, and the frontend is a React 18 TypeScript SPA. Deploy a Bash or PowerShell agent
+                An AI-powered server monitoring platform deployed on AWS cloud with NVIDIA GPU acceleration. The backend runs on Spring Boot 3 (Java 21)
+                with PostgreSQL, and the frontend is a React 18 TypeScript SPA. Install a Bash or PowerShell agent
                 on each server to stream 12 metric types every 5 seconds — then set threshold-based alert rules
                 and receive email notifications when something needs attention.
               </p>
@@ -360,7 +360,7 @@ export default function Register() {
                 { label: 'Email notifications', desc: 'Branded HTML alerts on threshold breaches' },
                 { label: 'CSV / PDF / Excel export', desc: 'Download and share historical reports' },
                 { label: 'Per-user data isolation', desc: 'JWT auth — you only see your own servers' },
-                { label: 'MIT licensed & free', desc: 'No vendor lock-in, no subscription fees' },
+                { label: 'Free tier included', desc: 'Unlimited servers, upgrade for AI features' },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-2.5">
                   <CheckCircle2 className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />

@@ -24,6 +24,8 @@ public class NotificationPreferenceResponse {
 
     private Integer quietHoursEnd;
 
+    private String timezone;
+
     public static NotificationPreferenceResponse from(UserNotificationPreference pref) {
         return NotificationPreferenceResponse.builder()
                 .emailEnabled(pref.isEmailEnabled())
@@ -32,6 +34,7 @@ public class NotificationPreferenceResponse {
                 .quietHoursEnabled(pref.isQuietHoursEnabled())
                 .quietHoursStart(pref.getQuietHoursStart())
                 .quietHoursEnd(pref.getQuietHoursEnd())
+                .timezone(pref.getTimezone())
                 .build();
     }
 }

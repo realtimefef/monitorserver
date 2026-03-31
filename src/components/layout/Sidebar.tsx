@@ -56,7 +56,7 @@ export function Sidebar({ isOpen, toggle }: SidebarProps) {
   const { user, logout } = useAuth();
   const { toast } = useToast();
 
-  // Supabase Realtime connection is always "live" when Supabase is configured,
+  // WebSocket connection status indicator
   // we show a simple status indicator
   const [realtimeStatus] = ['connected'];
 

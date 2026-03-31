@@ -42,4 +42,8 @@ public interface AlertRepository extends JpaRepository<Alert, Long> {
     List<Alert> findByServerOwnerIdAndStatusOrderByTriggeredAtDesc(Long ownerId, AlertStatus status);
 
     void deleteByServerId(Long serverId);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @Query("UPDATE Alert a SET a.alertRule = null WHERE a.alertRule.id = :ruleId")
+    void nullifyAlertRuleReference(@Param("ruleId") Long ruleId);
 }

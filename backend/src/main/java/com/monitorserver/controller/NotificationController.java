@@ -7,6 +7,7 @@ import com.monitorserver.entity.User;
 import com.monitorserver.service.NotificationPreferenceService;
 import com.monitorserver.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class NotificationController {
      */
     @PutMapping("/preferences")
     public ResponseEntity<NotificationPreferenceResponse> updatePreferences(
-            @RequestBody UpdateNotificationPreferenceRequest request,
+            @Valid @RequestBody UpdateNotificationPreferenceRequest request,
             @AuthenticationPrincipal User user) {
 
         return ResponseEntity.ok(notificationPreferenceService.update(user.getId(), request));
@@ -47,6 +48,7 @@ public class NotificationController {
     /**
      * GET /api/v1/notifications/alert/{alertId}
      * Get notification history for a specific alert.
+     * Only returns notifications for alerts belonging to the current user.
      */
     @GetMapping("/alert/{alertId}")
     public ResponseEntity<List<NotificationResponse>> getByAlert(
@@ -55,6 +57,7 @@ public class NotificationController {
 
         return ResponseEntity.ok(
                 notificationService.getByAlertId(alertId).stream()
+                        .filter(n -> n.getUser() != null && n.getUser().getId().equals(user.getId()))
                         .map(NotificationResponse::from)
                         .toList()
         );

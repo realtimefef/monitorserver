@@ -57,8 +57,8 @@ export default function Cookies() {
                   </thead>
                   <tbody className="divide-y divide-border">
                     {[
-                      { name: 'sb-access-token', type: 'Essential', purpose: 'Authentication session token (Supabase)', expires: 'Session' },
-                      { name: 'sb-refresh-token', type: 'Essential', purpose: 'Auth token renewal (Supabase)', expires: 'Session' },
+                      { name: 'ms-access-token', type: 'Essential', purpose: 'Authentication session token (JWT)', expires: 'Session' },
+                      { name: 'ms-refresh-token', type: 'Essential', purpose: 'Auth token renewal', expires: 'Session' },
                       { name: 'monitor-theme', type: 'Functional', purpose: 'Stores your dark/light theme preference', expires: '1 year (localStorage)' },
                       { name: 'monitor_user_settings', type: 'Functional', purpose: 'Stores dashboard display preferences', expires: 'Persistent (localStorage)' },
                       { name: 'monitor_scheduled_reports', type: 'Functional', purpose: 'Stores saved report templates', expires: 'Persistent (localStorage)' },

@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { BookOpen, Code2, Zap, Shield, ChevronRight } from 'lucide-react';
+import { BookOpen, Code2, Zap, Shield, ChevronRight, ArrowLeft } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -94,6 +94,11 @@ export default function Documentation() {
           /* Hub landing page */
           <div className="space-y-12">
             <div className="text-center space-y-4">
+              <Link to="/">
+                <Button variant="ghost" size="sm" className="mb-2 text-muted-foreground hover:text-foreground">
+                  <ArrowLeft className="mr-1 h-4 w-4" /> Back to Home
+                </Button>
+              </Link>
               <h1 className="font-display text-4xl font-bold text-foreground">Documentation</h1>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 Everything you need to know about Monitor Server — from initial setup to advanced

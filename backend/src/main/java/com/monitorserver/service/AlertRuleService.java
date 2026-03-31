@@ -5,6 +5,7 @@ import com.monitorserver.dto.response.AlertRuleResponse;
 import com.monitorserver.entity.*;
 import com.monitorserver.exception.BadRequestException;
 import com.monitorserver.exception.ResourceNotFoundException;
+import com.monitorserver.repository.AlertRepository;
 import com.monitorserver.repository.AlertRuleRepository;
 import com.monitorserver.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 public class AlertRuleService {
 
     private final AlertRuleRepository alertRuleRepository;
+    private final AlertRepository alertRepository;
     private final ServerRepository serverRepository;
 
     /**
@@ -150,6 +152,8 @@ public class AlertRuleService {
         AlertRule rule = alertRuleRepository.findByIdAndServerOwnerId(ruleId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("AlertRule", ruleId));
 
+        // Nullify FK references in alerts before deleting the rule
+        alertRepository.nullifyAlertRuleReference(ruleId);
         alertRuleRepository.delete(rule);
 
         log.info("Alert rule {} deleted by user {}", ruleId, userId);

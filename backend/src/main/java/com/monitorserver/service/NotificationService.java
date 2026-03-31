@@ -45,20 +45,17 @@ public class NotificationService {
             return notificationRepository.save(notification);
         }
 
-        try {
-            emailService.sendAlertNotification(
-                    user.getEmail(),
-                    serverName,
-                    alert.getTitle(),
-                    severity
-            );
-            notification.setStatus(NotificationStatus.SENT);
-            notification.setSentAt(LocalDateTime.now());
-        } catch (Exception e) {
-            notification.setStatus(NotificationStatus.FAILED);
-            notification.setErrorMessage(e.getMessage());
-            log.warn("Failed to send notification {} for alert {}: {}", notification.getId(), alert.getId(), e.getMessage());
-        }
+        // sendAlertNotification is @Async — it returns immediately, so we cannot
+        // catch mail errors here. Mark as SENT optimistically; the @Async method
+        // logs failures internally. Failed notifications are picked up by retryFailedNotifications.
+        emailService.sendAlertNotification(
+                user.getEmail(),
+                serverName,
+                alert.getTitle(),
+                severity
+        );
+        notification.setStatus(NotificationStatus.SENT);
+        notification.setSentAt(LocalDateTime.now());
 
         return notificationRepository.save(notification);
     }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -48,6 +48,7 @@ import {
   Link,
   Plus,
   Copy,
+  ArrowLeft,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -61,6 +62,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { getApiUrl, setApiUrl } from '@/lib/apiClient';
+import { useTimezone, TIMEZONE_OPTIONS } from '@/contexts/TimezoneContext';
 
 // ── Password helpers ──────────────────────────────────────────────────────────
 
@@ -98,6 +100,7 @@ export default function Settings() {
   const { user, logout } = useAuth();
   const { toast } = useToast();
   const { theme, setTheme, toggleTheme } = useTheme();
+  const { timezone, setTimezone, formatDate } = useTimezone();
   const navigate = useNavigate();
 
   // ── API Configuration ───────────────────────────────────────────────────────
@@ -220,12 +223,18 @@ export default function Settings() {
     setIsLoadingServerPrefs(true);
     notificationPreferencesApi
       .get()
-      .then((prefs) => setServerPrefs(prefs))
+      .then((prefs) => {
+        setServerPrefs(prefs);
+        // Sync timezone from server preferences
+        if (prefs.timezone) {
+          setTimezone(prefs.timezone);
+        }
+      })
       .catch(() => {
         // Endpoint may not exist yet — silently skip
       })
       .finally(() => setIsLoadingServerPrefs(false));
-  }, []);
+  }, [setTimezone]);
 
   const handleSaveServerPrefs = async () => {
     if (!serverPrefs) return;
@@ -244,7 +253,8 @@ export default function Settings() {
     }
   };
 
-  // ── Account Deletion ────────────────────────────────────────────────────────  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  // ── Account Deletion ────────────────────────────────────────────────────────
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
   // ── Webhooks ────────────────────────────────────────────────────────────────
   const [webhooks, setWebhooks] = useState<WebhookConfigType[]>([]);
@@ -375,6 +385,11 @@ export default function Settings() {
       <div className="space-y-6">
         {/* Header */}
         <div>
+          <RouterLink to="/dashboard">
+            <Button variant="ghost" size="sm" className="mb-2 -ml-2 text-muted-foreground hover:text-foreground">
+              <ArrowLeft className="mr-1 h-4 w-4" /> Back to Dashboard
+            </Button>
+          </RouterLink>
           <h1 className="font-display text-3xl font-bold text-foreground">Settings</h1>
           <p className="mt-1 text-muted-foreground">
             Manage your account, API configuration, and preferences
@@ -768,6 +783,49 @@ export default function Settings() {
 
                     <Separator />
 
+                    {/* Timezone */}
+                    <div className="space-y-3">
+                      <div>
+                        <p className="font-medium text-foreground">Timezone</p>
+                        <p className="text-xs text-muted-foreground">
+                          All dates and times across the app will display in this timezone
+                        </p>
+                      </div>
+                      <Select
+                        value={serverPrefs.timezone || timezone}
+                        onValueChange={(v) => {
+                          setTimezone(v);
+                          setServerPrefs((p) => p ? { ...p, timezone: v } : p);
+                        }}
+                      >
+                        <SelectTrigger className="w-full max-w-sm">
+                          <SelectValue placeholder="Select timezone" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {TIMEZONE_OPTIONS.map((tz) => (
+                            <SelectItem key={tz.value} value={tz.value}>
+                              {tz.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <p className="text-xs text-muted-foreground">
+                        Current: <span className="font-mono text-foreground">{serverPrefs.timezone || timezone}</span>
+                        {' · '}
+                        Local time: <span className="font-mono text-foreground">
+                          {new Intl.DateTimeFormat(undefined, {
+                            timeZone: serverPrefs.timezone || timezone,
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            timeZoneName: 'short',
+                          }).format(new Date())}
+                        </span>
+                      </p>
+                    </div>
+
+                    <Separator />
+
                     {/* Quiet Hours */}
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
@@ -1026,8 +1084,8 @@ export default function Settings() {
                           </div>
                           <p className="text-xs text-muted-foreground">
                             Prefix: <code className="rounded bg-muted px-1">{k.prefix}...</code>
-                            {k.expiresAt && <> · Expires: {new Date(k.expiresAt).toLocaleDateString()}</>}
-                            {k.lastUsedAt && <> · Last used: {new Date(k.lastUsedAt).toLocaleDateString()}</>}
+                            {k.expiresAt && <> · Expires: {formatDate(k.expiresAt, 'short')}</>}
+                            {k.lastUsedAt && <> · Last used: {formatDate(k.lastUsedAt, 'short')}</>}
                           </p>
                         </div>
                         <div className="flex items-center gap-1 shrink-0 ml-2">

@@ -7,8 +7,8 @@
 const API_URL_KEY = 'monitor_api_url';
 const TOKEN_KEY = 'monitor_token';
 
-// Use VITE_API_URL env var in production, fallback to localhost for dev
-export const DEFAULT_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
+// Use VITE_API_URL env var, default to production custom domain
+export const DEFAULT_API_URL = import.meta.env.VITE_API_URL || 'https://api.monitorserver.in/api/v1';
 
 export function getApiUrl(): string {
   return localStorage.getItem(API_URL_KEY) || DEFAULT_API_URL;

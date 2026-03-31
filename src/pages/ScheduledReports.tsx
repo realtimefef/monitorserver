@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,11 +33,12 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import {
-  Plus, FileText, Trash2, Download, Loader2, Clock, Pencil,
+  Plus, FileText, Trash2, Download, Loader2, Clock, Pencil, ArrowLeft,
 } from 'lucide-react';
 import { reportsApi, serversApi, metricsCustomApi, type ReportTemplate, type Server } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
+import { useTimezone } from '@/contexts/TimezoneContext';
 
 const TIME_FRAMES = [
   { value: '1h', label: 'Last 1 Hour' },
@@ -79,6 +81,7 @@ const emptyForm: FormState = {
 
 export default function ScheduledReports() {
   const { toast } = useToast();
+  const { formatDate } = useTimezone();
   const [templates, setTemplates] = useState<ReportTemplate[]>([]);
   const [servers, setServers] = useState<Server[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -240,7 +243,7 @@ export default function ScheduledReports() {
         doc.setFontSize(10);
         doc.text(`Server: ${serverName}`, 14, 24);
         doc.text(`Period: ${template.timeframe}`, 14, 30);
-        doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 36);
+        doc.text(`Generated: ${formatDate(new Date(), 'full')}`, 14, 36);
         let y = 46;
         for (const [type, metrics] of Object.entries(data)) {
           if (y > 260) { doc.addPage(); y = 14; }
@@ -289,6 +292,11 @@ export default function ScheduledReports() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
+            <Link to="/dashboard">
+              <Button variant="ghost" size="sm" className="mb-2 -ml-2 text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="mr-1 h-4 w-4" /> Back to Dashboard
+              </Button>
+            </Link>
             <h1 className="font-display text-3xl font-bold text-foreground">Reports</h1>
             <p className="mt-1 text-muted-foreground">Create, edit, and generate metric reports</p>
           </div>
@@ -430,7 +438,7 @@ export default function ScheduledReports() {
                   {t.lastGenerated && (
                     <div className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
-                      Last: {format(new Date(t.lastGenerated), 'MMM d, HH:mm')}
+                      Last: {formatDate(t.lastGenerated, 'short')}
                     </div>
                   )}
                 </div>

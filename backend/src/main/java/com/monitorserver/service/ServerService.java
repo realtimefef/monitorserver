@@ -8,9 +8,12 @@ import com.monitorserver.entity.MonitoredServer;
 import com.monitorserver.entity.ServerStatus;
 import com.monitorserver.entity.User;
 import com.monitorserver.exception.ResourceNotFoundException;
+import com.monitorserver.repository.AgentActivityRepository;
 import com.monitorserver.repository.AlertRepository;
 import com.monitorserver.repository.AlertRuleRepository;
+import com.monitorserver.repository.MaintenanceWindowRepository;
 import com.monitorserver.repository.MetricRepository;
+import com.monitorserver.repository.NotificationRepository;
 import com.monitorserver.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +34,9 @@ public class ServerService {
     private final AlertRepository alertRepository;
     private final AlertRuleRepository alertRuleRepository;
     private final MetricRepository metricRepository;
+    private final NotificationRepository notificationRepository;
+    private final MaintenanceWindowRepository maintenanceWindowRepository;
+    private final AgentActivityRepository agentActivityRepository;
 
     /**
      * Get all servers owned by the given user, including active alert counts.
@@ -132,9 +138,12 @@ public class ServerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Server", id));
 
         // Delete dependent records before server to avoid FK constraint violations
+        notificationRepository.deleteByServerId(server.getId());
         alertRepository.deleteByServerId(server.getId());
         alertRuleRepository.deleteByServerId(server.getId());
         metricRepository.deleteByServerId(server.getId());
+        maintenanceWindowRepository.deleteByServerId(server.getId());
+        agentActivityRepository.deleteByServerId(server.getId());
 
         serverRepository.delete(server);
         log.info("Server deleted: id={}, name={}", id, server.getName());

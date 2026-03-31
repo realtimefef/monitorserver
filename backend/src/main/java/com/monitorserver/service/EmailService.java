@@ -58,7 +58,7 @@ public class EmailService {
         );
 
         if (!mailEnabled) {
-            log.warn("Email disabled, verification token: {}", token);
+            log.warn("Email disabled — verification email not sent to: {}", to);
             return;
         }
         sendHtml(to, "Confirm Your Account — Monitor Server", body);
@@ -83,7 +83,7 @@ public class EmailService {
         );
 
         if (!mailEnabled) {
-            log.warn("Email disabled, reset token: {}", token);
+            log.warn("Email disabled — password reset email not sent to: {}", to);
             return;
         }
         sendHtml(to, "Password Recovery — Monitor Server", body);

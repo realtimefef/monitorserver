@@ -2,11 +2,11 @@ package com.monitorserver.service;
 
 import com.monitorserver.entity.*;
 import com.monitorserver.repository.WebhookConfigRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -16,11 +16,20 @@ import java.util.List;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class WebhookDeliveryService {
 
     private final WebhookConfigRepository webhookConfigRepository;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public WebhookDeliveryService(WebhookConfigRepository webhookConfigRepository) {
+        this.webhookConfigRepository = webhookConfigRepository;
+
+        // RestTemplate with 10s connect and 10s read timeout
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(10_000);
+        factory.setReadTimeout(10_000);
+        this.restTemplate = new RestTemplate(factory);
+    }
 
     @Async
     public void sendAlertWebhooks(User owner, Alert alert) {

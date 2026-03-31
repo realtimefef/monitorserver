@@ -2,8 +2,8 @@ import { Alert } from '@/lib/api';
 import { StatusBadge } from './StatusBadge';
 import { Button } from '@/components/ui/button';
 import { Bell, Check, CheckCircle2, Server, Clock } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { useTimezone } from '@/contexts/TimezoneContext';
 
 interface AlertCardProps {
   alert: Alert;
@@ -13,8 +13,9 @@ interface AlertCardProps {
 }
 
 export function AlertCard({ alert, onAcknowledge, onResolve, isLoading }: AlertCardProps) {
+  const { formatDate } = useTimezone();
   const displayTime = alert.triggeredAt ?? alert.createdAt;
-  const triggeredTime = formatDistanceToNow(new Date(displayTime), { addSuffix: true });
+  const triggeredTime = formatDate(displayTime, 'relative');
   const displayTitle = alert.title ?? alert.type?.replace(/_/g, ' ') ?? 'Alert';
 
   const severityStyles = {

@@ -5,8 +5,8 @@ import {
   RefreshCw, CheckCircle2, XCircle, AlertTriangle, Loader2, Clock, ArrowLeft,
 } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
-import { formatDistanceToNow } from 'date-fns';
 import { getApiUrl, getToken } from '@/lib/apiClient';
+import { useTimezone } from '@/contexts/TimezoneContext';
 import { cn } from '@/lib/utils';
 
 interface ServiceStatus {
@@ -29,6 +29,7 @@ async function probe(url: string, options?: RequestInit): Promise<{ ok: boolean;
 }
 
 export default function Status() {
+  const { formatDate } = useTimezone();
   const [services, setServices] = useState<ServiceStatus[]>([
     { name: 'API Server', description: 'REST API server responding', status: 'checking' },
     { name: 'Authentication', description: 'Auth endpoint reachable', status: 'checking' },
@@ -226,7 +227,7 @@ export default function Status() {
               {lastChecked && (
                 <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <Clock className="h-3.5 w-3.5" />
-                  {formatDistanceToNow(lastChecked, { addSuffix: true })}
+                  {formatDate(lastChecked, 'relative')}
                   {' · '}refreshes in {countdown}s
                 </span>
               )}

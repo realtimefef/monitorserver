@@ -8,11 +8,17 @@ import com.monitorserver.exception.BadRequestException;
 import com.monitorserver.exception.ResourceNotFoundException;
 import com.monitorserver.repository.AlertRepository;
 import com.monitorserver.repository.AlertRuleRepository;
+import com.monitorserver.repository.AgentActivityRepository;
+import com.monitorserver.repository.ApiKeyRepository;
+import com.monitorserver.repository.MaintenanceWindowRepository;
 import com.monitorserver.repository.MetricRepository;
+import com.monitorserver.repository.NotificationRepository;
 import com.monitorserver.repository.ScheduledReportRepository;
 import com.monitorserver.repository.ServerRepository;
 import com.monitorserver.repository.UserNotificationPreferenceRepository;
 import com.monitorserver.repository.UserRepository;
+import com.monitorserver.repository.UserUsageStatsRepository;
+import com.monitorserver.repository.WebhookConfigRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,8 +41,14 @@ public class AuthService {
     private final AlertRepository alertRepository;
     private final AlertRuleRepository alertRuleRepository;
     private final MetricRepository metricRepository;
+    private final NotificationRepository notificationRepository;
     private final UserNotificationPreferenceRepository notificationPreferenceRepository;
     private final ScheduledReportRepository scheduledReportRepository;
+    private final WebhookConfigRepository webhookConfigRepository;
+    private final ApiKeyRepository apiKeyRepository;
+    private final MaintenanceWindowRepository maintenanceWindowRepository;
+    private final AgentActivityRepository agentActivityRepository;
+    private final UserUsageStatsRepository userUsageStatsRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final EmailService emailService;
@@ -222,17 +234,24 @@ public class AuthService {
 
         // Delete all dependent records for each server owned by user
         serverRepository.findByOwnerId(userId).forEach(server -> {
+            notificationRepository.deleteByServerId(server.getId());
             alertRepository.deleteByServerId(server.getId());
             alertRuleRepository.deleteByServerId(server.getId());
             metricRepository.deleteByServerId(server.getId());
+            maintenanceWindowRepository.deleteByServerId(server.getId());
+            agentActivityRepository.deleteByServerId(server.getId());
             serverRepository.delete(server);
         });
 
         // Delete user-level dependent records
+        webhookConfigRepository.deleteByUserId(userId);
+        apiKeyRepository.deleteByUserId(userId);
+        notificationRepository.deleteByUserId(userId);
         notificationPreferenceRepository.findByUserId(userId)
                 .ifPresent(notificationPreferenceRepository::delete);
         scheduledReportRepository.findByOwnerId(userId)
                 .forEach(scheduledReportRepository::delete);
+        userUsageStatsRepository.deleteByUserId(userId);
 
         userRepository.delete(user);
         log.info("Account deleted for user: {}", user.getEmail());

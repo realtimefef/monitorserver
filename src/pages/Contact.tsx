@@ -14,7 +14,7 @@ export default function Contact() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/25">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight">CloudMonitor</span>
+            <span className="font-display text-lg font-bold tracking-tight">Monitor Server</span>
           </Link>
           <ThemeToggle />
         </div>
@@ -107,14 +107,22 @@ export default function Contact() {
 
       {/* Footer */}
       <footer className="border-t border-border bg-card/50 mt-16">
-        <div className="container mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <span>&copy; {new Date().getFullYear()} CloudMonitor</span>
-          <nav className="flex gap-6">
-            <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-            <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-            <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
-            <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-          </nav>
+        <div className="container mx-auto px-6 py-8">
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-center gap-6">
+              <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+              <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+              <span>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a></span>
+              <nav className="flex gap-6">
+                <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+                <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+                <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
+                <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+              </nav>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

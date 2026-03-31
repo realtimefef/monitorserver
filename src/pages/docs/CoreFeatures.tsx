@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ArrowLeft } from 'lucide-react';
 
 const features = [
   {
@@ -136,7 +136,9 @@ export default function CoreFeatures() {
     <article className="space-y-10">
       <header className="space-y-2">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-          <Link to="/docs" className="hover:text-foreground transition-colors">Docs</Link>
+          <Link to="/docs" className="hover:text-foreground transition-colors inline-flex items-center gap-1">
+            <ArrowLeft className="h-3.5 w-3.5" /> Docs
+          </Link>
           <span className="text-muted-foreground">›</span>
           <span className="text-foreground">Core Features</span>
         </div>

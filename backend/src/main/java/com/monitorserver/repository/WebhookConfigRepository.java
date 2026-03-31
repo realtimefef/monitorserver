@@ -12,4 +12,6 @@ public interface WebhookConfigRepository extends JpaRepository<WebhookConfig, Lo
     List<WebhookConfig> findByUserId(Long userId);
 
     java.util.Optional<WebhookConfig> findByIdAndUserId(Long id, Long userId);
+
+    void deleteByUserId(Long userId);
 }

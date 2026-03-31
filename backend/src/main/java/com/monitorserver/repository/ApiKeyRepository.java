@@ -15,4 +15,6 @@ public interface ApiKeyRepository extends JpaRepository<ApiKey, Long> {
     Optional<ApiKey> findByIdAndUserId(Long id, Long userId);
 
     long countByUserIdAndActiveTrue(Long userId);
+
+    void deleteByUserId(Long userId);
 }

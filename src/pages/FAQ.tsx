@@ -274,14 +274,20 @@ export default function FAQ() {
       {/* ─── Footer ─── */}
       <footer className="border-t border-border bg-card/50 mt-12">
         <div className="container mx-auto px-4 sm:px-6 py-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>&copy; {new Date().getFullYear()} Monitor Server. All rights reserved.</p>
-            <nav className="flex flex-wrap gap-4">
-              <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-              <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-              <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
-              <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-            </nav>
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-center gap-6">
+              <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+              <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+              <p>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a>. All rights reserved.</p>
+              <nav className="flex flex-wrap gap-4">
+                <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+                <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+                <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
+                <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+              </nav>
+            </div>
           </div>
         </div>
       </footer>

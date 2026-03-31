@@ -299,6 +299,20 @@ export default function HowItWorks() {
         </div>
       </section>
 
+      {/* ─── Powered By ─── */}
+      <section className="py-16 sm:py-20 border-t border-border">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
+          <motion.p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-8" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+            Built on world-class infrastructure
+          </motion.p>
+          <motion.div className="flex items-center justify-center gap-10 flex-wrap" initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+            <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+            <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+          </motion.div>
+        </div>
+      </section>
+
       {/* ─── CTA ─── */}
       <section className="py-24 sm:py-28 bg-muted/20 border-t border-border relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
@@ -325,14 +339,20 @@ export default function HowItWorks() {
       {/* ─── Footer ─── */}
       <footer className="border-t border-border bg-card/50">
         <div className="container mx-auto px-4 sm:px-6 py-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>&copy; {new Date().getFullYear()} Monitor Server. All rights reserved.</p>
-            <nav className="flex flex-wrap gap-4">
-              <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
-              <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-              <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-              <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-            </nav>
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-center gap-6">
+              <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+              <img src="/powered-by-nvidia.png" alt="NVIDIA Inception" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+              <p>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a>. All rights reserved.</p>
+              <nav className="flex flex-wrap gap-4">
+                <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
+                <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+                <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+                <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+              </nav>
+            </div>
           </div>
         </div>
       </footer>

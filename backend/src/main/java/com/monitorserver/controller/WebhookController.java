@@ -37,7 +37,7 @@ public class WebhookController {
     @PutMapping("/{id}")
     public ResponseEntity<WebhookConfigResponse> update(
             @PathVariable Long id,
-            @RequestBody UpdateWebhookRequest request,
+            @Valid @RequestBody UpdateWebhookRequest request,
             @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(webhookConfigService.update(id, request, user.getId()));
     }

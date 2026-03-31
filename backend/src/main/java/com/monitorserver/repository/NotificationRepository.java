@@ -23,4 +23,10 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     );
 
     List<Notification> findByStatus(NotificationStatus status);
+
+    void deleteByUserId(Long userId);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @Query("DELETE FROM Notification n WHERE n.alert.id IN (SELECT a.id FROM Alert a WHERE a.server.id = :serverId)")
+    void deleteByServerId(@Param("serverId") Long serverId);
 }

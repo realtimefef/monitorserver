@@ -13,6 +13,7 @@ import {
   SortAsc,
   Upload,
   RefreshCw,
+  ArrowLeft,
 } from 'lucide-react';
 import { serversApi, Server } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
@@ -129,6 +130,11 @@ export default function Servers() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
+            <Link to="/dashboard">
+              <Button variant="ghost" size="sm" className="mb-2 -ml-2 text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="mr-1 h-4 w-4" /> Back to Dashboard
+              </Button>
+            </Link>
             <h1 className="font-display text-3xl font-bold text-foreground">Servers</h1>
             <p className="mt-1 text-muted-foreground">Manage and monitor your server fleet</p>
           </div>

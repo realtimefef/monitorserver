@@ -40,6 +40,10 @@ public class UserNotificationPreference {
 
     private Integer quietHoursEnd;
 
+    @Builder.Default
+    @Column(length = 64)
+    private String timezone = "UTC";
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;

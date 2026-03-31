@@ -1,75 +1,82 @@
 # Monitor Server Monitoring Agent
 
-This directory contains agent scripts that run on client servers to collect and send metrics to the Monitor Server dashboard.
+Lightweight agent scripts that run on your servers to collect and send metrics to the Monitor Server dashboard.
 
-## Available Agents
+## Quick Start
 
-### 1. Shell Script Agent (`monitor-agent.sh`)
-
-A lightweight bash script for Linux servers.
-
-**Features:**
-- Collects CPU, Memory, Disk, Network, Process, and Load metrics
-- No dependencies (uses standard Linux tools)
-- Easy to deploy and configure
-
-**Installation:**
+### Linux / macOS
 
 ```bash
-# 1. Copy the script to your server
-scp monitor-agent.sh user@your-server:/opt/monitor/
+# 1. Download the agent (replace YOUR_API_URL with your API base URL)
+curl -fsSL "YOUR_API_URL/agent/monitor-agent.sh" -o monitor-agent.sh
+chmod +x monitor-agent.sh
 
-# 2. Make it executable
-chmod +x /opt/monitor/monitor-agent.sh
-
-# 3. Set environment variables and run
-export AGENT_KEY=your-agent-key-here
-
-# 4. Test manually
-/opt/monitor/monitor-agent.sh
-
-# 5. Add to crontab (runs every minute — agent loops internally at 5s intervals)
-(crontab -l 2>/dev/null; echo "*/1 * * * * AGENT_KEY=your-agent-key /opt/monitor/monitor-agent.sh >> /var/log/monitor-agent.log 2>&1") | crontab -
+# 2. Run the agent (replace YOUR_AGENT_KEY with the key from your dashboard)
+MONITOR_API_URL="YOUR_API_URL" AGENT_KEY="YOUR_AGENT_KEY" ./monitor-agent.sh
 ```
 
-### 2. PowerShell Agent (`monitor-agent.ps1`)
-
-For Windows servers.
+### Windows (PowerShell)
 
 ```powershell
-# Set environment variables
-$env:AGENT_KEY = "your-agent-key-here"
+# 1. Download the agent (replace YOUR_API_URL with your API base URL)
+Invoke-WebRequest -Uri "YOUR_API_URL/agent/monitor-agent.ps1" -OutFile monitor-agent.ps1
 
-# Run the agent
-.\monitor-agent.ps1
+# 2. Run the agent (replace YOUR_API_URL and YOUR_AGENT_KEY)
+.\monitor-agent.ps1 -ApiUrl "YOUR_API_URL" -AgentKey "YOUR_AGENT_KEY"
 ```
 
-### 3. Systemd Service (Recommended for Production)
+> **Tip:** When you add a server in the dashboard, a ready-to-paste command with your URL and key pre-filled is shown. Just copy and paste it.
+
+## Keep the Agent Running
+
+### Linux — systemd (recommended)
 
 ```bash
-sudo nano /etc/systemd/system/monitor-agent.service
-```
-
-```ini
+sudo tee /etc/systemd/system/monitor-agent.service << 'EOF'
 [Unit]
 Description=Monitor Server Agent
-After=network.target
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c 'while true; do /opt/monitor/monitor-agent.sh; sleep 5; done'
-Restart=always
+Environment="MONITOR_API_URL=YOUR_API_URL"
+Environment="AGENT_KEY=YOUR_AGENT_KEY"
+ExecStart=/opt/monitor/monitor-agent.sh
+Restart=on-failure
 RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
+EOF
+
+sudo cp monitor-agent.sh /opt/monitor/monitor-agent.sh
+sudo chmod +x /opt/monitor/monitor-agent.sh
+sudo systemctl daemon-reload
+sudo systemctl enable --now monitor-agent
 ```
 
+### Linux — Background process (quick)
+
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable monitor-agent
-sudo systemctl start monitor-agent
+nohup env MONITOR_API_URL="YOUR_API_URL" AGENT_KEY="YOUR_AGENT_KEY" ./monitor-agent.sh &
 ```
+
+### Windows — Task Scheduler
+
+1. Open **Task Scheduler** → Create Basic Task
+2. Set trigger to **At Startup**
+3. Action: Start a program → `powershell.exe`
+4. Arguments: `-File "C:\path\to\monitor-agent.ps1" -ApiUrl "YOUR_API_URL" -AgentKey "YOUR_AGENT_KEY"`
+
+## Configuration
+
+| Parameter | Env Variable | Default | Description |
+|-----------|-------------|---------|-------------|
+| `-ApiUrl` | `MONITOR_API_URL` | `http://localhost:8080/api/v1` | API base URL |
+| `-AgentKey` | `AGENT_KEY` | (required) | Your server's agent key |
+
+Priority: Script parameter > Environment variable > Default
 
 ## Metrics Collected
 
@@ -77,9 +84,13 @@ sudo systemctl start monitor-agent
 |--------|-------------|------|
 | CPU_USAGE | CPU utilization | % |
 | MEMORY_USAGE | Memory used | % |
+| MEMORY_TOTAL | Total memory | MB |
+| MEMORY_AVAILABLE | Available memory | bytes |
 | DISK_USAGE | Root partition usage | % |
-| NETWORK_IN | Bytes received | bytes |
-| NETWORK_OUT | Bytes transmitted | bytes |
+| DISK_TOTAL | Total disk space | bytes |
+| DISK_AVAILABLE | Available disk space | bytes |
+| NETWORK_IN | Bytes received/sec | bytes/s |
+| NETWORK_OUT | Bytes transmitted/sec | bytes/s |
 | PROCESS_COUNT | Running processes | count |
 | LOAD_AVERAGE | 1-minute load | - |
 | UPTIME | System uptime | seconds |

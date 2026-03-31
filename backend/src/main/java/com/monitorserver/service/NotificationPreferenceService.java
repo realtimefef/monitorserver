@@ -57,6 +57,12 @@ public class NotificationPreferenceService {
         if (request.getQuietHoursEnd() != null) {
             pref.setQuietHoursEnd(request.getQuietHoursEnd());
         }
+        if (request.getTimezone() != null && !request.getTimezone().isBlank()) {
+            // Validate timezone ID
+            if (java.util.TimeZone.getTimeZone(request.getTimezone()).getID().equals(request.getTimezone())) {
+                pref.setTimezone(request.getTimezone());
+            }
+        }
 
         pref = repository.save(pref);
 

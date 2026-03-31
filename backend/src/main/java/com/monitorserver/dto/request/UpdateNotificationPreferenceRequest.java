@@ -18,4 +18,6 @@ public class UpdateNotificationPreferenceRequest {
     private Integer quietHoursStart;
 
     private Integer quietHoursEnd;
+
+    private String timezone;
 }

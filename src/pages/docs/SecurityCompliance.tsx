@@ -1,65 +1,63 @@
 import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 export default function SecurityCompliance() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
+        <Link to="/docs" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-2">
+          <ArrowLeft className="h-3.5 w-3.5" /> Back to Docs
+        </Link>
         <h1 className="font-display text-3xl font-bold text-foreground">Security & Compliance</h1>
         <p className="text-muted-foreground">How Monitor Server protects your data and servers.</p>
       </header>
 
       {[
         {
-          title: 'Row Level Security (RLS)',
-          content: `All four Supabase tables (servers, metrics, alerts, alert_rules) have Row Level Security enabled.
+          title: 'Row Level Security',
+          content: `All database tables (users, servers, metrics, alerts, alert_rules, notifications, etc.) are protected with ownership-based access control.
 
 Policies enforce that:
-- Users can only SELECT, INSERT, UPDATE, DELETE their own servers (WHERE user_id = auth.uid())
+- Users can only access their own servers and data
 - Metrics are accessible only to the owner of the referenced server
-- Alerts and alert_rules are scoped the same way
+- Alerts and alert_rules are scoped to the server owner
+- API endpoints verify JWT authentication and user ownership before returning data
 
-This means even if someone obtained your anon key, they could not read another user's data.`,
+This means even if someone obtained another user's server ID, they could not read or modify that user's data.`,
         },
         {
           title: 'Agent Key Authentication',
           content: `Each server gets a unique agent_key (a UUID). Agents authenticate using only this key — they never use your user credentials.
 
-The metrics table has a trigger (link_server_id_trigger) that resolves the agent_key to a server_id before insert. If the key is unknown, the insert is rejected.
+The backend validates the agent_key against the monitored_servers table before accepting any metric data. If the key is unknown, the request is rejected.
 
 You can regenerate an agent_key at any time from the Server Detail page. The old key immediately stops working.`,
         },
         {
           title: 'Data Encryption',
-          content: `All data is encrypted at rest using AES-256 by Supabase (backed by AWS RDS). All communications use HTTPS/TLS 1.2+ for REST calls and WSS for realtime subscriptions.
+          content: `All data is encrypted at rest using AES-256 on AWS-hosted PostgreSQL. All communications use HTTPS/TLS 1.2+ for REST API calls and WSS for WebSocket connections.
 
-Supabase does not decrypt your data for analytics or advertising.`,
+Your data is never shared with third parties or used for analytics or advertising.`,
         },
         {
           title: 'Authentication & Passwords',
-          content: `Passwords are hashed using bcrypt by Supabase Auth. Monitor Server never stores or transmits plaintext passwords.
+          content: `Passwords are hashed using bcrypt with a cost factor of 10. Monitor Server never stores or transmits plaintext passwords.
 
-For password resets, Supabase sends a signed one-time link to your email. The link expires after 1 hour. The new password must meet complexity requirements (8+ chars, uppercase, lowercase, digit, special character).`,
+For password resets, the system sends a secure token to your email. The token expires after 1 hour. The new password must meet complexity requirements (8+ chars, uppercase, lowercase, digit, special character).`,
         },
         {
           title: 'Credential Best Practices',
-          content: `- Never commit your VITE_SUPABASE_ANON_KEY or agent keys to version control
-- The anon key has limited permissions by design — it cannot bypass RLS
+          content: `- Never commit agent keys or API keys to version control
 - Store agent keys securely as environment variables on your servers
 - Rotate agent keys periodically using the regenerate button
-- Use systemd to run the agent (prevents the key from being exposed in process lists)`,
+- Use systemd to run the agent (prevents the key from being exposed in process lists)
+- API keys use prefix-based lookup with bcrypt-hashed values for maximum security`,
         },
         {
           title: 'Data Retention',
-          content: `Metrics are retained indefinitely unless you configure a Supabase database retention policy or a pg_cron job to delete old rows.
+          content: `Metrics are retained based on your configured retention policy (default: 30 days). The system automatically cleans up old metrics via scheduled tasks.
 
-To set up automatic retention (e.g., keep only 30 days), run in the Supabase SQL editor:
-\`\`\`sql
-SELECT cron.schedule(
-  'delete-old-metrics',
-  '0 3 * * *',
-  $$DELETE FROM metrics WHERE timestamp < NOW() - INTERVAL '30 days'$$
-);
-\`\`\``,
+You can configure the retention period via the METRICS_RETENTION_DAYS environment variable.`,
         },
         {
           title: 'Reporting Vulnerabilities',

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { formatDistanceToNow } from 'date-fns';
 import { MainLayout } from '@/components/layout/MainLayout';
+import { useTimezone } from '@/contexts/TimezoneContext';
 import { StatusBadge } from '@/components/StatusBadge';
 import { MetricCard } from '@/components/MetricCard';
 import { AlertCard } from '@/components/AlertCard';
@@ -325,6 +325,7 @@ export default function ServerDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { formatDate, timezone } = useTimezone();
 
   const [server, setServer] = useState<ServerType | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);
@@ -404,7 +405,7 @@ export default function ServerDetail() {
     fetchData();
   }, [fetchData]);
 
-  // Poll every 10 seconds instead of Supabase Realtime
+  // Poll every 10 seconds for real-time updates
   usePolling(fetchData, { interval: 5_000, enabled: !!serverId });
 
   // ── Handlers ───────────────────────────────────────────────────────────────
@@ -524,7 +525,7 @@ export default function ServerDetail() {
 
   const toChartData = (type: string) =>
     (metrics[type] || []).map(m => ({
-      time: new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      time: new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: timezone }),
       value: m.value,
     }));
 
@@ -535,7 +536,17 @@ export default function ServerDetail() {
   const diskAvailable = latestMetrics['DISK_AVAILABLE']?.value ?? 0;
   const diskUsed = diskTotal - diskAvailable;
 
-  const agentInstallCmd = `MONITOR_API_URL=${getApiUrl()} AGENT_KEY=${server.agentKey} ./monitor-agent.sh`;
+  const apiUrl = getApiUrl();
+  const bashInstallCmd = [
+    `curl -fsSL "${apiUrl}/agent/monitor-agent.sh" -o monitor-agent.sh && chmod +x monitor-agent.sh`,
+    `MONITOR_API_URL="${apiUrl}" AGENT_KEY="${server.agentKey}" ./monitor-agent.sh`,
+  ].join('\n');
+  const psInstallCmd = [
+    `Invoke-WebRequest -Uri "${apiUrl}/agent/monitor-agent.ps1" -OutFile monitor-agent.ps1`,
+    `.\\monitor-agent.ps1 -ApiUrl "${apiUrl}" -AgentKey "${server.agentKey}"`,
+  ].join('\n');
+  const isWindows = server.operatingSystem?.toLowerCase().includes('windows');
+  const agentInstallCmd = isWindows ? psInstallCmd : bashInstallCmd;
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
@@ -626,24 +637,50 @@ export default function ServerDetail() {
                 <CardTitle className="text-lg">Agent Installation</CardTitle>
               </div>
               <CardDescription>
-                Run this command on your server to install the agent and start sending metrics.
+                Paste this command on your server to download and start the monitoring agent.
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="relative rounded-md bg-muted p-4 pr-12 font-mono text-sm max-w-full overflow-x-auto">
-                <p className="whitespace-pre-wrap break-all">{agentInstallCmd}</p>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-2 top-2 h-8 w-8 bg-background/50 hover:bg-background"
-                  onClick={() => {
-                    navigator.clipboard.writeText(agentInstallCmd);
-                    toast({ title: 'Command copied!' });
-                  }}
-                >
-                  <Copy className="h-4 w-4" />
-                </Button>
+            <CardContent className="space-y-4">
+              <div>
+                <p className="text-xs font-medium text-muted-foreground mb-2">
+                  {isWindows ? 'PowerShell (Windows)' : 'Bash (Linux / macOS)'}
+                </p>
+                <div className="relative rounded-md bg-muted p-4 pr-12 font-mono text-sm max-w-full overflow-x-auto">
+                  <p className="whitespace-pre-wrap break-all">{agentInstallCmd}</p>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-2 top-2 h-8 w-8 bg-background/50 hover:bg-background"
+                    onClick={() => {
+                      navigator.clipboard.writeText(agentInstallCmd);
+                      toast({ title: 'Command copied!' });
+                    }}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
+
+              {/* Show the other OS option too */}
+              <details className="text-sm">
+                <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
+                  {isWindows ? 'Show Linux / macOS command' : 'Show Windows (PowerShell) command'}
+                </summary>
+                <div className="relative mt-2 rounded-md bg-muted p-4 pr-12 font-mono text-sm max-w-full overflow-x-auto">
+                  <p className="whitespace-pre-wrap break-all">{isWindows ? bashInstallCmd : psInstallCmd}</p>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-2 top-2 h-8 w-8 bg-background/50 hover:bg-background"
+                    onClick={() => {
+                      navigator.clipboard.writeText(isWindows ? bashInstallCmd : psInstallCmd);
+                      toast({ title: 'Command copied!' });
+                    }}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              </details>
             </CardContent>
           </Card>
         )}
@@ -936,11 +973,11 @@ export default function ServerDetail() {
                 {[
                   { label: 'Host Address', value: server.hostAddress },
                   { label: 'Operating System', value: server.operatingSystem },
-                  { label: 'Created', value: formatDistanceToNow(new Date(server.createdAt), { addSuffix: true }) },
+                  { label: 'Created', value: formatDate(server.createdAt, 'relative') },
                   {
                     label: 'Last Heartbeat',
                     value: server.lastHeartbeat
-                      ? formatDistanceToNow(new Date(server.lastHeartbeat), { addSuffix: true })
+                      ? formatDate(server.lastHeartbeat, 'relative')
                       : 'Never',
                   },
                   { label: 'Active Alerts', value: String(server.activeAlerts ?? 0) },
@@ -1065,7 +1102,7 @@ export default function ServerDetail() {
                           {isPast && <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">{mw.active ? 'Ended' : 'Cancelled'}</span>}
                         </div>
                         <p className="text-xs text-muted-foreground">
-                          {start.toLocaleString()} — {end.toLocaleString()}
+                          {formatDate(start, 'datetime')} — {formatDate(end, 'datetime')}
                         </p>
                       </div>
                       {mw.active && !isPast && serverId && (

@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import {
   Eye, EyeOff, Loader2, Shield, BarChart3,
   Cpu, HardDrive, Wifi, CheckCircle2, ArrowRight, Lock, Zap, Clock,
-  Heart, ArrowLeft
+  ArrowLeft
 } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { useToast } from '@/hooks/use-toast';
@@ -148,8 +148,8 @@ export default function Login() {
             <div className="mb-8">
               <h4 className="text-sm font-bold text-foreground mb-2">About Monitor Server</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Monitor Server is an open-source, self-hosted server monitoring platform built with
-                Spring Boot 3 and React 18. Deploy a lightweight Bash or PowerShell agent on any server and
+                Monitor Server is an AI-powered server monitoring platform built with
+                Spring Boot 3 and React 18, deployed on AWS cloud. Install a lightweight agent on any server and
                 get real-time CPU, memory, disk, and network metrics streamed to your dashboard every 5 seconds.
               </p>
             </div>
@@ -181,7 +181,7 @@ export default function Login() {
                 { label: 'Email notifications', desc: 'Branded HTML alerts when thresholds are breached' },
                 { label: 'Historical data & reports', desc: 'Export metrics in CSV, PDF, or Excel' },
                 { label: 'Per-user data isolation', desc: 'JWT auth ensures you only see your own servers' },
-                { label: 'MIT licensed & free', desc: 'No vendor lock-in, self-host on your infrastructure' },
+                { label: 'Free tier included', desc: 'Unlimited servers, upgrade for AI features' },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-2.5">
                   <CheckCircle2 className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
@@ -313,7 +313,7 @@ export default function Login() {
               'Email notifications on threshold breaches',
               'Export historical data as CSV, PDF, or Excel',
               'Per-user data isolation with JWT authentication',
-              'MIT licensed — self-host on your own infrastructure',
+              'Backed by NVIDIA Inception & AWS Activate programs',
             ].map((feature, i) => (
               <div key={i} className="flex items-center gap-3">
                 <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
@@ -361,8 +361,8 @@ export default function Login() {
 
           {/* Bottom trust */}
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mt-6">
-            <Heart className="h-3.5 w-3.5 text-red-500" />
-            Open source · Free forever · No vendor lock-in
+            <Shield className="h-3.5 w-3.5 text-primary" />
+            Backed by AWS Activate & NVIDIA Inception
           </div>
         </div>
       </div>

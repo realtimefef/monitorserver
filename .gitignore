@@ -12,10 +12,11 @@ dist
 dist-ssr
 *.local
 
-# Environment files (secrets)
+# Environment files (contain secrets)
 .env
 .env.development
 .env.production
+.env.local
 
 # Editor directories and files
 .vscode/*
@@ -28,5 +29,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# Java/Maven build output
+# Backend build output
 backend/target/

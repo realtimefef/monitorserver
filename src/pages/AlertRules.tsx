@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Button } from '@/components/ui/button';
@@ -45,6 +46,7 @@ import {
   Clock,
   RefreshCw,
   Info,
+  ArrowLeft,
 } from 'lucide-react';
 import { serversApi, alertRulesApi, Server as ServerType, AlertRule } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
@@ -405,6 +407,11 @@ export default function AlertRules() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
+            <Link to="/dashboard">
+              <Button variant="ghost" size="sm" className="mb-2 -ml-2 text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="mr-1 h-4 w-4" /> Back to Dashboard
+              </Button>
+            </Link>
             <h1 className="font-display text-3xl font-bold text-foreground">Alert Rules</h1>
             <p className="mt-1 text-muted-foreground">
               Configure threshold-based alerts for your servers

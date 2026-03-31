@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { MainLayout } from '@/components/layout/MainLayout';
+import { useTimezone } from '@/contexts/TimezoneContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,11 +19,11 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 import {
-  Download, RefreshCw, Loader2, BarChart2, TrendingUp, Server, Calendar as CalendarIcon, Palette,
+  Download, RefreshCw, Loader2, BarChart2, TrendingUp, Server, Calendar as CalendarIcon, Palette, ArrowLeft,
 } from 'lucide-react';
 import { serversApi, metricsApi, metricsCustomApi, type Server as ServerType, type Metric, type TimeRange } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
-import { format, subHours, subDays } from 'date-fns';
+import { subHours, subDays, format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import type { DateRange } from 'react-day-picker';
 
@@ -58,8 +60,12 @@ const TIME_FRAMES: { label: string; value: TimeRange | 'custom' | '30d' }[] = [
 const CHART_TYPES = ['line', 'area', 'bar'] as const;
 type ChartType = typeof CHART_TYPES[number];
 
-function buildChartData(metricData: Record<string, Metric[]>) {
+function buildChartData(metricData: Record<string, Metric[]>, tz?: string) {
   const bucketMap = new Map<number, Record<string, number>>();
+  const fmt = new Intl.DateTimeFormat(undefined, {
+    timeZone: tz || undefined,
+    month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+  });
 
   for (const [type, metrics] of Object.entries(metricData)) {
     for (const m of metrics) {
@@ -73,7 +79,7 @@ function buildChartData(metricData: Record<string, Metric[]>) {
 
   return Array.from(bucketMap.entries())
     .sort((a, b) => a[0] - b[0])
-    .map(([, v]) => ({ ...v, time: format(new Date(v.ts), 'MM/dd HH:mm') }));
+    .map(([, v]) => ({ ...v, time: fmt.format(new Date(v.ts)) }));
 }
 
 function computeStats(metrics: Metric[]) {
@@ -89,6 +95,7 @@ function computeStats(metrics: Metric[]) {
 
 export default function History() {
   const { toast } = useToast();
+  const { timezone, formatDate } = useTimezone();
   const chartRef = useRef<HTMLDivElement>(null);
 
   const [servers, setServers] = useState<ServerType[]>([]);
@@ -158,7 +165,7 @@ export default function History() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  const chartData = useMemo(() => buildChartData(metricData), [metricData]);
+  const chartData = useMemo(() => buildChartData(metricData, timezone), [metricData, timezone]);
 
   // Export helpers
   const exportCSV = () => {
@@ -189,7 +196,7 @@ export default function History() {
     doc.text('Metrics Report', 14, 16);
     doc.setFontSize(10);
     doc.text(`Server: ${servers.find(s => s.id.toString() === selectedServer)?.name ?? selectedServer}`, 14, 24);
-    doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 30);
+    doc.text(`Generated: ${formatDate(new Date(), 'full')}`, 14, 30);
     let y = 40;
     for (const [type, metrics] of Object.entries(metricData)) {
       if (y > 260) { doc.addPage(); y = 14; }
@@ -271,6 +278,11 @@ export default function History() {
         {/* Header */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
+            <Link to="/dashboard">
+              <Button variant="ghost" size="sm" className="mb-2 -ml-2 text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="mr-1 h-4 w-4" /> Back to Dashboard
+              </Button>
+            </Link>
             <h1 className="font-display text-3xl font-bold text-foreground">History</h1>
             <p className="mt-1 text-muted-foreground">Historical metric charts and data exports</p>
           </div>

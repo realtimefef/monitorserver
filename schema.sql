@@ -180,6 +180,7 @@ CREATE TABLE IF NOT EXISTS notification_preferences (
     quiet_hours_enabled BOOLEAN DEFAULT FALSE,
     quiet_hours_start   INT,
     quiet_hours_end     INT,
+    timezone            VARCHAR(64) DEFAULT 'UTC',
     created_at          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

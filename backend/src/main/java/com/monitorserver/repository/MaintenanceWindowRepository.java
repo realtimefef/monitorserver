@@ -18,4 +18,6 @@ public interface MaintenanceWindowRepository extends JpaRepository<MaintenanceWi
                                                  @Param("now") LocalDateTime now);
 
     java.util.Optional<MaintenanceWindow> findByIdAndServerId(Long id, Long serverId);
+
+    void deleteByServerId(Long serverId);
 }

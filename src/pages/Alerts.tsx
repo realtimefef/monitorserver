@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { formatDistanceToNow } from 'date-fns';
+import { Link } from 'react-router-dom';
 import { MainLayout } from '@/components/layout/MainLayout';
+import { useTimezone } from '@/contexts/TimezoneContext';
 import { AlertCard } from '@/components/AlertCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +20,7 @@ import {
   History,
   AlertCircle,
   Mail,
+  ArrowLeft,
 } from 'lucide-react';
 import { alertsApi, serversApi, notificationPreferencesApi, Alert, Server, NotificationHistoryItem } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
@@ -36,6 +38,7 @@ type TabView = 'active' | 'resolved' | 'notifications';
 const PAGE_SIZE = 20;
 
 export default function Alerts() {
+  const { formatDate } = useTimezone();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [servers, setServers] = useState<Server[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -226,6 +229,11 @@ export default function Alerts() {
         {/* Header */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
+            <Link to="/dashboard">
+              <Button variant="ghost" size="sm" className="mb-2 -ml-2 text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="mr-1 h-4 w-4" /> Back to Dashboard
+              </Button>
+            </Link>
             <h1 className="font-display text-3xl font-bold text-foreground">Alerts</h1>
             <p className="mt-1 text-muted-foreground">
               Monitor and manage system alerts
@@ -398,8 +406,8 @@ export default function Alerts() {
                     <p className="font-medium text-sm text-foreground truncate">{n.subject}</p>
                     <p className="text-xs text-muted-foreground mt-1 truncate">{n.content}</p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {n.createdAt ? formatDistanceToNow(new Date(n.createdAt), { addSuffix: true }) : ''}
-                      {n.sentAt ? ` · Sent ${formatDistanceToNow(new Date(n.sentAt), { addSuffix: true })}` : ''}
+                      {n.createdAt ? formatDate(n.createdAt, 'relative') : ''}
+                      {n.sentAt ? ` · Sent ${formatDate(n.sentAt, 'relative')}` : ''}
                     </p>
                   </div>
                   <div className="shrink-0">
@@ -477,7 +485,7 @@ export default function Alerts() {
                     <p className="mt-1 text-xs text-muted-foreground px-1">
                       Server: <span className="text-foreground">{alert.serverName}</span>
                       {' · '}
-                      {formatDistanceToNow(new Date(alert.createdAt), { addSuffix: true })}
+                      {formatDate(alert.createdAt, 'relative')}
                     </p>
                   )}
                 </div>

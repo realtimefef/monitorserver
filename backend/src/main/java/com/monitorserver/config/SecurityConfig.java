@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -30,6 +31,9 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserRepository userRepository;
+
+    @org.springframework.beans.factory.annotation.Value("${app.cors.allow-localhost:false}")
+    private boolean allowLocalhost;
 
     public SecurityConfig(@org.springframework.context.annotation.Lazy JwtAuthFilter jwtAuthFilter, UserRepository userRepository) {
         this.jwtAuthFilter = jwtAuthFilter;
@@ -57,6 +61,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/resend-verification").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/metrics/ingest").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/metrics/heartbeat").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/agent/**").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers(HttpMethod.GET, "/").permitAll()
                 .requestMatchers("/ws/**").permitAll()
@@ -71,14 +76,17 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of(
-            "http://localhost:*",
+        List<String> origins = new ArrayList<>(List.of(
             "https://monitorserver.pages.dev",
             "https://*.monitorserver.pages.dev",
             "https://*.onrender.com",
             "https://monitorserver.in",
             "https://*.monitorserver.in"
         ));
+        if (allowLocalhost) {
+            origins.add("http://localhost:*");
+        }
+        configuration.setAllowedOriginPatterns(origins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With", "X-Api-Key"));
         configuration.setAllowCredentials(true);
