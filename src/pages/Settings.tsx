@@ -49,6 +49,7 @@ import {
   Plus,
   Copy,
   ArrowLeft,
+  Globe2,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -701,6 +702,56 @@ export default function Settings() {
               </CardContent>
             </Card>
 
+            {/* ── Timezone (always visible) ──────────────────────────────────── */}
+            <Card className="mt-4">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <Globe2 className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle>Timezone</CardTitle>
+                    <CardDescription>
+                      All dates and times across the app will display in your selected timezone
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Select
+                  value={timezone}
+                  onValueChange={(v) => {
+                    setTimezone(v);
+                    setServerPrefs((p) => p ? { ...p, timezone: v } : p);
+                  }}
+                >
+                  <SelectTrigger className="w-full max-w-sm">
+                    <SelectValue placeholder="Select timezone" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {TIMEZONE_OPTIONS.map((tz) => (
+                      <SelectItem key={tz.value} value={tz.value}>
+                        {tz.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-sm text-muted-foreground">
+                  Current: <span className="font-mono text-foreground">{timezone}</span>
+                  {' · '}
+                  Local time: <span className="font-mono text-foreground">
+                    {new Intl.DateTimeFormat(undefined, {
+                      timeZone: timezone,
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      timeZoneName: 'short',
+                    }).format(new Date())}
+                  </span>
+                </p>
+              </CardContent>
+            </Card>
+
             {/* ── Server Notification Preferences (API) ──────────────────────── */}
             <Card className="mt-4">
               <CardHeader>
@@ -780,49 +831,6 @@ export default function Settings() {
                         </div>
                       </div>
                     )}
-
-                    <Separator />
-
-                    {/* Timezone */}
-                    <div className="space-y-3">
-                      <div>
-                        <p className="font-medium text-foreground">Timezone</p>
-                        <p className="text-xs text-muted-foreground">
-                          All dates and times across the app will display in this timezone
-                        </p>
-                      </div>
-                      <Select
-                        value={serverPrefs.timezone || timezone}
-                        onValueChange={(v) => {
-                          setTimezone(v);
-                          setServerPrefs((p) => p ? { ...p, timezone: v } : p);
-                        }}
-                      >
-                        <SelectTrigger className="w-full max-w-sm">
-                          <SelectValue placeholder="Select timezone" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {TIMEZONE_OPTIONS.map((tz) => (
-                            <SelectItem key={tz.value} value={tz.value}>
-                              {tz.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <p className="text-xs text-muted-foreground">
-                        Current: <span className="font-mono text-foreground">{serverPrefs.timezone || timezone}</span>
-                        {' · '}
-                        Local time: <span className="font-mono text-foreground">
-                          {new Intl.DateTimeFormat(undefined, {
-                            timeZone: serverPrefs.timezone || timezone,
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit',
-                            timeZoneName: 'short',
-                          }).format(new Date())}
-                        </span>
-                      </p>
-                    </div>
 
                     <Separator />
 
