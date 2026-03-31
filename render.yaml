@@ -13,10 +13,18 @@ services:
     dockerContext: ./backend
     plan: starter
     envVars:
-      - key: DATABASE_URL
+      - key: DB_HOST
         fromDatabase:
           name: monitor-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: monitor-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: monitor-db
+          property: database
       - key: DB_USERNAME
         fromDatabase:
           name: monitor-db
