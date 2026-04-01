@@ -51,7 +51,7 @@ export default function Index() {
       {/* ─── Navbar ─── */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-2xl border-b border-border/50">
         <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2.5">
+          <Link to={isAuthenticated ? '/dashboard' : '/'} className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/25">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
