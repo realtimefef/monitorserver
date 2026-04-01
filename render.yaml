@@ -1,6 +1,6 @@
 databases:
   - name: monitor-db
-    plan: free
+    plan: basic-256mb
     databaseName: monitor_db
     user: monitor_user
 
