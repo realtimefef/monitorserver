@@ -100,7 +100,7 @@ export default function Login() {
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -122,7 +122,7 @@ export default function Login() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in\u2026
+                  Signing in…
                 </>
               ) : (
                 <>
@@ -140,7 +140,7 @@ export default function Login() {
             </Link>
           </p>
 
-          {/* About NodeVigil \u2014 below form */}
+          {/* About NodeVigil - below form */}
           <div className="mt-10 pt-8 border-t border-border">
             {/* Project overview */}
             <div className="mb-8">
@@ -174,7 +174,7 @@ export default function Login() {
             <div className="space-y-2 mb-6">
               <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider">What You Get</h4>
               {[
-                { label: 'Instant access', desc: 'No email confirmation \u2014 sign up and log straight in' },
+                { label: 'Instant access', desc: 'No email confirmation — sign up and log straight in' },
                 { label: 'Live metrics dashboard', desc: 'CPU, memory, disk & network at a glance' },
                 { label: 'Threshold-based alerts', desc: 'Custom rules with severity levels & cooldowns' },
                 { label: 'Historical data & reports', desc: 'Export metrics in CSV, PDF, or Excel' },
@@ -185,7 +185,7 @@ export default function Login() {
                   <CheckCircle2 className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
                   <div>
                     <span className="text-xs font-medium text-foreground">{item.label}</span>
-                    <span className="text-[10px] text-muted-foreground ml-1">\u2014 {item.desc}</span>
+                    <span className="text-[10px] text-muted-foreground ml-1">— {item.desc}</span>
                   </div>
                 </div>
               ))}
@@ -210,11 +210,11 @@ export default function Login() {
             {/* Footer links */}
             <div className="flex items-center justify-center gap-4 text-[10px] text-muted-foreground pt-4 border-t border-border">
               <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-              <span>\u00b7</span>
+              <span>·</span>
               <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-              <span>\u00b7</span>
+              <span>·</span>
               <Link to="/help" className="hover:text-foreground transition-colors">Help</Link>
-              <span>\u00b7</span>
+              <span>·</span>
               <Link to="/status" className="hover:text-foreground transition-colors">Status</Link>
             </div>
           </div>
@@ -241,7 +241,7 @@ export default function Login() {
             Built for Engineers Who Care About Uptime
           </h2>
           <p className="text-center text-muted-foreground mb-10">
-            NodeVigil gives you full-stack infrastructure visibility \u2014 CPU, memory, disk, and network \u2014
+            NodeVigil gives you full-stack infrastructure visibility — CPU, memory, disk, and network —
             streamed in real time to a single dashboard. Built with Spring Boot 3, React 18, and PostgreSQL.
           </p>
 
@@ -360,7 +360,7 @@ export default function Login() {
           {/* Bottom trust */}
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mt-6">
             <Shield className="h-3.5 w-3.5 text-primary" />
-            JWT-secured \u00b7 Per-user data isolation \u00b7 No email confirmation needed
+            JWT-secured · Per-user data isolation · No email confirmation needed
           </div>
         </div>
       </div>
