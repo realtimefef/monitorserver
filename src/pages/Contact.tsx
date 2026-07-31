@@ -14,7 +14,7 @@ export default function Contact() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/25">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight">Monitor Server</span>
+            <span className="font-display text-lg font-bold tracking-tight">NodeVigil</span>
           </Link>
           <ThemeToggle />
         </div>
@@ -36,7 +36,7 @@ export default function Contact() {
               <Mail className="h-5 w-5 text-primary" />
             </div>
             <h3 className="font-semibold mb-1">Email</h3>
-            <p className="text-sm text-muted-foreground">support@monitorserver.in</p>
+            <a href="mailto:support@nodevigil.cloud" className="text-sm text-muted-foreground hover:text-primary transition-colors">support@nodevigil.cloud</a>
           </div>
           <div className="rounded-xl border border-border bg-card p-6 text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mx-auto mb-4">
@@ -108,21 +108,15 @@ export default function Contact() {
       {/* Footer */}
       <footer className="border-t border-border bg-card/50 mt-16">
         <div className="container mx-auto px-6 py-8">
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center justify-center gap-6">
-              <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
-              <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-              <span>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a></span>
-              <nav className="flex gap-6">
-                <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-                <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-                <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
-                <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
-              </nav>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+            <span>&copy; {new Date().getFullYear()} NodeVigil by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a></span>
+            <nav className="flex flex-wrap justify-center gap-6">
+              <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+              <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+              <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
+              <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+              <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
+            </nav>
           </div>
         </div>
       </footer>
