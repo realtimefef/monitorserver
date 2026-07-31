@@ -2,15 +2,16 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
-import { useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState } from 'react';
 import {
   Server, Bell, Shield, Zap, LineChart, ChevronRight,
   CheckCircle2, Cpu, HardDrive, Wifi, BarChart3, ArrowRight,
   Terminal, AlertTriangle, Eye, Layers, Lock, Gauge,
   Clock, Menu, X, Play, Sparkles, Brain, Bot,
   Cloud, Network, Container, Users, TrendingUp,
-  Rocket, Target, Building2, DollarSign
+  Rocket, Target, Building2, DollarSign, Database,
+  Activity, Globe, Quote, Star, Minus
 } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import {
@@ -20,7 +21,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 
-/* ── Animated particles for hero ── */
+/* Animated particles for hero */
 const PARTICLES = Array.from({ length: 16 }, () => ({
   top: `${Math.random() * 100}%`,
   left: `${Math.random() * 100}%`,
@@ -29,13 +30,50 @@ const PARTICLES = Array.from({ length: 16 }, () => ({
   delay: Math.random() * 2,
 }));
 
+const NAV_ITEMS = [
+  { label: 'Features', to: '/features' },
+  { label: 'Pricing', to: '/pricing' },
+  { label: 'How It Works', to: '/how-it-works' },
+  { label: 'Blog', to: '/blog' },
+  { label: 'Docs', to: '/docs' },
+];
+
 const faqs = [
-  { q: 'What exactly does Monitor Server do?', a: 'It gives you a live window into every server you manage. CPU spikes, memory leaks, disk pressure, network throughput — all visible in one place, updated every 5 seconds.' },
+  { q: 'What exactly does NodeVigil do?', a: 'It gives you a live window into every server you manage. CPU spikes, memory leaks, disk pressure, network throughput - all visible in one place, updated every 5 seconds.' },
   { q: 'Is there anything to install?', a: 'Just a small shell script (Bash or PowerShell). Copy it to your server, plug in the agent key from your dashboard, and metrics start flowing within seconds.' },
-  { q: 'How are alerts configured?', a: 'You create rules in the dashboard — pick a metric, set a threshold, choose a severity. When the value crosses that line, you get notified immediately.' },
-  { q: 'What if I have dozens of servers?', a: 'Monitor Server is built for scale. Each server runs its own lightweight agent. The dashboard aggregates everything so you can see fleet-wide health at a glance.' },
+  { q: 'How are alerts configured?', a: 'You create rules in the dashboard - pick a metric, set a threshold, choose a severity. When the value crosses that line, you get notified immediately.' },
+  { q: 'What if I have dozens of servers?', a: 'NodeVigil is built for scale. Each server runs its own lightweight agent. The dashboard aggregates everything so you can see fleet-wide health at a glance.' },
+  { q: 'Does the agent slow my servers down?', a: 'No. The agent reads kernel counters, uses well under one percent of a single core, and holds a footprint smaller than 5 KB on disk.' },
   { q: 'Is my data secure?', a: 'All data is stored securely in PostgreSQL with per-user isolation. Each user can only see their own servers and metrics. Auth is handled via secure JWT tokens.' },
-  { q: 'Is it really free?', a: 'Yes — the free tier includes unlimited servers, real-time metrics, and custom alert rules with no credit card required. When you need AI-powered features, advanced integrations, and longer metric history, upgrade to Pro.' },
+  { q: 'Can I monitor servers across different providers?', a: 'Yes. The same agent runs on cloud instances, bare metal, virtual machines, and container hosts. One dashboard covers all of them.' },
+  { q: 'Is it really free?', a: 'Yes - the free tier includes unlimited servers, real-time metrics, and custom alert rules with no credit card required. When you need AI-powered features, advanced integrations, and longer metric history, upgrade to Pro.' },
+];
+
+const testimonials = [
+  {
+    quote: 'We replaced three separate dashboards with NodeVigil in an afternoon. The agent took two minutes per host and we have not touched it since.',
+    name: 'Platform Lead',
+    role: 'Series A fintech, 40 servers',
+  },
+  {
+    quote: 'The alerting is what sold us. Thresholds per server, sane cooldowns, and no pager noise at three in the morning for a blip that resolved itself.',
+    name: 'Head of Infrastructure',
+    role: 'B2B SaaS, 120 servers',
+  },
+  {
+    quote: 'Setup was genuinely five minutes. Our on-call engineers can now see fleet health on one screen instead of stitching together log queries.',
+    name: 'DevOps Engineer',
+    role: 'E-commerce platform, 18 servers',
+  },
+];
+
+const comparison = [
+  { capability: 'Live metrics under 5 seconds', nodevigil: true, diy: false, legacy: true },
+  { capability: 'Setup measured in minutes', nodevigil: true, diy: false, legacy: false },
+  { capability: 'Unlimited servers on the free tier', nodevigil: true, diy: true, legacy: false },
+  { capability: 'No agent dependencies or sidecars', nodevigil: true, diy: false, legacy: false },
+  { capability: 'Per-server alert thresholds', nodevigil: true, diy: false, legacy: true },
+  { capability: 'Per-user data isolation by default', nodevigil: true, diy: false, legacy: true },
 ];
 
 export default function Index() {
@@ -48,24 +86,18 @@ export default function Index() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
-      {/* ─── Navbar ─── */}
+      {/* Navbar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-2xl border-b border-border/50">
         <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/25">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight hidden sm:inline">Monitor Server</span>
+            <span className="font-display text-lg font-bold tracking-tight hidden sm:inline">NodeVigil</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
-            {[
-              { label: 'Features', to: '/features' },
-              { label: 'Pricing', to: '/pricing' },
-              { label: 'How It Works', to: '/how-it-works' },
-              { label: 'Blog', to: '/blog' },
-              { label: 'Docs', to: '/docs' },
-            ].map((item) => (
+            {NAV_ITEMS.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
@@ -107,13 +139,7 @@ export default function Index() {
             exit={{ opacity: 0, height: 0 }}
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
-              {[
-                { label: 'Features', to: '/features' },
-                { label: 'Pricing', to: '/pricing' },
-                { label: 'How It Works', to: '/how-it-works' },
-                { label: 'Blog', to: '/blog' },
-                { label: 'Docs', to: '/docs' },
-              ].map((item) => (
+              {NAV_ITEMS.map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
@@ -137,23 +163,19 @@ export default function Index() {
         )}
       </header>
 
-      {/* ─── Announcement Bar ─── */}
+      {/* Announcement bar */}
       <div className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 border-b border-primary/20 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-1.5 flex items-center justify-center gap-2 text-xs sm:text-sm">
           <Sparkles className="h-3.5 w-3.5 text-primary shrink-0" />
-          <span className="text-muted-foreground">Built on</span>
-          <span className="font-semibold text-foreground">NVIDIA GPU</span>
-          <span className="text-muted-foreground">&amp;</span>
-          <span className="font-semibold text-foreground">AWS Cloud</span>
-          <span className="text-muted-foreground hidden sm:inline">— AI chatbot & smart monitoring coming soon</span>
+          <span className="font-semibold text-foreground">NodeVigil 1.0</span>
+          <span className="text-muted-foreground">is live</span>
+          <span className="text-muted-foreground hidden sm:inline">- AI assistant and smart remediation coming soon</span>
         </div>
       </div>
 
-      {/* ─── Hero ─── */}
+      {/* Hero */}
       <section ref={heroRef} className="relative min-h-[100svh] flex items-center pt-24 overflow-hidden">
-        {/* Animated background */}
         <div className="absolute inset-0 pointer-events-none">
-          {/* Gradient mesh blobs — subtle, professional */}
           <motion.div
             className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-primary/[0.05] rounded-full blur-[160px]"
             animate={{ scale: [1, 1.08, 1], opacity: [0.3, 0.45, 0.3] }}
@@ -170,7 +192,6 @@ export default function Index() {
             transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
           />
 
-          {/* Minimal particles — refined, sparse */}
           {PARTICLES.map((p, i) => (
             <motion.div
               key={`p-${i}`}
@@ -194,10 +215,7 @@ export default function Index() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
               </span>
-              <img src="/powered-by-aws-logo.webp" alt="AWS" className="h-4 sm:h-5 object-contain" />
-              <span className="mx-1">&amp;</span>
-              <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-4 sm:h-5 object-contain" />
-              GPU Infrastructure
+              Live metrics every 5 seconds
             </motion.div>
 
             <motion.h1
@@ -206,9 +224,9 @@ export default function Index() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              Infrastructure monitoring,
+              Every server you run,
               <br />
-              <span className="text-gradient-primary">reimagined with AI.</span>
+              <span className="text-gradient-primary">watched in real time.</span>
             </motion.h1>
 
             <motion.p
@@ -217,8 +235,9 @@ export default function Index() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
             >
-              Real-time server monitoring for DevOps teams, SaaS startups, and cloud infrastructure engineers.
-              Deploy a lightweight agent and get instant visibility into CPU, memory, disk &amp; network — powered by AWS cloud and NVIDIA GPU acceleration.
+              NodeVigil is real-time infrastructure monitoring for DevOps teams, SaaS startups, and platform
+              engineers. Deploy one lightweight agent and get instant visibility into CPU, memory, disk, and
+              network across your entire fleet.
             </motion.p>
 
             <motion.div
@@ -229,7 +248,7 @@ export default function Index() {
             >
               <Button size="lg" className="h-13 px-8 text-base shadow-xl shadow-primary/20" asChild>
                 <Link to="/register">
-                  Get started — it's free
+                  Get started - it is free
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -261,7 +280,6 @@ export default function Index() {
           >
             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-20 pointer-events-none" />
             <div className="relative rounded-2xl border border-border bg-card/80 backdrop-blur-sm shadow-2xl shadow-black/20 overflow-hidden">
-              {/* Title bar */}
               <div className="flex items-center gap-2 px-5 py-3 border-b border-border bg-muted/30">
                 <div className="flex gap-1.5">
                   <div className="h-3 w-3 rounded-full bg-red-500/80" />
@@ -269,13 +287,11 @@ export default function Index() {
                   <div className="h-3 w-3 rounded-full bg-green-500/80" />
                 </div>
                 <div className="flex-1 text-center">
-                  <span className="text-xs text-muted-foreground font-mono">monitorserver.in/dashboard</span>
+                  <span className="text-xs text-muted-foreground font-mono">nodevigil - dashboard</span>
                 </div>
               </div>
 
-              {/* Dashboard content */}
               <div className="p-6 md:p-8">
-                {/* Top row — metric tiles */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                   {[
                     { icon: Cpu, label: 'CPU', value: '24%', accent: 'text-emerald-500', bar: 'bg-emerald-500', w: '24%' },
@@ -307,7 +323,6 @@ export default function Index() {
                   ))}
                 </div>
 
-                {/* Chart + server list */}
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="md:col-span-2 rounded-xl bg-background/60 border border-border p-5">
                     <div className="flex items-center justify-between mb-4">
@@ -363,7 +378,7 @@ export default function Index() {
         </motion.div>
       </section>
 
-      {/* ─── Powered By / Trust Bar ─── */}
+      {/* Stats bar */}
       <section className="py-20 border-y border-border bg-muted/20">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.p
@@ -372,58 +387,23 @@ export default function Index() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
-            Our Technology Stack
+            Built for production
           </motion.p>
           <motion.h3
-            className="text-center text-2xl sm:text-3xl font-bold text-foreground mb-10"
+            className="text-center text-2xl sm:text-3xl font-bold text-foreground mb-12"
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Built on industry-leading platforms
+            Numbers that matter when something breaks
           </motion.h3>
 
-          {/* Large partner logos */}
-          <div className="flex flex-wrap items-center justify-center gap-10 sm:gap-16 mb-14">
-            <motion.div
-              className="flex flex-col items-center gap-3 hover:scale-105 transition-transform"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-            >
-              <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-14 sm:h-20 object-contain" />
-              <span className="text-xs text-muted-foreground font-medium">AWS Cloud Platform</span>
-            </motion.div>
-            <motion.div
-              className="flex flex-col items-center gap-3 hover:scale-105 transition-transform"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              <img src="/powered-by-nvidia.png" alt="Powered by NVIDIA" className="h-14 sm:h-20 object-contain" />
-              <span className="text-xs text-muted-foreground font-medium">NVIDIA GPU Platform</span>
-            </motion.div>
-            <motion.div
-              className="flex flex-col items-center gap-3 hover:scale-105 transition-transform"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-            >
-              <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-14 sm:h-20 object-contain" />
-              <span className="text-xs text-muted-foreground font-medium">NVIDIA TensorRT</span>
-            </motion.div>
-          </div>
-
-          {/* Social proof stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
               { value: '99.9%', label: 'Uptime SLA', icon: Shield },
               { value: '5s', label: 'Metric Refresh', icon: Gauge },
               { value: '<50ms', label: 'Alert Latency', icon: Zap },
-              { value: '∞', label: 'Servers Supported', icon: Server },
+              { value: 'Unlimited', label: 'Servers Supported', icon: Server },
             ].map((stat, i) => (
               <motion.div
                 key={i}
@@ -442,7 +422,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── Who It's For ─── */}
+      {/* Who it is for */}
       <section className="py-24">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
@@ -456,7 +436,7 @@ export default function Index() {
               Built for teams who ship
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              Whether you're managing a single server or an entire fleet, Monitor Server scales with you.
+              Whether you are managing a single server or an entire fleet, NodeVigil scales with you.
             </p>
           </motion.div>
 
@@ -465,31 +445,31 @@ export default function Index() {
               {
                 icon: Rocket,
                 title: 'SaaS Startups',
-                desc: 'Monitor your production infrastructure from day one. Catch performance issues before they impact customers and churn.',
+                desc: 'Monitor your production infrastructure from day one. Catch performance issues before they reach customers.',
                 color: 'bg-emerald-500/10 text-emerald-500',
               },
               {
                 icon: Target,
                 title: 'DevOps Engineers',
-                desc: 'Replace fragmented monitoring with a single pane of glass. Track CPU, memory, disk, and network across every server.',
+                desc: 'Replace fragmented tooling with a single pane of glass covering CPU, memory, disk, and network on every host.',
                 color: 'bg-blue-500/10 text-blue-500',
               },
               {
                 icon: Building2,
-                title: 'Cloud Infrastructure Teams',
-                desc: 'Manage AWS EC2 instances, on-premise servers, and hybrid environments from one dashboard with real-time alerts.',
+                title: 'Platform Teams',
+                desc: 'Manage cloud instances, on-premise servers, and hybrid environments from one dashboard with real-time alerts.',
                 color: 'bg-violet-500/10 text-violet-500',
               },
               {
                 icon: Container,
-                title: 'Container & Kubernetes',
-                desc: 'Monitor nodes running Docker and Kubernetes workloads. Track resource utilization across your orchestrated infrastructure.',
+                title: 'Container and Kubernetes',
+                desc: 'Monitor nodes running Docker and Kubernetes workloads. Track resource pressure across orchestrated infrastructure.',
                 color: 'bg-amber-500/10 text-amber-500',
               },
               {
                 icon: Network,
                 title: 'Multi-Cloud Deployments',
-                desc: 'A single monitoring agent works across AWS EC2, GCP, Azure, and bare-metal. One consistent interface for all your infrastructure.',
+                desc: 'One agent works across every major cloud provider and bare metal. One consistent interface for all of it.',
                 color: 'bg-red-500/10 text-red-500',
               },
               {
@@ -518,7 +498,8 @@ export default function Index() {
           </div>
         </div>
       </section>
-      {/* ─── Core Technology Demos ─── */}
+
+      {/* Core technology */}
       <section className="py-28 bg-muted/5">
         <div className="container mx-auto px-6">
           <motion.div
@@ -532,11 +513,11 @@ export default function Index() {
               How it all works
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              A lightweight agent, real-time pipelines, and intelligent alerting — under the hood.
+              A lightweight agent, real-time pipelines, and intelligent alerting - under the hood.
             </p>
           </motion.div>
 
-          {/* Demo 1: Data Ingestion — left text, right animation */}
+          {/* Ingestion */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-28">
             <motion.div
               initial={{ opacity: 0, x: -24 }}
@@ -550,10 +531,11 @@ export default function Index() {
                 Zero-config data ingestion
               </h3>
               <p className="text-muted-foreground text-lg leading-relaxed mb-6 max-w-lg">
-                A single shell script reads CPU, memory, disk and network counters every 5 seconds, then pushes them over HTTPS to the backend. No Docker, no sidecars, no daemons.
+                A single shell script reads CPU, memory, disk, and network counters every 5 seconds, then pushes
+                them over HTTPS to the backend. No Docker, no sidecars, no daemons.
               </p>
               <ul className="space-y-3">
-                {['Bash + PowerShell cross-platform', 'Under 5 KB footprint', 'Auto-reconnect on failure', 'Secure agent key auth'].map((item, i) => (
+                {['Bash and PowerShell cross-platform', 'Under 5 KB footprint', 'Auto-reconnect on failure', 'Secure agent key auth'].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-sm text-foreground/80">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" /> {item}
                   </li>
@@ -566,15 +548,13 @@ export default function Index() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              {/* Animated ingestion visualization */}
               <div className="rounded-2xl border border-border bg-[#0c0f1a] overflow-hidden shadow-2xl p-6 relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none" />
                 <div className="relative space-y-4">
-                  {/* Simulated server nodes sending data */}
                   {[
-                    { name: 'web-prod-01', cpu: 24, mem: 61, color: 'emerald' },
-                    { name: 'db-primary', cpu: 45, mem: 78, color: 'blue' },
-                    { name: 'cache-01', cpu: 12, mem: 34, color: 'violet' },
+                    { name: 'web-prod-01', cpu: 24, mem: 61, dot: 'bg-emerald-500/20', icon: 'text-emerald-400' },
+                    { name: 'db-primary', cpu: 45, mem: 78, dot: 'bg-blue-500/20', icon: 'text-blue-400' },
+                    { name: 'cache-01', cpu: 12, mem: 34, dot: 'bg-violet-500/20', icon: 'text-violet-400' },
                   ].map((node, i) => (
                     <motion.div
                       key={i}
@@ -584,8 +564,8 @@ export default function Index() {
                       viewport={{ once: true }}
                       transition={{ delay: 0.3 + i * 0.15 }}
                     >
-                      <div className={`h-8 w-8 rounded-lg bg-${node.color}-500/20 flex items-center justify-center shrink-0`}>
-                        <Server className={`h-4 w-4 text-${node.color}-400`} />
+                      <div className={`h-8 w-8 rounded-lg ${node.dot} flex items-center justify-center shrink-0`}>
+                        <Server className={`h-4 w-4 ${node.icon}`} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-mono text-gray-300 mb-1">{node.name}</div>
@@ -607,7 +587,6 @@ export default function Index() {
                     </motion.div>
                   ))}
 
-                  {/* Central hub */}
                   <motion.div
                     className="flex items-center justify-center gap-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4 mt-2"
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -616,7 +595,7 @@ export default function Index() {
                     transition={{ delay: 0.8 }}
                   >
                     <MonitorLogo className="h-5 w-5 text-emerald-400" />
-                    <span className="text-sm font-medium text-emerald-300">Monitor Server API — Ingesting</span>
+                    <span className="text-sm font-medium text-emerald-300">NodeVigil API - Ingesting</span>
                     <motion.div
                       className="h-2 w-2 rounded-full bg-emerald-400"
                       animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
@@ -628,7 +607,7 @@ export default function Index() {
             </motion.div>
           </div>
 
-          {/* Demo 2: Real-time Streaming — right text, left animation */}
+          {/* Streaming */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-28">
             <motion.div
               className="order-2 lg:order-1"
@@ -636,7 +615,6 @@ export default function Index() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              {/* Live metric stream visualization */}
               <div className="rounded-2xl border border-border bg-[#0c0f1a] overflow-hidden shadow-2xl p-6 relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent pointer-events-none" />
                 <div className="relative">
@@ -655,13 +633,12 @@ export default function Index() {
                     </div>
                   </div>
 
-                  {/* Animated metric bars */}
                   <div className="space-y-3">
                     {[
-                      { label: 'CPU', value: 24, max: 100, color: 'bg-emerald-400' },
-                      { label: 'RAM', value: 61, max: 100, color: 'bg-blue-400' },
-                      { label: 'Disk', value: 43, max: 100, color: 'bg-amber-400' },
-                      { label: 'Net', value: 38, max: 100, color: 'bg-violet-400' },
+                      { label: 'CPU', value: 24, color: 'bg-emerald-400' },
+                      { label: 'RAM', value: 61, color: 'bg-blue-400' },
+                      { label: 'Disk', value: 43, color: 'bg-amber-400' },
+                      { label: 'Net', value: 38, color: 'bg-violet-400' },
                     ].map((m, i) => (
                       <div key={i} className="space-y-1.5">
                         <div className="flex items-center justify-between text-xs">
@@ -689,7 +666,6 @@ export default function Index() {
                     ))}
                   </div>
 
-                  {/* WebSocket indicator */}
                   <motion.div
                     className="mt-4 flex items-center gap-2 rounded-lg bg-blue-500/10 border border-blue-500/20 px-3 py-2"
                     initial={{ opacity: 0 }}
@@ -698,7 +674,7 @@ export default function Index() {
                     transition={{ delay: 1.2 }}
                   >
                     <Zap className="h-3.5 w-3.5 text-blue-400" />
-                    <span className="text-xs text-blue-300 font-mono">ws://api/metrics — connected</span>
+                    <span className="text-xs text-blue-300 font-mono">ws://api/metrics - connected</span>
                   </motion.div>
                 </div>
               </div>
@@ -717,7 +693,8 @@ export default function Index() {
                 Sub-second metric delivery
               </h3>
               <p className="text-muted-foreground text-lg leading-relaxed mb-6 max-w-lg">
-                Once ingested, metrics are pushed to your dashboard instantly via WebSocket + STOMP. No polling, no delays — your charts animate in real time.
+                Once ingested, metrics are pushed to your dashboard instantly over WebSocket and STOMP. No polling,
+                no delays - your charts animate in real time.
               </p>
               <ul className="space-y-3">
                 {['STOMP over WebSocket protocol', 'Per-server subscriptions', 'Automatic reconnection', 'Binary-efficient payloads'].map((item, i) => (
@@ -729,7 +706,7 @@ export default function Index() {
             </motion.div>
           </div>
 
-          {/* Demo 3: Smart Alerting — left text, right animation */}
+          {/* Alerting */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -24 }}
@@ -743,10 +720,11 @@ export default function Index() {
                 Threshold-based alerting engine
               </h3>
               <p className="text-muted-foreground text-lg leading-relaxed mb-6 max-w-lg">
-                Define rules for any metric — CPU, memory, disk, network. When values breach your thresholds, alerts fire instantly with configurable severity and cooldowns.
+                Define rules for any metric - CPU, memory, disk, network. When values breach your thresholds,
+                alerts fire instantly with configurable severity and cooldowns.
               </p>
               <ul className="space-y-3">
-                {['INFO / WARNING / CRITICAL levels', 'Configurable cooldown periods', 'Per-server rule overrides', 'One-click acknowledge & resolve'].map((item, i) => (
+                {['INFO, WARNING, and CRITICAL levels', 'Configurable cooldown periods', 'Per-server rule overrides', 'One-click acknowledge and resolve'].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-sm text-foreground/80">
                     <CheckCircle2 className="h-4 w-4 text-red-500 shrink-0" /> {item}
                   </li>
@@ -759,16 +737,14 @@ export default function Index() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              {/* Animated alert chart */}
               <div className="rounded-2xl border border-border bg-[#0c0f1a] overflow-hidden shadow-2xl p-6 relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent pointer-events-none" />
                 <div className="relative">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-sm font-medium text-gray-300">CPU — prod-web-01</span>
+                    <span className="text-sm font-medium text-gray-300">CPU - prod-web-01</span>
                     <span className="text-[10px] text-gray-500 uppercase tracking-wider">Last 30 min</span>
                   </div>
 
-                  {/* Chart bars with threshold line */}
                   <div className="h-32 flex items-end gap-[2px] relative mb-4">
                     <div className="absolute top-[20%] left-0 right-0 border-t border-dashed border-red-500/50 z-10">
                       <span className="absolute -top-2.5 right-0 text-[9px] text-red-400 bg-[#0c0f1a] px-1 rounded">80%</span>
@@ -785,7 +761,6 @@ export default function Index() {
                     ))}
                   </div>
 
-                  {/* Alert toast popup */}
                   <motion.div
                     className="flex items-center gap-3 rounded-xl bg-red-500/15 border border-red-500/30 p-3"
                     initial={{ opacity: 0, y: 8, scale: 0.95 }}
@@ -801,8 +776,8 @@ export default function Index() {
                       <AlertTriangle className="h-4 w-4 text-white" />
                     </motion.div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-xs font-semibold text-red-300">CRITICAL — CPU &gt; 80%</div>
-                      <div className="text-[10px] text-gray-500">prod-web-01 · triggered 30s ago</div>
+                      <div className="text-xs font-semibold text-red-300">CRITICAL - CPU above 80%</div>
+                      <div className="text-[10px] text-gray-500">prod-web-01 - triggered 30s ago</div>
                     </div>
                     <span className="text-[10px] bg-red-500/30 text-red-300 font-medium px-2 py-0.5 rounded-full shrink-0">ACTIVE</span>
                   </motion.div>
@@ -813,7 +788,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── Features ─── */}
+      {/* Features */}
       <section id="features" className="py-28">
         <div className="container mx-auto px-6">
           <motion.div
@@ -824,7 +799,7 @@ export default function Index() {
           >
             <span className="text-sm font-medium text-primary mb-3 block">Capabilities</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
-              Everything you need,<br />nothing you don't.
+              Everything you need,<br />nothing you do not.
             </h2>
             <p className="text-muted-foreground text-lg">
               Focused monitoring tools that work out of the box.
@@ -833,12 +808,15 @@ export default function Index() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Cpu, title: 'CPU & Load Tracking', desc: 'Watch processor usage and load averages across every core, with per-server breakdowns.' },
-              { icon: HardDrive, title: 'Memory & Disk', desc: 'Track RAM consumption, swap usage, and disk space so you never get caught off guard.' },
+              { icon: Cpu, title: 'CPU and Load Tracking', desc: 'Watch processor usage and load averages across every core, with per-server breakdowns.' },
+              { icon: HardDrive, title: 'Memory and Disk', desc: 'Track RAM consumption, swap usage, and disk space so you never get caught off guard.' },
               { icon: Wifi, title: 'Network Throughput', desc: 'See inbound and outbound traffic in real time. Spot anomalies before they impact users.' },
               { icon: Bell, title: 'Custom Alert Rules', desc: 'Set thresholds per server, per metric. Choose severity levels and get notified your way.' },
-              { icon: Eye, title: 'Live Dashboard', desc: 'Metrics update in real time via WebSocket — no refresh needed. See the pulse of your fleet.' },
+              { icon: Eye, title: 'Live Dashboard', desc: 'Metrics update in real time over WebSocket - no refresh needed. See the pulse of your fleet.' },
               { icon: Lock, title: 'Secure by Design', desc: 'JWT authentication, per-user data isolation, and auto-expiring tokens keep your data yours.' },
+              { icon: Clock, title: 'Historical Trends', desc: 'Compare today against last week. Spot slow regressions long before they become incidents.' },
+              { icon: Database, title: 'Scheduled Reports', desc: 'Export fleet health summaries on a schedule and share them with the rest of your team.' },
+              { icon: Activity, title: 'Status Pages', desc: 'Publish a live status view so stakeholders can check system health without asking you.' },
             ].map((f, i) => (
               <motion.div
                 key={i}
@@ -863,7 +841,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── How It Works — Visual Pipeline ─── */}
+      {/* How it works */}
       <section id="how-it-works" className="py-28 bg-muted/20 border-y border-border">
         <div className="container mx-auto px-6">
           <motion.div
@@ -900,7 +878,7 @@ export default function Index() {
               {
                 num: '3',
                 title: 'Watch metrics flow',
-                desc: 'CPU, RAM, disk, network — all streaming live. Set up alert rules and relax.',
+                desc: 'CPU, RAM, disk, network - all streaming live. Set up alert rules and relax.',
                 icon: LineChart,
                 color: 'from-violet-500/20 to-violet-500/5',
               },
@@ -944,12 +922,12 @@ export default function Index() {
                   <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
                   <div className="h-2.5 w-2.5 rounded-full bg-green-500/70" />
                 </div>
-                  <span className="ml-3 text-xs text-gray-500 font-mono">~/ terminal</span>
+                <span className="ml-3 text-xs text-gray-500 font-mono">~/ terminal</span>
               </div>
               <div className="p-5 font-mono text-sm text-gray-400 space-y-1.5">
-                <div><span className="text-emerald-400">$</span> chmod +x monitor-agent.sh && ./monitor-agent.sh</div>
+                <div><span className="text-emerald-400">$</span> chmod +x nodevigil-agent.sh &amp;&amp; ./nodevigil-agent.sh</div>
                 <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.3 }}>
-                  <span className="text-gray-500">[info]</span> Monitor Server Agent v1.0
+                  <span className="text-gray-500">[info]</span> NodeVigil Agent v1.0
                 </motion.div>
                 <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.6 }}>
                   <span className="text-gray-500">[info]</span> OS detected: Linux x86_64
@@ -972,8 +950,110 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── Developer Resources ─── */}
-      <section className="py-28 border-t border-border">
+      {/* Testimonials */}
+      <section className="py-28">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-sm font-medium text-primary mb-3 block">Customer Stories</span>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Teams that stopped guessing
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              What engineering teams say after moving their fleet onto NodeVigil.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={i}
+                className="rounded-2xl border border-border bg-card p-8 flex flex-col"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Quote className="h-6 w-6 text-primary/40 mb-5" />
+                <p className="text-foreground/90 leading-relaxed mb-6 flex-1">{t.quote}</p>
+                <div className="flex items-center gap-1 mb-4">
+                  {Array.from({ length: 5 }).map((_, s) => (
+                    <Star key={s} className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+                  ))}
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-foreground">{t.name}</div>
+                  <div className="text-xs text-muted-foreground">{t.role}</div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison */}
+      <section className="py-28 bg-muted/20 border-y border-border">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.div
+            className="text-center mb-14"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-sm font-medium text-primary mb-3 block">Comparison</span>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Why teams switch
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              How NodeVigil compares to rolling your own scripts or running a heavyweight legacy suite.
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="max-w-4xl mx-auto overflow-hidden rounded-2xl border border-border bg-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="grid grid-cols-4 gap-2 px-6 py-4 border-b border-border bg-muted/30 text-xs sm:text-sm font-semibold text-foreground">
+              <span className="col-span-1 sm:col-span-1">Capability</span>
+              <span className="text-center text-primary">NodeVigil</span>
+              <span className="text-center text-muted-foreground">DIY scripts</span>
+              <span className="text-center text-muted-foreground">Legacy suite</span>
+            </div>
+            {comparison.map((row, i) => (
+              <div
+                key={i}
+                className="grid grid-cols-4 gap-2 px-6 py-4 border-b border-border last:border-b-0 items-center text-sm"
+              >
+                <span className="text-muted-foreground">{row.capability}</span>
+                <span className="flex justify-center">
+                  {row.nodevigil
+                    ? <CheckCircle2 className="h-4 w-4 text-primary" />
+                    : <Minus className="h-4 w-4 text-muted-foreground/50" />}
+                </span>
+                <span className="flex justify-center">
+                  {row.diy
+                    ? <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+                    : <Minus className="h-4 w-4 text-muted-foreground/50" />}
+                </span>
+                <span className="flex justify-center">
+                  {row.legacy
+                    ? <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+                    : <Minus className="h-4 w-4 text-muted-foreground/50" />}
+                </span>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Developer resources */}
+      <section className="py-28">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             className="text-center mb-16"
@@ -1012,7 +1092,7 @@ export default function Index() {
               },
               {
                 icon: Shield,
-                title: 'Security & Architecture',
+                title: 'Security and Architecture',
                 desc: 'JWT authentication, per-user data isolation, secure agent keys, and the full system architecture explained.',
                 link: '/docs/security',
                 linkText: 'Learn more',
@@ -1049,7 +1129,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── AI-Powered Future ─── */}
+      {/* AI roadmap */}
       <section className="py-28 bg-gradient-to-b from-muted/10 to-background">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
@@ -1059,112 +1139,45 @@ export default function Index() {
             viewport={{ once: true }}
           >
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-500 text-xs font-medium mb-6">
-              <Brain className="h-3 w-3" /> Coming Soon — AI-Powered
+              <Brain className="h-3 w-3" /> Coming Soon
             </div>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
               The future of monitoring is intelligent
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-6">
-              We use NVIDIA GPUs to train AI models that power a smart chatbot — ask it about your server health,
-              get instant diagnoses, and receive fix recommendations in plain language.
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              We are building an assistant layer on top of your metrics so the dashboard tells you what is wrong,
+              not just what is happening.
             </p>
-            <div className="flex items-center justify-center gap-6">
-              <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-8 sm:h-10 object-contain opacity-70" />
-              <img src="/tensorrt-logo.png" alt="TensorRT" className="h-7 sm:h-9 object-contain opacity-70" />
-              <img src="/powered-by-aws-logo.webp" alt="AWS" className="h-7 sm:h-9 object-contain opacity-70" />
-            </div>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {[
-              {
-                icon: Bot,
-                title: 'Auto-Solve Alerts',
-                desc: 'AI-powered remediation that automatically resolves common infrastructure issues — from restarting services to scaling resources — without human intervention.',
-                tag: 'AI Agent',
-                tagColor: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
-              },
-              {
-                icon: Brain,
-                title: 'AI Recommendations',
-                desc: 'Get intelligent suggestions for resolving errors and alerts. Our AI analyzes patterns across your infrastructure and recommends the most effective fix.',
-                tag: 'ML Engine',
-                tagColor: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
-              },
-              {
-                icon: Sparkles,
-                title: 'Predictive Analytics',
-                desc: 'Forecast CPU spikes, memory exhaustion, and disk capacity issues before they happen. Plan infrastructure scaling with confidence.',
-                tag: 'GPU Accelerated',
-                tagColor: 'bg-violet-500/10 text-violet-500 border-violet-500/20',
-              },
-              {
-                icon: TrendingUp,
-                title: 'Anomaly Detection',
-                desc: 'Machine learning models trained on your metric baselines detect unusual patterns and alert you to silent failures that thresholds miss.',
-                tag: 'Neural Network',
-                tagColor: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
-              },
-              {
-                icon: Cloud,
-                title: 'Smart Capacity Planning',
-                desc: 'AI-driven insights on resource utilization trends help you right-size your infrastructure and cut cloud costs by up to 40%.',
-                tag: 'Cost Optimizer',
-                tagColor: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20',
-              },
-              {
-                icon: Network,
-                title: 'Root Cause Analysis',
-                desc: 'When an incident occurs, AI traces through correlated metrics across your fleet to pinpoint the exact root cause in seconds.',
-                tag: 'Deep Analysis',
-                tagColor: 'bg-red-500/10 text-red-500 border-red-500/20',
-              },
-            ].map((feature, i) => (
+              { icon: Bot, title: 'AI Assistant', desc: 'Ask questions about your fleet in plain language and get answers grounded in live metrics.' },
+              { icon: Brain, title: 'Anomaly Detection', desc: 'Learn each server baseline and surface unusual behaviour before a threshold is even crossed.' },
+              { icon: Sparkles, title: 'Auto-Remediation', desc: 'Suggested and, with approval, automated fixes for the failure patterns you see most often.' },
+              { icon: TrendingUp, title: 'Capacity Forecasting', desc: 'Project disk and memory growth so you provision ahead of the curve instead of after an outage.' },
+            ].map((item, i) => (
               <motion.div
                 key={i}
-                className="group relative rounded-2xl border border-border bg-card p-7 overflow-hidden"
+                className="rounded-2xl border border-border bg-card p-7"
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
+                transition={{ delay: i * 0.08 }}
               >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/[0.03] to-transparent pointer-events-none" />
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <feature.icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <span className={`text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full border ${feature.tagColor}`}>
-                      {feature.tag}
-                    </span>
-                  </div>
-                  <h3 className="font-display text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{feature.desc}</p>
+                <div className="h-12 w-12 rounded-xl bg-violet-500/10 text-violet-500 flex items-center justify-center mb-5">
+                  <item.icon className="h-5 w-5" />
                 </div>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-2">{item.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </div>
-
-          <motion.div
-            className="text-center mt-12"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-sm text-muted-foreground mb-4">
-              We train AI models on NVIDIA GPUs to power an intelligent chatbot that answers your monitoring questions, diagnoses server issues, and suggests fixes — all from a user-friendly chat interface.
-            </p>
-            <Button variant="outline" asChild>
-              <Link to="/blog">
-                Read our AI roadmap <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </motion.div>
         </div>
       </section>
 
-      {/* ─── Integration Badges ─── */}
-      <section className="py-20 border-y border-border">
+      {/* Supported platforms */}
+      <section className="py-24 border-t border-border">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             className="text-center mb-12"
@@ -1172,23 +1185,23 @@ export default function Index() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-3">
-              Works everywhere your servers run
+            <span className="text-sm font-medium text-primary mb-3 block">Compatibility</span>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
+              Runs anywhere your servers do
             </h2>
-            <p className="text-muted-foreground text-lg">
-              One agent, any platform — cloud, on-premise, or hybrid.
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              If it runs Bash or PowerShell, the agent works. No provider lock-in.
             </p>
           </motion.div>
 
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
             {[
-              'AWS EC2', 'Google Cloud', 'Microsoft Azure', 'DigitalOcean',
-              'Docker', 'Kubernetes', 'Ubuntu', 'CentOS', 'Debian',
-              'Windows Server', 'Red Hat', 'Bare Metal',
+              'Ubuntu', 'Debian', 'CentOS', 'Rocky Linux', 'Alpine', 'Amazon Linux',
+              'Red Hat', 'SUSE', 'Windows Server', 'Docker hosts', 'Kubernetes nodes', 'Bare metal',
             ].map((platform, i) => (
               <motion.div
                 key={i}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/40 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground"
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -1202,7 +1215,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── Pricing Teaser ─── */}
+      {/* Pricing teaser */}
       <section className="py-28">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
@@ -1215,10 +1228,10 @@ export default function Index() {
               <DollarSign className="h-3 w-3" /> Simple, Transparent Pricing
             </div>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Free to start. Scale when you're ready.
+              Free to start. Scale when you are ready.
             </h2>
             <p className="text-muted-foreground text-lg mb-10 max-w-2xl mx-auto">
-              Get started with unlimited servers on our free tier. Upgrade to Pro for AI-powered features,
+              Get started with unlimited servers on the free tier. Upgrade to Pro for AI-powered features,
               priority support, and advanced integrations.
             </p>
 
@@ -1259,7 +1272,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── Cloud Infrastructure ─── */}
+      {/* Infrastructure */}
       <section className="py-28 border-t border-border">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
@@ -1273,12 +1286,12 @@ export default function Index() {
                 Enterprise-grade cloud,<br />startup-friendly pricing.
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8 max-w-lg">
-                Deployed on AWS infrastructure with NVIDIA GPU acceleration for AI workloads. 
-                Your data is secured with enterprise-level encryption and per-user isolation.
+                NodeVigil runs on hardened cloud infrastructure with encrypted storage and strict per-user
+                isolation, so your metrics stay yours and stay available.
               </p>
               <div className="grid grid-cols-2 gap-4 mb-8">
                 {[
-                  { icon: Cloud, label: 'AWS Cloud', desc: 'Hosted on AWS infrastructure' },
+                  { icon: Cloud, label: 'Resilient Hosting', desc: 'Redundant, auto-scaling compute' },
                   { icon: Shield, label: 'SOC 2 Ready', desc: 'Enterprise security posture' },
                   { icon: Lock, label: 'Data Isolation', desc: 'Per-user encrypted data' },
                   { icon: Zap, label: '99.9% Uptime', desc: 'SLA-backed reliability' },
@@ -1304,7 +1317,6 @@ export default function Index() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              {/* Infrastructure stack card */}
               <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-xl">
                 <div className="px-6 py-4 border-b border-border">
                   <span className="text-sm font-semibold text-foreground">Infrastructure Stack</span>
@@ -1312,11 +1324,11 @@ export default function Index() {
                 <div className="p-6 space-y-4">
                   {[
                     { layer: 'Compute', tech: 'AWS EC2 + Auto Scaling', color: 'bg-amber-500' },
-                    { layer: 'AI / ML', tech: 'NVIDIA CUDA + TensorRT', color: 'bg-emerald-500' },
-                    { layer: 'Database', tech: 'AWS RDS PostgreSQL', color: 'bg-blue-500' },
+                    { layer: 'Database', tech: 'Managed PostgreSQL', color: 'bg-blue-500' },
                     { layer: 'Real-time', tech: 'WebSocket + STOMP', color: 'bg-violet-500' },
                     { layer: 'API', tech: 'Spring Boot 3 + Java 21', color: 'bg-sky-500' },
                     { layer: 'Frontend', tech: 'React + TypeScript + Vite', color: 'bg-red-500' },
+                    { layer: 'Delivery', tech: 'Global edge CDN', color: 'bg-emerald-500' },
                   ].map((item, i) => (
                     <motion.div
                       key={i}
@@ -1335,11 +1347,9 @@ export default function Index() {
                   ))}
                 </div>
                 <div className="px-6 py-4 border-t border-border bg-muted/20">
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    <img src="/powered-by-aws-logo.webp" alt="AWS" className="h-5 object-contain opacity-70" />
-                    <span>+</span>
-                    <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-5 object-contain opacity-70" />
-                    <span className="ml-1">Backed by industry leaders</span>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                    <span>Encrypted in transit and at rest, in every region we run.</span>
                   </div>
                 </div>
               </div>
@@ -1348,7 +1358,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── FAQ ─── */}
+      {/* FAQ */}
       <section id="faq" className="py-28 border-t border-border">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
@@ -1363,7 +1373,7 @@ export default function Index() {
                 Common questions
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                Can't find what you're looking for? Check our detailed FAQ page or reach out.
+                Cannot find what you are looking for? Check our detailed FAQ page or reach out.
               </p>
               <Button variant="outline" asChild>
                 <Link to="/faq">View all FAQs <ArrowRight className="ml-2 h-4 w-4" /></Link>
@@ -1394,7 +1404,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── CTA ─── */}
+      {/* CTA */}
       <section className="py-32 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.04] to-transparent" />
@@ -1429,7 +1439,7 @@ export default function Index() {
               </Button>
             </div>
             <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
-              {['No credit card required', 'Unlimited servers', 'AWS cloud infrastructure', '5-minute setup'].map((t, i) => (
+              {['No credit card required', 'Unlimited servers', 'Live metrics in minutes', '5-minute setup'].map((t, i) => (
                 <span key={i} className="flex items-center gap-1.5">
                   <CheckCircle2 className="h-4 w-4 text-primary" /> {t}
                 </span>
@@ -1439,20 +1449,20 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── Footer ─── */}
+      {/* Footer */}
       <footer className="border-t border-border bg-card/50">
         <div className="container mx-auto px-4 sm:px-6 py-14">
           <div className="grid grid-cols-2 md:grid-cols-6 gap-8 lg:gap-12">
-            {/* Brand column */}
             <div className="col-span-2">
               <div className="flex items-center gap-2.5 mb-4">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
                   <MonitorLogo className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <span className="font-display text-base font-bold tracking-tight">Monitor Server</span>
+                <span className="font-display text-base font-bold tracking-tight">NodeVigil</span>
               </div>
               <p className="text-sm text-muted-foreground max-w-xs mb-6 leading-relaxed">
-                AI-powered server monitoring with real-time metrics, intelligent alerts, and a beautiful dashboard. Deployed on AWS cloud with NVIDIA GPU acceleration.
+                Real-time server monitoring with live metrics, intelligent alerts, and a dashboard your whole
+                team can read at a glance.
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -1498,13 +1508,8 @@ export default function Index() {
           </div>
 
           <div className="border-t border-border mt-10 pt-8">
-            <div className="flex flex-wrap items-center justify-center gap-8 mb-6">
-              <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-10 opacity-70 hover:opacity-100 transition-opacity object-contain" />
-              <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-10 opacity-70 hover:opacity-100 transition-opacity object-contain" />
-              <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-8 opacity-70 hover:opacity-100 transition-opacity object-contain" />
-            </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-              <span>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a>. All rights reserved.</span>
+              <span>&copy; {new Date().getFullYear()} NodeVigil by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a>. All rights reserved.</span>
               <div className="flex items-center gap-6">
                 <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
                 <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
