@@ -22,10 +22,10 @@ public class EmailService {
     @Value("${app.mail.enabled:false}")
     private boolean mailEnabled;
 
-    @Value("${app.mail.from:noreply@monitorserver.in}")
+    @Value("${app.mail.from:noreply@nodevigil.cloud}")
     private String fromAddress;
 
-    @Value("${app.mail.alerts.from:alerts@monitorserver.in}")
+    @Value("${app.mail.alerts.from:alerts@nodevigil.cloud}")
     private String alertsFromAddress;
 
     @Value("${app.frontend.url:http://localhost:5173}")
@@ -41,27 +41,27 @@ public class EmailService {
 
     /**
      * Send an email verification link to the user.
-     * If mail is disabled, logs the token instead.
+     * Retained for legacy flows \u2014 verification is no longer required at signup.
      */
     @Async
     public void sendVerificationEmail(String to, String token) {
         String link = frontendUrl + "/verify-email?token=" + token;
         String body = buildEmailWrapper(
                 "Confirm Your Account",
-                "<p style='font-size:16px;color:#374151;'>Welcome to <strong>Monitor Server</strong>! "
-                + "Please confirm your email to activate your account and start monitoring your infrastructure.</p>"
+                "<p style='font-size:16px;color:#374151;'>Welcome to <strong>NodeVigil</strong>! "
+                + "Use the button below to confirm this email address.</p>"
                 + "<div style='text-align:center;margin:28px 0;'>"
                 + "<a href='" + link + "' style='display:inline-block;padding:12px 32px;background:#2563eb;color:#fff;"
                 + "text-decoration:none;border-radius:8px;font-weight:600;font-size:14px;'>Confirm Email Address</a></div>"
-                + "<p style='font-size:13px;color:#6b7280;'>This confirmation link is valid for <strong>24 hours</strong>. "
+                + "<p style='font-size:13px;color:#6b7280;'>Your account is already active \u2014 this step is optional. "
                 + "If you did not sign up, you can safely disregard this message.</p>"
         );
 
         if (!mailEnabled) {
-            log.warn("Email disabled — verification email not sent to: {}", to);
+            log.warn("Email disabled \u2014 verification email not sent to: {}", to);
             return;
         }
-        sendHtml(to, "Confirm Your Account — Monitor Server", body);
+        sendHtml(to, "Confirm Your Account \u2014 NodeVigil", body);
     }
 
     /**
@@ -79,14 +79,14 @@ public class EmailService {
                 + "<a href='" + link + "' style='display:inline-block;padding:12px 32px;background:#2563eb;color:#fff;"
                 + "text-decoration:none;border-radius:8px;font-weight:600;font-size:14px;'>Choose New Password</a></div>"
                 + "<p style='font-size:13px;color:#6b7280;'>This link expires in <strong>24 hours</strong>. "
-                + "If you did not request this, no action is needed — your account remains secure.</p>"
+                + "If you did not request this, no action is needed \u2014 your account remains secure.</p>"
         );
 
         if (!mailEnabled) {
-            log.warn("Email disabled — password reset email not sent to: {}", to);
+            log.warn("Email disabled \u2014 password reset email not sent to: {}", to);
             return;
         }
-        sendHtml(to, "Password Recovery — Monitor Server", body);
+        sendHtml(to, "Password Recovery \u2014 NodeVigil", body);
     }
 
     /**
@@ -107,7 +107,7 @@ public class EmailService {
                 + "<p style='margin:0;font-size:13px;color:#6b7280;'>Server: " + safeName
                 + " &nbsp;|&nbsp; Severity: <span style='color:" + severityColor + ";font-weight:600;'>" + safeSeverity + "</span></p>"
                 + "</div>"
-                + "<p style='font-size:14px;color:#374151;'>Open your <strong>Monitor Server</strong> dashboard to review details and take action.</p>"
+                + "<p style='font-size:14px;color:#374151;'>Open your <strong>NodeVigil</strong> dashboard to review details and take action.</p>"
         );
 
         if (!mailEnabled) {
@@ -123,7 +123,7 @@ public class EmailService {
         }
 
         sendHtml(alertsMailSender, alertsFromAddress, to,
-                "[" + severity + "] " + alertTitle + " — " + serverName, body);
+                "[" + severity + "] " + alertTitle + " \u2014 " + serverName, body);
     }
 
     /**
@@ -137,7 +137,7 @@ public class EmailService {
                 "<p style='font-size:16px;color:#374151;'>You have received <strong>" + dailyLimit
                 + "</strong> alert emails today, which is the maximum daily limit.</p>"
                 + "<p style='font-size:14px;color:#374151;'>Further alerts will still appear on your "
-                + "<strong>Monitor Server</strong> dashboard and via WebSocket notifications, "
+                + "<strong>NodeVigil</strong> dashboard and via WebSocket notifications, "
                 + "but no more emails will be sent until tomorrow.</p>"
                 + "<p style='font-size:13px;color:#6b7280;'>You can adjust alert rules or notification "
                 + "preferences in your dashboard settings to reduce alert volume.</p>"
@@ -154,7 +154,7 @@ public class EmailService {
         }
 
         sendHtml(alertsMailSender, alertsFromAddress, to,
-                "Daily Alert Email Limit Reached — Monitor Server", body);
+                "Daily Alert Email Limit Reached \u2014 NodeVigil", body);
     }
 
     /**
@@ -164,17 +164,17 @@ public class EmailService {
     public void sendPasswordChangedEmail(String to) {
         String body = buildEmailWrapper(
                 "Password Updated",
-                "<p style='font-size:16px;color:#374151;'>Your <strong>Monitor Server</strong> password "
+                "<p style='font-size:16px;color:#374151;'>Your <strong>NodeVigil</strong> password "
                 + "was changed successfully.</p>"
                 + "<p style='font-size:13px;color:#6b7280;'>If you did not make this change, "
-                + "please reset your password immediately or contact support.</p>"
+                + "please reset your password immediately or contact support@nodevigil.cloud.</p>"
         );
 
         if (!mailEnabled) {
             log.warn("Email disabled, password changed notification for: {}", to);
             return;
         }
-        sendHtml(to, "Your Password Was Changed — Monitor Server", body);
+        sendHtml(to, "Your Password Was Changed \u2014 NodeVigil", body);
     }
 
     /**
@@ -202,7 +202,7 @@ public class EmailService {
                 continue;
             }
 
-            sendHtml(trimmed, "Infrastructure Report: " + reportName + " — Monitor Server", body);
+            sendHtml(trimmed, "Infrastructure Report: " + reportName + " \u2014 NodeVigil", body);
         }
     }
 
@@ -212,13 +212,13 @@ public class EmailService {
     private String buildEmailWrapper(String heading, String innerHtml) {
         return "<div style='max-width:520px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;'>"
                 + "<div style='border-bottom:3px solid #2563eb;padding:20px 0 12px;text-align:center;'>"
-                + "<span style='font-size:20px;font-weight:700;color:#111827;'>Monitor Server</span></div>"
+                + "<span style='font-size:20px;font-weight:700;color:#111827;'>NodeVigil</span></div>"
                 + "<div style='padding:28px 4px;'>"
                 + "<h2 style='margin:0 0 16px;font-size:22px;color:#111827;'>" + heading + "</h2>"
                 + innerHtml
                 + "</div>"
                 + "<div style='border-top:1px solid #e5e7eb;padding:16px 0;text-align:center;font-size:11px;color:#9ca3af;'>"
-                + "&copy; Monitor Server &mdash; Infrastructure Monitoring Platform</div></div>";
+                + "&copy; NodeVigil &mdash; Infrastructure Monitoring Platform</div></div>";
     }
 
     /**

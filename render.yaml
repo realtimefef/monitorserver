@@ -5,9 +5,9 @@ databases:
     user: monitor_user
 
 services:
-  # Backend — Spring Boot API
+  # Backend \u2014 Spring Boot API
   - type: web
-    name: monitor-server-api
+    name: nodevigil-api
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
@@ -44,21 +44,21 @@ services:
       - key: MAIL_PORT
         value: "587"
       - key: MAIL_USERNAME
-        value: noreply@monitorserver.in
+        value: noreply@nodevigil.cloud
       - key: MAIL_PASSWORD
         sync: false
       - key: MAIL_FROM
-        value: noreply@monitorserver.in
+        value: noreply@nodevigil.cloud
       - key: MAIL_ALERTS_HOST
         value: smtp.larksuite.com
       - key: MAIL_ALERTS_PORT
         value: "587"
       - key: MAIL_ALERTS_USERNAME
-        value: alerts@monitorserver.in
+        value: alerts@nodevigil.cloud
       - key: MAIL_ALERTS_PASSWORD
         sync: false
       - key: MAIL_ALERTS_FROM
-        value: alerts@monitorserver.in
+        value: alerts@nodevigil.cloud
       - key: METRICS_RETENTION_DAYS
         value: "30"
       - key: ALERT_DAILY_LIMIT_PER_USER
@@ -67,9 +67,9 @@ services:
         value: "false"
     healthCheckPath: /actuator/health
 
-  # Frontend — React Static Site
+  # Frontend \u2014 React Static Site
   - type: web
-    name: monitor-server-frontend
+    name: nodevigil-frontend
     runtime: static
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
@@ -95,4 +95,4 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://monitor-server-api.onrender.com/api/v1
+        value: https://nodevigil-api.onrender.com/api/v1
