@@ -1,6 +1,6 @@
 /**
- * MonitorLogo — inline SVG brand mark for Monitor Server.
- * A pulse line with an active dot — matches the favicon/logo identity.
+ * MonitorLogo - inline SVG brand mark for NodeVigil.
+ * A pulse line with an active dot - matches the favicon/logo identity.
  */
 export function MonitorLogo({ className = 'h-5 w-5' }: { className?: string }) {
   return (
