@@ -5,9 +5,12 @@ databases:
     user: monitor_user
 
 services:
-  # Backend \u2014 Spring Boot API
+  # Backend - Spring Boot API
+  # NOTE: service names are intentionally left as-is. Renaming a Render service
+  # changes its .onrender.com hostname and detaches the existing deployment,
+  # so the rename has to be done in the Render dashboard alongside the DNS move.
   - type: web
-    name: nodevigil-api
+    name: monitor-server-api
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
@@ -36,7 +39,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
-        value: https://monitorserver.in
+        value: https://nodevigil.cloud
       - key: MAIL_ENABLED
         value: "true"
       - key: MAIL_HOST
@@ -67,9 +70,9 @@ services:
         value: "false"
     healthCheckPath: /actuator/health
 
-  # Frontend \u2014 React Static Site
+  # Frontend - React Static Site
   - type: web
-    name: nodevigil-frontend
+    name: monitor-server-frontend
     runtime: static
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
@@ -95,4 +98,4 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://nodevigil-api.onrender.com/api/v1
+        value: https://monitor-server-api.onrender.com/api/v1
