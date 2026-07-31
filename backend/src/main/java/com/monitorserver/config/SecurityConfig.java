@@ -77,6 +77,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         List<String> origins = new ArrayList<>(List.of(
+            // NodeVigil (current)
+            "https://nodevigil.cloud",
+            "https://*.nodevigil.cloud",
+            // Legacy domains, kept so the old site keeps working during the DNS move
             "https://monitorserver.pages.dev",
             "https://*.monitorserver.pages.dev",
             "https://*.onrender.com",
