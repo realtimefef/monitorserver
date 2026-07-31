@@ -1,5 +1,5 @@
 {
-    "name": "monitor-server-frontend",
+    "name": "nodevigil-frontend",
     "private": true,
     "version": "1.0.0",
     "type": "module",
