@@ -28,31 +28,41 @@ public class AuthController {
     private final AuthService authService;
     private final UserRepository userRepository;
 
-    // ─── Auth Endpoints ─────────────────────────────────────────────────
-
+    // \u2500\u2500\u2500 Auth Endpoints \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n
     @PostMapping("/auth/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request.getEmail(), request.getPassword());
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Register a new account. Accounts are active immediately - no email
+     * confirmation step is required before signing in.
+     */
     @PostMapping("/auth/register")
     public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody RegisterRequest request) {
         authService.register(request.getUsername(), request.getEmail(), request.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(true, "Account created — please check your inbox to confirm your email.", null));
+                .body(new ApiResponse<>(true, "Account created \u2014 you can sign in right away.", null));
     }
 
+    /**
+     * Legacy endpoint. Verification is no longer required; kept so confirmation
+     * links mailed out previously still resolve successfully.
+     */
     @GetMapping("/auth/verify")
     public ResponseEntity<ApiResponse<Void>> verifyEmail(@RequestParam String token) {
         authService.verifyEmail(token);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Email confirmed successfully.", null));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Your account is ready to use.", null));
     }
 
+    /**
+     * Legacy endpoint. Verification is no longer required, so this is a no-op.
+     */
     @PostMapping("/auth/resend-verification")
     public ResponseEntity<ApiResponse<Void>> resendVerification(@RequestBody Map<String, String> body) {
         authService.resendVerification(body.get("email"));
-        return ResponseEntity.ok(new ApiResponse<>(true, "Verification email dispatched.", null));
+        return ResponseEntity.ok(new ApiResponse<>(true, "No confirmation needed \u2014 your account is already active.", null));
     }
 
     @PostMapping("/auth/forgot-password")
@@ -85,8 +95,7 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-    // ─── User Endpoints ─────────────────────────────────────────────────
-
+    // \u2500\u2500\u2500 User Endpoints \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n
     @GetMapping("/users/me")
     public ResponseEntity<UserResponse> getMe(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(authService.getProfile(user.getId()));
@@ -99,8 +108,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.updateProfile(user.getId(), updates.get("username")));
     }
 
-    // ─── Token Validation & Lookup ───────────────────────────────────────
-
+    // \u2500\u2500\u2500 Token Validation & Lookup \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n
     @GetMapping("/auth/validate")
     public ResponseEntity<ApiResponse<UserResponse>> validateToken(
             @AuthenticationPrincipal User user) {

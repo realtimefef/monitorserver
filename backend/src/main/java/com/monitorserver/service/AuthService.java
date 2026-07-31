@@ -55,7 +55,8 @@ public class AuthService {
 
     /**
      * Authenticate a user by email and password.
-     * Checks email verification and account active status.
+     * Email verification is NOT required to sign in - accounts are usable immediately
+     * after registration. Only the account active status is enforced.
      * Returns a JWT token and user details on success.
      */
     @Transactional(readOnly = true)
@@ -65,10 +66,6 @@ public class AuthService {
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadRequestException("Incorrect email or password");
-        }
-
-        if (!user.isEmailVerified()) {
-            throw new BadRequestException("Your email address has not been confirmed yet");
         }
 
         if (!user.isActive()) {
@@ -83,9 +80,10 @@ public class AuthService {
     }
 
     /**
-     * Register a new user. Checks for existing email/username,
-     * creates the user with an encoded password and email_verified=false,
-     * generates a verification token, and sends a verification email.
+     * Register a new user. Checks for existing email/username and creates the user
+     * with an encoded password. Accounts are created pre-verified so the user can
+     * sign in immediately - no confirmation email is sent and no verification
+     * token is issued.
      */
     @Transactional
     public void register(String username, String email, String password) {
@@ -96,66 +94,44 @@ public class AuthService {
             throw new BadRequestException("This username is not available");
         }
 
-        String verificationToken = generateSecureToken();
-
         User user = User.builder()
                 .username(username)
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .role(Role.USER)
-                .emailVerified(false)
+                .emailVerified(true)
                 .isActive(true)
-                .verificationToken(verificationToken)
-                .verificationTokenExpiry(LocalDateTime.now().plusHours(24))
+                .verificationToken(null)
+                .verificationTokenExpiry(null)
                 .build();
 
         userRepository.save(user);
-        log.info("User registered: {}", user.getEmail());
-
-        emailService.sendVerificationEmail(user.getEmail(), verificationToken);
+        log.info("User registered (auto-verified): {}", user.getEmail());
     }
 
     /**
-     * Verify a user's email using the verification token.
-     * Token must not be expired (24h window).
+     * Legacy endpoint kept for backwards compatibility with confirmation links that
+     * were mailed out before verification was removed. Accounts no longer require
+     * verification, so this is idempotent and never fails for an unknown token.
      */
     @Transactional
     public void verifyEmail(String token) {
-        User user = userRepository.findByVerificationToken(token)
-                .orElseThrow(() -> new BadRequestException("This verification link is invalid or has already been used"));
-
-        if (user.getVerificationTokenExpiry() != null
-                && user.getVerificationTokenExpiry().isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("This verification link has expired — please request a new one");
-        }
-
-        user.setEmailVerified(true);
-        user.setVerificationToken(null);
-        user.setVerificationTokenExpiry(null);
-        userRepository.save(user);
-
-        log.info("Email verified for user: {}", user.getEmail());
+        userRepository.findByVerificationToken(token).ifPresent(user -> {
+            user.setEmailVerified(true);
+            user.setVerificationToken(null);
+            user.setVerificationTokenExpiry(null);
+            userRepository.save(user);
+            log.info("Legacy verification link consumed for user: {}", user.getEmail());
+        });
     }
 
     /**
-     * Resend a verification email with a new token.
+     * Legacy endpoint kept for backwards compatibility. Verification is no longer
+     * required, so this is a no-op and no email is dispatched.
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public void resendVerification(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
-
-        if (user.isEmailVerified()) {
-            throw new BadRequestException("This email address is already confirmed");
-        }
-
-        String verificationToken = generateSecureToken();
-        user.setVerificationToken(verificationToken);
-        user.setVerificationTokenExpiry(LocalDateTime.now().plusHours(24));
-        userRepository.save(user);
-
-        emailService.sendVerificationEmail(user.getEmail(), verificationToken);
-        log.info("Verification email resent to: {}", user.getEmail());
+        log.info("Resend verification called for {} - verification is disabled, ignoring", email);
     }
 
     /**
@@ -190,7 +166,7 @@ public class AuthService {
 
         if (user.getResetTokenExpiry() != null
                 && user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("This reset link has expired — please request a new one");
+            throw new BadRequestException("This reset link has expired \u2014 please request a new one");
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));

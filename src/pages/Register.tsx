@@ -1,13 +1,14 @@
 import { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authApi } from '@/lib/api';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   Eye, EyeOff, Loader2, Shield, CheckCircle2, Circle,
   ArrowRight, Server, Bell, Cpu, HardDrive, Wifi, BarChart3,
-  Lock, Zap, Clock, Globe, Terminal, ArrowLeft, UserPlus
+  Lock, Zap, Terminal, ArrowLeft, UserPlus
 } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { useToast } from '@/hooks/use-toast';
@@ -17,7 +18,7 @@ const PW_RULES = [
   { key: 'len', test: (p: string) => p.length >= 8, label: '8 or more characters' },
   { key: 'mix', test: (p: string) => /[a-z]/.test(p) && /[A-Z]/.test(p), label: 'Mixed case (a-z & A-Z)' },
   { key: 'num', test: (p: string) => /\d/.test(p), label: 'Contains a number' },
-  { key: 'sym', test: (p: string) => /[^a-zA-Z0-9]/.test(p), label: 'Has a symbol (!@#…)' },
+  { key: 'sym', test: (p: string) => /[^a-zA-Z0-9]/.test(p), label: 'Has a symbol (!@#\u2026)' },
 ] as const;
 
 function getStrengthInfo(pw: string) {
@@ -38,6 +39,7 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { login } = useAuth();
 
   const strength = useMemo(() => getStrengthInfo(password), [password]);
 
@@ -63,11 +65,23 @@ export default function Register() {
 
     try {
       await authApi.register(username, email, password);
-      toast({
-        title: 'You\'re all set!',
-        description: 'A confirmation email is on its way to your inbox.',
-      });
-      navigate('/email-sent', { state: { email } });
+
+      // No email confirmation required \u2014 sign the user straight in.
+      try {
+        const session = await authApi.login(email, password);
+        login(session.token, session.user);
+        toast({
+          title: 'Welcome to NodeVigil',
+          description: 'Your account is ready \u2014 let\'s add your first server.',
+        });
+        navigate('/dashboard');
+      } catch {
+        toast({
+          title: 'Account created',
+          description: 'Sign in with your new credentials to continue.',
+        });
+        navigate('/login');
+      }
     } catch (error) {
       toast({
         title: 'Could not create account',
@@ -90,7 +104,7 @@ export default function Register() {
       <div className="hidden lg:flex lg:w-1/2 flex-col justify-center items-center bg-gradient-to-br from-primary/[0.06] via-background to-muted/40 border-r border-border p-12 xl:p-16 relative overflow-hidden">
         {/* Ambient glow */}
         <div className="absolute top-1/3 left-1/3 w-[300px] h-[300px] bg-primary/[0.06] rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[200px] h-[200px] bg-indigo-500/[0.04] rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[200px] h-[200px] bg-accent/[0.05] rounded-full blur-[100px] pointer-events-none" />
 
         <div className="max-w-lg w-full relative z-10">
           <div className="mb-10 flex justify-center">
@@ -105,7 +119,7 @@ export default function Register() {
             Real-Time Server Monitoring, Built for Engineers
           </h2>
           <p className="text-center text-muted-foreground mb-8">
-            Monitor Server is an AI-powered platform built with Spring Boot 3 and React 18, deployed on AWS cloud.
+            NodeVigil is a real-time monitoring platform built with Spring Boot 3 and React 18.
             Install a lightweight agent, stream 12 metric types every 5 seconds, and gain full visibility into your infrastructure.
           </p>
 
@@ -134,9 +148,9 @@ export default function Register() {
           <div className="space-y-4 mb-8">
             <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider">How It Works</h3>
             {[
-              { num: '1', title: 'Create account', desc: 'Sign up and verify your email', icon: UserPlus },
+              { num: '1', title: 'Create account', desc: 'Instant access \u2014 no email confirmation', icon: UserPlus },
               { num: '2', title: 'Add your server', desc: 'Get a unique 64-char agent key', icon: Server },
-              { num: '3', title: 'Run the agent', desc: 'One command — metrics flow in 5s', icon: Terminal },
+              { num: '3', title: 'Run the agent', desc: 'One command \u2014 metrics flow in 5s', icon: Terminal },
             ].map((step, i) => (
               <div key={i} className="flex items-center gap-4 rounded-xl bg-card/50 border border-border p-4">
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
@@ -185,8 +199,8 @@ export default function Register() {
 
           {/* Bottom trust line */}
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-            <Shield className="h-3.5 w-3.5 text-primary" />
-            Built on AWS Cloud & NVIDIA GPU
+            <Zap className="h-3.5 w-3.5 text-primary" />
+            Start monitoring in under a minute \u2014 no credit card, no email confirmation
           </div>
         </div>
       </div>
@@ -199,7 +213,7 @@ export default function Register() {
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25">
                 <MonitorLogo className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="font-display text-2xl font-bold">Monitor Server</span>
+              <span className="font-display text-2xl font-bold">NodeVigil</span>
             </Link>
             <Link to="/" className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft className="h-4 w-4" />
@@ -211,7 +225,7 @@ export default function Register() {
             Create your account
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Start monitoring your infrastructure in under a minute
+            Instant access \u2014 no email confirmation required
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
@@ -266,7 +280,7 @@ export default function Register() {
                 </Button>
               </div>
 
-              {/* Password strength — unique ring meter design */}
+              {/* Password strength \u2014 ring meter */}
               {password && (
                 <div className="flex items-start gap-3 rounded-lg border border-border bg-muted/30 p-3">
                   <div className="relative h-10 w-10 shrink-0">
@@ -320,11 +334,11 @@ export default function Register() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating account…
+                  Creating account\u2026
                 </>
               ) : (
                 <>
-                  Sign up
+                  Create account
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </>
               )}
@@ -338,16 +352,16 @@ export default function Register() {
             </Link>
           </p>
 
-          {/* About Monitor Server — below form */}
+          {/* About NodeVigil \u2014 below form */}
           <div className="mt-10 pt-8 border-t border-border">
             {/* Project summary */}
             <div className="mb-6">
-              <h4 className="text-sm font-bold text-foreground mb-2">About Monitor Server</h4>
+              <h4 className="text-sm font-bold text-foreground mb-2">About NodeVigil</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                An AI-powered server monitoring platform deployed on AWS cloud with NVIDIA GPU acceleration. The backend runs on Spring Boot 3 (Java 21)
+                A real-time server monitoring platform. The backend runs on Spring Boot 3 (Java 21)
                 with PostgreSQL, and the frontend is a React 18 TypeScript SPA. Install a Bash or PowerShell agent
-                on each server to stream 12 metric types every 5 seconds — then set threshold-based alert rules
-                and receive email notifications when something needs attention.
+                on each server to stream 12 metric types every 5 seconds \u2014 then set threshold-based alert rules
+                and receive notifications when something needs attention.
               </p>
             </div>
 
@@ -355,18 +369,18 @@ export default function Register() {
             <div className="space-y-2 mb-6">
               <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider">What You Get</h4>
               {[
+                { label: 'Instant sign-up', desc: 'No email confirmation \u2014 straight to your dashboard' },
                 { label: 'Live metrics dashboard', desc: 'CPU, memory, disk & network at a glance' },
                 { label: 'Custom alert rules', desc: 'Severity levels, comparison operators & cooldowns' },
-                { label: 'Email notifications', desc: 'Branded HTML alerts on threshold breaches' },
                 { label: 'CSV / PDF / Excel export', desc: 'Download and share historical reports' },
-                { label: 'Per-user data isolation', desc: 'JWT auth — you only see your own servers' },
+                { label: 'Per-user data isolation', desc: 'JWT auth \u2014 you only see your own servers' },
                 { label: 'Free tier included', desc: 'Unlimited servers, upgrade for AI features' },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-2.5">
                   <CheckCircle2 className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
                   <div>
                     <span className="text-xs font-medium text-foreground">{item.label}</span>
-                    <span className="text-[10px] text-muted-foreground ml-1">— {item.desc}</span>
+                    <span className="text-[10px] text-muted-foreground ml-1">\u2014 {item.desc}</span>
                   </div>
                 </div>
               ))}
@@ -381,11 +395,11 @@ export default function Register() {
             {/* Footer links */}
             <div className="flex items-center justify-center gap-4 text-[10px] text-muted-foreground pt-4 border-t border-border">
               <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-              <span>·</span>
+              <span>\u00b7</span>
               <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-              <span>·</span>
+              <span>\u00b7</span>
               <Link to="/help" className="hover:text-foreground transition-colors">Help</Link>
-              <span>·</span>
+              <span>\u00b7</span>
               <Link to="/status" className="hover:text-foreground transition-colors">Status</Link>
             </div>
           </div>

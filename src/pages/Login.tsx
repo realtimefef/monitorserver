@@ -36,11 +36,9 @@ export default function Login() {
       });
       navigate('/dashboard');
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Invalid credentials';
-      const isUnverified = msg.toLowerCase().includes('verify') || msg.toLowerCase().includes('email') || msg.toLowerCase().includes('confirmed');
       toast({
         title: 'Unable to sign in',
-        description: isUnverified ? 'Please confirm your email address first.' : msg,
+        description: error instanceof Error ? error.message : 'Invalid credentials',
         variant: 'destructive',
       });
     } finally {
@@ -63,7 +61,7 @@ export default function Login() {
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25">
                 <MonitorLogo className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="font-display text-2xl font-bold">Monitor Server</span>
+              <span className="font-display text-2xl font-bold">NodeVigil</span>
             </Link>
             <Link to="/" className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft className="h-4 w-4" /> Back
@@ -102,7 +100,7 @@ export default function Login() {
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
+                  placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -124,7 +122,7 @@ export default function Login() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in…
+                  Signing in\u2026
                 </>
               ) : (
                 <>
@@ -142,14 +140,14 @@ export default function Login() {
             </Link>
           </p>
 
-          {/* About Monitor Server — below form */}
+          {/* About NodeVigil \u2014 below form */}
           <div className="mt-10 pt-8 border-t border-border">
             {/* Project overview */}
             <div className="mb-8">
-              <h4 className="text-sm font-bold text-foreground mb-2">About Monitor Server</h4>
+              <h4 className="text-sm font-bold text-foreground mb-2">About NodeVigil</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Monitor Server is an AI-powered server monitoring platform built with
-                Spring Boot 3 and React 18, deployed on AWS cloud. Install a lightweight agent on any server and
+                NodeVigil is a real-time server monitoring platform built with
+                Spring Boot 3 and React 18. Install a lightweight agent on any server and
                 get real-time CPU, memory, disk, and network metrics streamed to your dashboard every 5 seconds.
               </p>
             </div>
@@ -176,9 +174,9 @@ export default function Login() {
             <div className="space-y-2 mb-6">
               <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider">What You Get</h4>
               {[
+                { label: 'Instant access', desc: 'No email confirmation \u2014 sign up and log straight in' },
                 { label: 'Live metrics dashboard', desc: 'CPU, memory, disk & network at a glance' },
                 { label: 'Threshold-based alerts', desc: 'Custom rules with severity levels & cooldowns' },
-                { label: 'Email notifications', desc: 'Branded HTML alerts when thresholds are breached' },
                 { label: 'Historical data & reports', desc: 'Export metrics in CSV, PDF, or Excel' },
                 { label: 'Per-user data isolation', desc: 'JWT auth ensures you only see your own servers' },
                 { label: 'Free tier included', desc: 'Unlimited servers, upgrade for AI features' },
@@ -187,7 +185,7 @@ export default function Login() {
                   <CheckCircle2 className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
                   <div>
                     <span className="text-xs font-medium text-foreground">{item.label}</span>
-                    <span className="text-[10px] text-muted-foreground ml-1">— {item.desc}</span>
+                    <span className="text-[10px] text-muted-foreground ml-1">\u2014 {item.desc}</span>
                   </div>
                 </div>
               ))}
@@ -212,11 +210,11 @@ export default function Login() {
             {/* Footer links */}
             <div className="flex items-center justify-center gap-4 text-[10px] text-muted-foreground pt-4 border-t border-border">
               <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-              <span>·</span>
+              <span>\u00b7</span>
               <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-              <span>·</span>
+              <span>\u00b7</span>
               <Link to="/help" className="hover:text-foreground transition-colors">Help</Link>
-              <span>·</span>
+              <span>\u00b7</span>
               <Link to="/status" className="hover:text-foreground transition-colors">Status</Link>
             </div>
           </div>
@@ -227,7 +225,7 @@ export default function Login() {
       <div className="hidden lg:flex lg:w-1/2 flex-col justify-center items-center bg-gradient-to-br from-muted/40 via-background to-primary/[0.06] border-l border-border p-12 xl:p-16 relative overflow-hidden">
         {/* Ambient glow */}
         <div className="absolute top-1/4 right-1/4 w-[300px] h-[300px] bg-primary/[0.06] rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 left-1/4 w-[200px] h-[200px] bg-indigo-500/[0.04] rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 left-1/4 w-[200px] h-[200px] bg-accent/[0.05] rounded-full blur-[100px] pointer-events-none" />
 
         <div className="max-w-lg w-full relative z-10">
           {/* Icon + heading */}
@@ -243,7 +241,7 @@ export default function Login() {
             Built for Engineers Who Care About Uptime
           </h2>
           <p className="text-center text-muted-foreground mb-10">
-            Monitor Server gives you full-stack infrastructure visibility — CPU, memory, disk, and network —
+            NodeVigil gives you full-stack infrastructure visibility \u2014 CPU, memory, disk, and network \u2014
             streamed in real time to a single dashboard. Built with Spring Boot 3, React 18, and PostgreSQL.
           </p>
 
@@ -265,7 +263,7 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Stats row — factual capabilities */}
+          {/* Stats row */}
           <div className="grid grid-cols-3 gap-4 mb-10">
             {[
               { value: '5s', label: 'Polling', icon: Clock },
@@ -310,10 +308,10 @@ export default function Login() {
             {[
               'CPU, memory, disk & network collected every 5 seconds',
               'Custom alert rules with severity levels and cooldowns',
-              'Email notifications on threshold breaches',
+              'Instant notifications on threshold breaches',
               'Export historical data as CSV, PDF, or Excel',
               'Per-user data isolation with JWT authentication',
-              'Built on NVIDIA GPU & AWS Cloud infrastructure',
+              'Sign up and start monitoring in under a minute',
             ].map((feature, i) => (
               <div key={i} className="flex items-center gap-3">
                 <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
@@ -352,7 +350,7 @@ export default function Login() {
               <span className="ml-2 text-[10px] text-gray-500 font-mono">terminal</span>
             </div>
             <div className="p-4 font-mono text-xs text-gray-400 space-y-1">
-              <div><span className="text-emerald-400">$</span> ./monitor-agent.sh</div>
+              <div><span className="text-emerald-400">$</span> ./nodevigil-agent.sh</div>
               <div><span className="text-gray-500">[info]</span> Connecting to API...</div>
               <div className="text-emerald-400">[ok] Streaming metrics every 5s.</div>
               <div><span className="text-gray-500">[metric]</span> cpu=12% mem=58% disk=41%</div>
@@ -362,7 +360,7 @@ export default function Login() {
           {/* Bottom trust */}
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mt-6">
             <Shield className="h-3.5 w-3.5 text-primary" />
-            Built on AWS Cloud & NVIDIA GPU
+            JWT-secured \u00b7 Per-user data isolation \u00b7 No email confirmation needed
           </div>
         </div>
       </div>
