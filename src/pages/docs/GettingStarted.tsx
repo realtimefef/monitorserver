@@ -14,7 +14,11 @@ export default function GettingStarted() {
         </div>
         <h1 className="font-display text-3xl font-bold text-foreground">Getting Started</h1>
         <p className="text-muted-foreground">
-          Set up Monitor Server, add your first server, and start collecting metrics in minutes.
+          Set up NodeVigil, add your first server, and start collecting metrics in minutes.
+        </p>
+        <p className="text-sm text-muted-foreground">
+          NodeVigil is currently in testing and access is limited to selected partners. To request access, email{' '}
+          <a href="mailto:support@nodevigil.cloud" className="text-primary hover:underline">support@nodevigil.cloud</a>.
         </p>
       </header>
 
@@ -50,7 +54,7 @@ export default function GettingStarted() {
             <h3 className="font-semibold text-foreground text-sm">Backend (REST API)</h3>
             <ul className="space-y-1 text-sm text-muted-foreground list-disc list-inside">
               <li>
-                <strong>Java 21+</strong> — the Monitor Server backend is a Spring Boot application.
+                <strong>Java 21+</strong> — the NodeVigil backend is a Spring Boot application.
               </li>
               <li>
                 <strong>MySQL 8+</strong> — the primary database. Create a database named{' '}
@@ -105,7 +109,7 @@ npm run dev`}</code>
       <section className="space-y-4">
         <h2 className="font-display text-xl font-semibold text-foreground">3. Configuration</h2>
         <p className="text-muted-foreground">
-          Monitor Server connects to your backend REST API. Set the API base URL in two ways:
+          NodeVigil connects to your backend REST API. Set the API base URL in two ways:
         </p>
 
         <div className="space-y-3">
@@ -199,7 +203,7 @@ Invoke-WebRequest -Uri "YOUR_API_URL/agent/monitor-agent.ps1" -OutFile monitor-a
         <pre className="rounded-lg bg-muted p-4 text-sm overflow-x-auto">
           <code>{`sudo tee /etc/systemd/system/monitor-agent.service << 'EOF'
 [Unit]
-Description=Monitor Server Agent
+Description=NodeVigil Agent
 After=network-online.target
 Wants=network-online.target
 

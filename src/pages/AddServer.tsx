@@ -45,7 +45,7 @@ const operatingSystems = [
 function buildBashScript(apiUrl: string, agentKey: string): string {
   return [
     '#!/bin/bash',
-    `# Download and run the Monitor Server agent`,
+    `# Download and run the NodeVigil agent`,
     `MONITOR_API_URL="${apiUrl}"`,
     `AGENT_KEY="${agentKey}"`,
     ``,
@@ -61,7 +61,7 @@ function buildBashScript(apiUrl: string, agentKey: string): string {
 
 function buildPsScript(apiUrl: string, agentKey: string): string {
   return [
-    `# Download and run the Monitor Server agent`,
+    `# Download and run the NodeVigil agent`,
     `$MONITOR_API_URL = "${apiUrl}"`,
     `$AGENT_KEY = "${agentKey}"`,
     ``,

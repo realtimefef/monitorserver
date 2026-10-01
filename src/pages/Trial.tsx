@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { TestingNotice } from '@/components/TestingNotice';
 import { ArrowLeft, Rocket, CheckCircle2, Clock, Sparkles, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MonitorLogo } from '@/components/MonitorLogo';
@@ -19,12 +20,12 @@ const currentFeatures = [
 ];
 
 const comingSoon = [
-  { name: 'AI Auto-Solve Alerts', eta: 'Q4 2026' },
-  { name: 'AI-Powered Recommendations', eta: 'Q3 2026' },
-  { name: 'Predictive Analytics', eta: 'Q3 2026' },
-  { name: 'Anomaly Detection (NVIDIA GPU)', eta: 'Q4 2026' },
-  { name: 'Smart Capacity Planning', eta: '2027' },
-  { name: 'Root Cause Analysis', eta: '2027' },
+  { name: 'AI Anomaly Detection', eta: 'Planned' },
+  { name: 'Alert Correlation', eta: 'Planned' },
+  { name: 'AI Incident Summaries', eta: 'Planned' },
+  { name: 'Policy-Controlled Remediation (human approval + audit log)', eta: 'Planned' },
+  { name: 'Smart Capacity Planning', eta: 'Planned' },
+  { name: 'Root Cause Analysis', eta: 'Planned' },
 ];
 
 export default function Trial() {
@@ -37,7 +38,7 @@ export default function Trial() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/25">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight">Monitor Server</span>
+            <span className="font-display text-lg font-bold tracking-tight">NodeVigil</span>
           </Link>
           <ThemeToggle />
         </div>
@@ -58,7 +59,7 @@ export default function Trial() {
               Pro features are on the way
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              We're building AI-powered monitoring features with NVIDIA GPU acceleration. 
+              We're building AI-powered monitoring, alerting, and policy-controlled remediation. 
               In the meantime, <strong className="text-foreground">all current features are completely free</strong> — no limits, no credit card, no trial period.
             </p>
           </div>
@@ -101,8 +102,8 @@ export default function Trial() {
                 <Clock className="h-5 w-5 text-amber-500" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-foreground">Coming Soon — AI Pro Features</h2>
-                <p className="text-sm text-muted-foreground">Powered by NVIDIA CUDA & AWS infrastructure</p>
+                <h2 className="text-xl font-bold text-foreground">Planned — AI Pro Features</h2>
+                <p className="text-sm text-muted-foreground">Planned, not yet available. Planned integrations include Azure AI Foundry, Azure Monitor / Log Analytics, and supported GPU compute.</p>
               </div>
             </div>
             <div className="space-y-4">
@@ -112,7 +113,7 @@ export default function Trial() {
                     <Sparkles className="h-4 w-4 text-amber-500" />
                     <span className="text-sm font-medium text-foreground">{feature.name}</span>
                   </div>
-                  <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground font-medium">
+                  <span className="shrink-0 text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground font-medium">
                     {feature.eta}
                   </span>
                 </div>
@@ -129,8 +130,8 @@ export default function Trial() {
           >
             <h3 className="text-lg font-bold mb-2">Start monitoring now — completely free</h3>
             <p className="text-sm text-muted-foreground mb-6">
-              Create your account, add your servers, and get full access to all features. 
-              When Pro launches, early users will get exclusive pricing.
+              This website is currently in testing and access is limited to selected partners. If you have access,
+              add your servers and use every available feature. To request access, contact us.
             </p>
             <Link to="/register">
               <Button size="lg" className="shadow-lg shadow-primary/20">
@@ -150,14 +151,15 @@ export default function Trial() {
               <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-              <span>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a></span>
+              <span>&copy; {new Date().getFullYear()} NodeVigil by <span className="text-foreground">Davinosia Pahilanipa</span></span>
               <nav className="flex gap-6">
                 <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
                 <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
+                <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
               </nav>
             </div>
           </div>
+          <TestingNotice className="mt-6 text-center sm:text-left" />
         </div>
       </footer>
     </div>

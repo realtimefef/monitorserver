@@ -1,11 +1,13 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { BookOpen, Code2, Zap, Shield, ChevronRight, ArrowLeft } from 'lucide-react';
+import { TestingNotice } from '@/components/TestingNotice';
+import { BookOpen, Code2, Zap, Shield, ChevronRight, ArrowLeft, Compass } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 
 const sections = [
+  { to: '/docs/product-overview', label: 'Product Overview', icon: Compass },
   { to: '/docs/getting-started', label: 'Getting Started', icon: BookOpen },
   { to: '/docs/core-features', label: 'Core Features', icon: Zap },
   { to: '/docs/api-reference', label: 'API Reference', icon: Code2 },
@@ -14,11 +16,19 @@ const sections = [
 
 const docCards = [
   {
+    to: '/docs/product-overview',
+    icon: Compass,
+    title: 'Product Overview',
+    description:
+      'What NodeVigil is, what is available today, and what is planned: AI-assisted detection, alert correlation, incident summaries, policy-controlled remediation, and planned Azure integrations.',
+    featured: true,
+  },
+  {
     to: '/docs/getting-started',
     icon: BookOpen,
     title: 'Getting Started',
     description:
-      'Install Monitor Server, add your first server, and deploy an agent in minutes. Includes prerequisites, configuration, and verification steps.',
+      'Install NodeVigil, add your first server, and deploy an agent in minutes. Includes prerequisites, configuration, and verification steps.',
   },
   {
     to: '/docs/core-features',
@@ -57,7 +67,7 @@ export default function Documentation() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-xl font-bold text-foreground">Monitor</span>
+            <span className="font-display text-xl font-bold text-foreground">NodeVigil</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-4 text-sm text-muted-foreground">
@@ -101,7 +111,7 @@ export default function Documentation() {
               </Link>
               <h1 className="font-display text-4xl font-bold text-foreground">Documentation</h1>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Everything you need to know about Monitor Server — from initial setup to advanced
+                Everything you need to know about NodeVigil — from initial setup to advanced
                 features and the full API reference.
               </p>
             </div>
@@ -111,7 +121,10 @@ export default function Documentation() {
                 <Link
                   key={card.to}
                   to={card.to}
-                  className="group rounded-xl border border-border bg-card p-6 hover:border-primary/40 hover:bg-primary/5 transition-all"
+                  className={cn(
+                    'group rounded-xl border border-border bg-card p-6 hover:border-primary/40 hover:bg-primary/5 transition-all',
+                    card.featured && 'sm:col-span-2 border-primary/30'
+                  )}
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
@@ -196,14 +209,17 @@ export default function Documentation() {
       {/* Footer */}
       <footer className="border-t border-border mt-12">
         <div className="mx-auto max-w-6xl px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Monitor Server. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} NodeVigil. All rights reserved.</p>
           <nav className="flex gap-4">
             <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
             <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
             <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-            <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
+            <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
           </nav>
+        </div>
+        <div className="mx-auto max-w-6xl px-4 pb-6">
+          <TestingNotice className="text-center sm:text-left" />
         </div>
       </footer>
     </div>

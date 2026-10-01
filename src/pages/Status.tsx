@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { TestingNotice } from '@/components/TestingNotice';
 import { Button } from '@/components/ui/button';
 import {
   RefreshCw, CheckCircle2, XCircle, AlertTriangle, Loader2, Clock, ArrowLeft,
@@ -196,7 +197,7 @@ export default function Status() {
                 <CheckCircle2 className="h-10 w-10 text-green-500" />
               </div>
               <h1 className="font-display text-2xl font-bold text-foreground">All Systems Operational</h1>
-              <p className="mt-2 text-muted-foreground">All Monitor Server services are running normally.</p>
+              <p className="mt-2 text-muted-foreground">All NodeVigil services are running normally.</p>
             </>
           )}
           {overallStatus === 'MAJOR_OUTAGE' && (
@@ -289,12 +290,15 @@ export default function Status() {
 
       <footer className="border-t border-border mt-8">
         <div className="mx-auto max-w-3xl px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Monitor Server.</p>
+          <p>© {new Date().getFullYear()} NodeVigil.</p>
           <nav className="flex gap-4">
             <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
             <Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link>
           </nav>
+        </div>
+        <div className="mx-auto max-w-3xl px-4 pb-6">
+          <TestingNotice className="text-center sm:text-left" />
         </div>
       </footer>
     </div>

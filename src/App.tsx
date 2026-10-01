@@ -1,4 +1,4 @@
-// Monitor Server Frontend
+// NodeVigil Frontend
 import { Suspense, lazy } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -57,6 +57,7 @@ const Terms = lazy(() => import("./pages/Terms"));
 const Cookies = lazy(() => import("./pages/Cookies"));
 
 const Documentation = lazy(() => import("./pages/docs/Documentation"));
+const ProductOverview = lazy(() => import("./pages/docs/ProductOverview"));
 const GettingStarted = lazy(() => import("./pages/docs/GettingStarted"));
 const CoreFeatures = lazy(() => import("./pages/docs/CoreFeatures"));
 const APIReference = lazy(() => import("./pages/docs/APIReference"));
@@ -123,6 +124,7 @@ const AppRoutes = () => (
 
       {/* Documentation with nested layout */}
       <Route path="/docs" element={<Documentation />}>
+        <Route path="product-overview" element={<ProductOverview />} />
         <Route path="getting-started" element={<GettingStarted />} />
         <Route path="core-features" element={<CoreFeatures />} />
         <Route path="api-reference" element={<APIReference />} />

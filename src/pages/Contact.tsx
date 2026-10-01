@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Mail, Github, MessageSquare } from 'lucide-react';
+import { TestingNotice } from '@/components/TestingNotice';
+import { ArrowLeft, Mail, Github, MessageSquare, MapPin } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
@@ -28,6 +29,8 @@ export default function Contact() {
         <h1 className="text-4xl font-bold tracking-tight mb-4">Get in Touch</h1>
         <p className="text-lg text-muted-foreground mb-12 leading-relaxed">
           Have a question, found a bug, or want to suggest a feature? We'd love to hear from you.
+          This website is currently in testing and access is limited to selected partners. If you would like
+          access, contact us.
         </p>
 
         <div className="grid sm:grid-cols-3 gap-5 mb-14">
@@ -53,6 +56,31 @@ export default function Contact() {
             <p className="text-sm text-muted-foreground">Join the discussion</p>
           </div>
         </div>
+
+        <section className="grid sm:grid-cols-2 gap-5 mb-14">
+          <div className="rounded-xl border border-border bg-card p-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <MapPin className="h-5 w-5 text-primary" />
+              </div>
+              <h3 className="font-semibold">Address</h3>
+            </div>
+            <address className="text-sm not-italic text-muted-foreground leading-relaxed">
+              NodeVigil<br />
+              5 Grenfell Liwene Rd, Apt 5, Didsbury,<br />
+              Manchester, M20 6TG,<br />
+              United Kingdom
+            </address>
+          </div>
+          <div className="rounded-xl border border-primary/30 bg-primary/5 p-6">
+            <h3 className="font-semibold mb-2">Request access</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Access is limited to selected partners during testing. Email{' '}
+              <a href="mailto:support@nodevigil.cloud" className="text-primary hover:underline">support@nodevigil.cloud</a>{' '}
+              and tell us about your infrastructure and use case.
+            </p>
+          </div>
+        </section>
 
         <section>
           <h2 className="text-2xl font-semibold mb-6">Send a Message</h2>
@@ -109,7 +137,7 @@ export default function Contact() {
       <footer className="border-t border-border bg-card/50 mt-16">
         <div className="container mx-auto px-6 py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <span>&copy; {new Date().getFullYear()} NodeVigil by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a></span>
+            <span>&copy; {new Date().getFullYear()} NodeVigil by <span className="text-foreground">Davinosia Pahilanipa</span></span>
             <nav className="flex flex-wrap justify-center gap-6">
               <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
               <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
@@ -118,6 +146,7 @@ export default function Contact() {
               <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
             </nav>
           </div>
+          <TestingNotice className="mt-6 text-center sm:text-left" />
         </div>
       </footer>
     </div>

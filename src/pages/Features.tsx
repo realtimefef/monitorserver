@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { TestingNotice } from '@/components/TestingNotice';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -7,7 +8,8 @@ import {
   Cpu, HardDrive, Wifi, Bell, Eye, Lock,
   BarChart3, Zap, Shield, Clock, Download, Globe, Server,
   TrendingUp, Layers, ArrowRight, CheckCircle2, ArrowLeft,
-  FileText, Settings, Mail, RefreshCw, Brain, Bot, Sparkles,
+  FileText, Settings, Mail, RefreshCw, Brain, Sparkles,
+  Workflow, ScrollText, UserCheck, ShieldCheck,
 } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 
@@ -153,7 +155,7 @@ export default function Features() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/25">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight hidden sm:inline">Monitor Server</span>
+            <span className="font-display text-lg font-bold tracking-tight hidden sm:inline">NodeVigil</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
@@ -193,14 +195,14 @@ export default function Features() {
         </div>
         <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center">
           <motion.span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-6" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-            <RefreshCw className="h-3 w-3" /> 16 features and counting
+            <RefreshCw className="h-3 w-3" /> 16 features available today
           </motion.span>
           <motion.h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
             Every feature your<br />servers need.
           </motion.h1>
           <motion.p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            Monitoring, alerting, visualization, and security — all in one platform.
-            No plugins, no add-ons, no hidden costs.
+            Monitoring, alerting, visualization, and security are available today. AI-assisted detection,
+            correlation, summaries, and policy-controlled remediation are planned.
           </motion.p>
           <motion.div className="flex flex-col sm:flex-row gap-4 justify-center" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
             <Button size="lg" className="h-13 px-8 text-base shadow-xl shadow-primary/20" asChild>
@@ -253,24 +255,30 @@ export default function Features() {
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div className="max-w-2xl mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-500 text-xs font-medium mb-4">
-              <Brain className="h-3 w-3" /> Coming Soon — Powered by NVIDIA &amp; AWS
+              <Brain className="h-3 w-3" /> Planned — not yet available
             </div>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">AI-powered monitoring</h2>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">AI-powered monitoring and remediation</h2>
             <p className="text-muted-foreground text-lg">
-              We're building intelligent features that go beyond dashboards — AI that automatically detects, diagnoses, and resolves infrastructure issues.
+              We are building an AI-powered cloud monitoring and auto-alert platform with automated AI remediation.
+              Production reliability depends on uninterrupted access to frontier models, supported by suitable capacity,
+              monitoring, retries, and fallback strategies.
             </p>
-            <div className="flex items-center gap-6 mt-6">
-              <img src="/nvidia-logo.webp" alt="NVIDIA" className="h-8 object-contain opacity-50" />
-              <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-8 object-contain opacity-50" />
-              <img src="/aws-logo.webp" alt="AWS" className="h-8 object-contain opacity-50" />
+            <div className="flex flex-wrap items-center gap-2 mt-6">
+              <span className="text-xs font-medium text-muted-foreground mr-1">Planned integrations:</span>
+              {['Azure AI Foundry', 'Azure gateway services', 'VM/vCPU workloads', 'Supported GPU compute', 'Azure Monitor / Log Analytics'].map((chip) => (
+                <span key={chip} className="text-xs font-medium px-2.5 py-1 rounded-full bg-muted/60 text-foreground/70 border border-border">{chip}</span>
+              ))}
             </div>
           </motion.div>
 
           <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" variants={container} initial="hidden" whileInView="show" viewport={{ once: true }}>
             {[
-              { icon: Bot, title: 'Auto-Solve Alerts', desc: 'AI agents that automatically remediate common issues — restart services, clear disk space, scale resources — without human intervention.', tag: 'AI Agent' },
-              { icon: Brain, title: 'AI Recommendations', desc: 'Intelligent fix suggestions based on pattern analysis across your infrastructure. Know the best action before you even open the terminal.', tag: 'ML Engine' },
-              { icon: Sparkles, title: 'Predictive Analytics', desc: 'Forecast resource exhaustion days in advance. GPU-accelerated models analyze baseline patterns to predict CPU spikes and memory leaks.', tag: 'GPU Accelerated' },
+              { icon: Brain, title: 'AI Anomaly Detection', desc: 'Learn each server\'s normal behaviour and surface unusual patterns before a static threshold is crossed.', tag: 'Detection' },
+              { icon: Workflow, title: 'Alert Correlation', desc: 'Group related alerts across servers and services into a single incident to cut notification noise.', tag: 'Correlation' },
+              { icon: ScrollText, title: 'Incident Summaries', desc: 'Plain-language summaries of what changed, what is affected, and what was tried — ready for hand-off and post-incident review.', tag: 'Summaries' },
+              { icon: Sparkles, title: 'Policy-Controlled Remediation', desc: 'Automated fixes that run only inside policies you define — which actions are allowed, on which servers, and when.', tag: 'Remediation' },
+              { icon: UserCheck, title: 'Human Approval', desc: 'Consequential changes wait for explicit approval from an authorised person before they run.', tag: 'Control' },
+              { icon: ShieldCheck, title: 'Audit Logging', desc: 'Every AI recommendation, approval, and action is recorded so it can be reviewed later.', tag: 'Audit' },
             ].map((f, i) => (
               <motion.div key={i} variants={item} className="rounded-2xl border border-dashed border-primary/30 bg-card/50 p-6 sm:p-8">
                 <div className="flex items-center justify-between mb-5">
@@ -284,6 +292,11 @@ export default function Features() {
               </motion.div>
             ))}
           </motion.div>
+
+          <p className="mt-8 max-w-3xl text-sm text-muted-foreground leading-relaxed">
+            None of the capabilities above are available yet. No cloud or model service can promise uninterrupted
+            availability, so reliability planning covers capacity, monitoring, retries, and fallback strategies.
+          </p>
         </div>
       </section>
 
@@ -319,16 +332,17 @@ export default function Features() {
               <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-              <p>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a>. All rights reserved.</p>
+              <p>&copy; {new Date().getFullYear()} NodeVigil by <span className="text-foreground">Davinosia Pahilanipa</span>. All rights reserved.</p>
               <nav className="flex flex-wrap gap-4">
                 <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
                 <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
                 <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
                 <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
+                <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
               </nav>
             </div>
           </div>
+          <TestingNotice className="mt-6 text-center sm:text-left" />
         </div>
       </footer>
     </div>

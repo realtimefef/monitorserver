@@ -19,7 +19,7 @@ Data is fetched by polling the REST API at regular intervals (configurable) so t
   {
     id: 'multi-server',
     title: '2. Multi-Server Management',
-    content: `Monitor Server is designed to handle fleets of any size:
+    content: `NodeVigil is designed to handle fleets of any size:
 
 - The Servers page lists all your registered servers with status indicators (ONLINE/OFFLINE), last-seen timestamp, and quick links to the Server Detail page or alert rules.
 - Each server is isolated by user account — you only see your own servers.
@@ -111,7 +111,7 @@ A CSV template is available to download from the Bulk Import page so you start w
   {
     id: 'role-based-navigation',
     title: '8. Role-based Navigation',
-    content: `Monitor Server supports user roles that influence navigation and available actions:
+    content: `NodeVigil supports user roles that influence navigation and available actions:
 
 - Admin — full access to all pages and management functions, including account deletion and server bulk operations.
 - User — standard access to their own servers, metrics, alerts, history, and reports.
@@ -123,7 +123,7 @@ Role assignment is managed by the backend. By default, newly registered users re
   {
     id: 'dark-light-theme',
     title: '9. Dark/Light Theme',
-    content: `Monitor Server supports both dark and light color themes. Toggle between them using the theme button in the top navigation bar, or via the command palette (Ctrl+K → "Toggle theme").
+    content: `NodeVigil supports both dark and light color themes. Toggle between them using the theme button in the top navigation bar, or via the command palette (Ctrl+K → "Toggle theme").
 
 Your theme preference is persisted in local storage so it is remembered across sessions. The theme applies to all pages — dashboard, docs, public pages, and modals.
 
@@ -144,9 +144,15 @@ export default function CoreFeatures() {
         </div>
         <h1 className="font-display text-3xl font-bold text-foreground">Core Features</h1>
         <p className="text-muted-foreground">
-          A complete overview of everything Monitor Server can do.
+          A complete overview of what NodeVigil can do today.
         </p>
       </header>
+
+      <div className="rounded-xl border border-violet-500/30 bg-violet-500/[0.04] p-4 text-sm text-muted-foreground leading-relaxed">
+        Everything on this page is available today. AI-assisted anomaly detection, alert correlation, incident
+        summaries, and policy-controlled remediation are planned - see the{' '}
+        <Link to="/docs/product-overview" className="text-primary hover:underline">Product Overview</Link>.
+      </div>
 
       {/* Feature cards */}
       <div className="space-y-6">

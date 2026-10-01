@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { TestingNotice } from '@/components/TestingNotice';
 import { ArrowLeft, ArrowRight, CheckCircle2, Zap, DollarSign, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MonitorLogo } from '@/components/MonitorLogo';
@@ -36,12 +37,12 @@ const plans = [
     name: 'Pro',
     price: '$29',
     period: '/month',
-    desc: 'For growing teams who need AI-powered insights, longer retention, and priority support.',
+    desc: 'For growing teams who need longer retention and priority support, with AI-powered features planned.',
     features: [
       'Everything in Free',
-      'AI auto-solve alerts (coming soon)',
-      'AI-powered recommendations (coming soon)',
-      'Predictive analytics (coming soon)',
+      'Policy-controlled AI remediation (planned)',
+      'AI incident summaries (planned)',
+      'AI anomaly detection & alert correlation (planned)',
       '90-day metric history',
       'Webhook integrations',
       'Scheduled PDF/Excel reports',
@@ -49,7 +50,7 @@ const plans = [
       'Maintenance windows',
       'Priority email support',
     ],
-    cta: 'Start 14-Day Free Trial',
+    cta: 'View Pro roadmap',
     ctaLink: '/trial',
     highlight: true,
   },
@@ -76,9 +77,9 @@ const plans = [
 ];
 
 const faqs = [
-  { q: 'Can I really use Monitor Server for free?', a: 'Yes. The Free tier includes unlimited servers, real-time metrics, custom alerts, and email notifications — no credit card required, no time limit.' },
-  { q: 'What happens when I exceed the free tier limits?', a: 'The Free tier has no server limits. The main differences are metric retention (7 days vs 90 days), AI features, and support level. You can upgrade anytime.' },
-  { q: 'Can I deploy Monitor Server on my own AWS account?', a: 'Enterprise customers can get a dedicated deployment on their own AWS infrastructure. Contact our sales team for custom deployment options and SLAs.' },
+  { q: 'Can I really use NodeVigil for free?', a: 'Yes. The Free tier includes unlimited servers, real-time metrics, custom alerts, and email notifications — no credit card required, no time limit.' },
+  { q: 'What happens when I exceed the free tier limits?', a: 'The Free tier has no server limits. The main differences are metric retention (7 days vs 90 days), AI features (planned), and support level. You can upgrade anytime.' },
+  { q: 'Can I deploy NodeVigil on my own AWS account?', a: 'Enterprise customers can get a dedicated deployment on their own AWS infrastructure. Contact our sales team for custom deployment options and SLAs.' },
   { q: 'Do you offer discounts for startups?', a: 'Yes! We offer special startup-friendly pricing for teams building on our platform. Contact us for details.' },
   { q: 'What payment methods do you accept?', a: 'We accept all major credit cards, PayPal, and wire transfers for Enterprise plans. All payments are processed securely through Stripe.' },
   { q: 'Can I cancel anytime?', a: 'Yes. There are no long-term contracts. Cancel your subscription at any time and keep access until the end of your billing period.' },
@@ -94,7 +95,7 @@ export default function Pricing() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/25">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight">Monitor Server</span>
+            <span className="font-display text-lg font-bold tracking-tight">NodeVigil</span>
           </Link>
           <ThemeToggle />
         </div>
@@ -119,7 +120,7 @@ export default function Pricing() {
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             No hidden fees, no surprises. Monitor unlimited servers on our free tier, 
-            and upgrade when you need AI-powered insights and extended retention.
+            and upgrade when you need extended retention. AI-powered features are planned and not yet available.
           </p>
           <div className="flex items-center justify-center gap-8 mt-8">
             <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-10 object-contain opacity-50" />
@@ -214,16 +215,17 @@ export default function Pricing() {
               <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-              <span>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a></span>
+              <span>&copy; {new Date().getFullYear()} NodeVigil by <span className="text-foreground">Davinosia Pahilanipa</span></span>
               <nav className="flex gap-6">
                 <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
                 <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
                 <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
                 <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
+                <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
               </nav>
             </div>
           </div>
+          <TestingNotice className="mt-6 text-center sm:text-left" />
         </div>
       </footer>
     </div>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { TestingNotice } from '@/components/TestingNotice';
 import { ChevronRight, Search, ArrowLeft } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { Button } from '@/components/ui/button';
@@ -15,15 +16,45 @@ import { useState, useMemo } from 'react';
 
 const faqs = [
   {
-    question: 'What is Monitor Server?',
+    question: 'What is NodeVigil?',
     answer:
-      'Monitor Server is a real-time server monitoring platform. You deploy a lightweight agent script on each server you want to observe, and it continuously pushes metrics — CPU, memory, disk, network, and more — to your dashboard. From there you can visualize trends, set threshold-based alert rules, manage incidents, export historical reports, and monitor your entire server fleet from a single interface.',
+      'NodeVigil is being built as an AI-powered cloud monitoring and auto-alert platform with policy-controlled AI remediation. Today it is a real-time server monitoring platform; the AI features are planned. You deploy a lightweight agent script on each server you want to observe, and it continuously pushes metrics — CPU, memory, disk, network, and more — to your dashboard. From there you can visualize trends, set threshold-based alert rules, manage incidents, export historical reports, and monitor your entire server fleet from a single interface.',
     category: 'general',
+  },
+  {
+    question: 'What is available today and what is planned?',
+    answer:
+      'Available today: real-time metrics, threshold alert rules, email and webhook notifications (Slack, Discord, generic), history and export, scheduled reports, maintenance windows, and API keys. Planned and not yet available: AI-assisted anomaly detection, alert correlation, incident summaries, and policy-controlled remediation with human approval and audit logging.',
+    category: 'general',
+  },
+  {
+    question: 'Will AI change my infrastructure without asking?',
+    answer:
+      'No. Remediation is designed to be policy-controlled: you define which actions automation may take. Consequential changes require human approval, and every AI recommendation, approval, and action is designed to be recorded in an audit log. These controls are part of the planned design and are not live yet.',
+    category: 'security',
+  },
+  {
+    question: 'Do you guarantee uninterrupted access to AI models?',
+    answer:
+      'No. Production reliability of AI features depends on uninterrupted access to frontier models. We plan to support that with suitable capacity, monitoring, retries, and fallback strategies, but no cloud or model service can guarantee uninterrupted availability.',
+    category: 'general',
+  },
+  {
+    question: 'Which integrations are planned?',
+    answer:
+      'Planned integrations: Azure AI Foundry, Azure gateway services, VM/vCPU workloads, supported GPU compute, and Azure Monitor / Log Analytics. None are generally available yet. Slack, Discord, and generic webhooks are available today.',
+    category: 'general',
+  },
+  {
+    question: 'How do I get access?',
+    answer:
+      'This website is currently in testing and access is limited to selected partners. To request access, contact us at support@nodevigil.cloud or use the Contact page.',
+    category: 'account',
   },
   {
     question: 'How does the monitoring agent work?',
     answer:
-      'The agent is a small Bash script (or PowerShell on Windows) that runs on your server. It collects system metrics every 5 seconds and sends them to the Monitor Server REST API using your unique agent key. The agent requires no inbound firewall rules — it only makes outbound HTTPS requests. On Linux you can run it as a systemd service so it starts automatically on boot.',
+      'The agent is a small Bash script (or PowerShell on Windows) that runs on your server. It collects system metrics every 5 seconds and sends them to the NodeVigil REST API using your unique agent key. The agent requires no inbound firewall rules — it only makes outbound HTTPS requests. On Linux you can run it as a systemd service so it starts automatically on boot.',
     category: 'agent',
   },
   {
@@ -53,7 +84,7 @@ const faqs = [
   {
     question: 'Can I monitor multiple servers?',
     answer:
-      'Yes — Monitor Server is designed for multi-server monitoring. Each server you add gets its own unique agent key. All servers appear on the main Servers page and the Dashboard overview. You can filter alerts, history charts, and reports by server, and use Bulk Import (CSV) to register many servers at once.',
+      'Yes — NodeVigil is designed for multi-server monitoring. Each server you add gets its own unique agent key. All servers appear on the main Servers page and the Dashboard overview. You can filter alerts, history charts, and reports by server, and use Bulk Import (CSV) to register many servers at once.',
     category: 'general',
   },
   {
@@ -131,7 +162,7 @@ export default function FAQ() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/25">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight hidden sm:inline">Monitor Server</span>
+            <span className="font-display text-lg font-bold tracking-tight hidden sm:inline">NodeVigil</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
@@ -176,7 +207,7 @@ export default function FAQ() {
               Frequently Asked Questions
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-              Everything you need to know about Monitor Server.
+              Everything you need to know about NodeVigil.
               Can't find your answer? Visit our{' '}
               <Link to="/help" className="text-primary hover:underline">
                 Help &amp; Support
@@ -280,16 +311,17 @@ export default function FAQ() {
               <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-              <p>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a>. All rights reserved.</p>
+              <p>&copy; {new Date().getFullYear()} NodeVigil by <span className="text-foreground">Davinosia Pahilanipa</span>. All rights reserved.</p>
               <nav className="flex flex-wrap gap-4">
                 <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
                 <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
                 <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
                 <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
+                <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
               </nav>
             </div>
           </div>
+          <TestingNotice className="mt-6 text-center sm:text-left" />
         </div>
       </footer>
     </div>

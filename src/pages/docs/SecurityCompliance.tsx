@@ -9,7 +9,7 @@ export default function SecurityCompliance() {
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Docs
         </Link>
         <h1 className="font-display text-3xl font-bold text-foreground">Security & Compliance</h1>
-        <p className="text-muted-foreground">How Monitor Server protects your data and servers.</p>
+        <p className="text-muted-foreground">How NodeVigil protects your data and servers.</p>
       </header>
 
       {[
@@ -41,7 +41,7 @@ Your data is never shared with third parties or used for analytics or advertisin
         },
         {
           title: 'Authentication & Passwords',
-          content: `Passwords are hashed using bcrypt with a cost factor of 10. Monitor Server never stores or transmits plaintext passwords.
+          content: `Passwords are hashed using bcrypt with a cost factor of 10. NodeVigil never stores or transmits plaintext passwords.
 
 For password resets, the system sends a secure token to your email. The token expires after 1 hour. The new password must meet complexity requirements (8+ chars, uppercase, lowercase, digit, special character).`,
         },
@@ -60,8 +60,17 @@ For password resets, the system sends a secure token to your email. The token ex
 You can configure the retention period via the METRICS_RETENTION_DAYS environment variable.`,
         },
         {
+          title: 'AI Remediation Safeguards (planned)',
+          content: `AI-assisted remediation is planned and not yet available. It is being designed with these safeguards:
+- Policy controls: you define which actions automation may take, on which servers, and under what conditions
+- Human approval: consequential changes require explicit approval from an authorised person before they run
+- Audit logging: every AI recommendation, approval, and action is recorded so it can be reviewed later
+
+Production reliability of AI features depends on uninterrupted access to frontier models. The plan includes suitable capacity, monitoring, retries, and fallback strategies; no cloud or model service can guarantee uninterrupted availability.`,
+        },
+        {
           title: 'Reporting Vulnerabilities',
-          content: `If you discover a security vulnerability, please report it privately to admin@monitorserver.in before any public disclosure. We aim to acknowledge reports within 48 hours.`,
+          content: `If you discover a security vulnerability, please report it privately to support@nodevigil.cloud before any public disclosure. We aim to acknowledge reports within 48 hours.`,
         },
       ].map((s, i) => (
         <div key={i} className="rounded-xl border border-border bg-card p-6 space-y-3">

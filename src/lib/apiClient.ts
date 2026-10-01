@@ -1,5 +1,5 @@
 /**
- * REST API client for Monitor Server.
+ * REST API client for NodeVigil.
  * Replaces Supabase SDK with direct fetch() calls using JWT authentication.
  * API base URL is configurable in app settings (stored in localStorage).
  */

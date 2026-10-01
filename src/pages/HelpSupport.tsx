@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { TestingNotice } from '@/components/TestingNotice';
 import {
   ChevronRight,
   ChevronDown,
@@ -67,7 +68,7 @@ Steps to diagnose:
 2. If you forgot your password, use the "Forgot password?" link on the Login page to request a reset link.
 3. Make sure you're using the correct email address — the one you used during registration.
 4. If your session expired, simply log in again. Sessions expire after the JWT token lifetime (typically 1 hour).
-5. If login still fails, contact support at support@monitorserver.in with your email address.`,
+5. If login still fails, contact support at support@nodevigil.cloud with your email address.`,
   },
   {
     icon: MemoryStick,
@@ -189,7 +190,7 @@ export default function HelpSupport() {
         >
           <h2 className="font-display text-2xl font-semibold text-foreground">Getting Started</h2>
           <p className="text-muted-foreground">
-            New to Monitor Server? These guides will get you up and running quickly.
+            New to NodeVigil? These guides will get you up and running quickly.
           </p>
           <div className="grid gap-4 sm:grid-cols-2">
             <Link
@@ -203,7 +204,7 @@ export default function HelpSupport() {
                 <h3 className="font-semibold text-foreground">Getting Started Guide</h3>
               </div>
               <p className="text-sm text-muted-foreground">
-                Install Monitor Server, add your first server, deploy the agent, and verify metrics are
+                Install NodeVigil, add your first server, deploy the agent, and verify metrics are
                 flowing — step by step.
               </p>
               <div className="flex items-center gap-1 mt-4 text-sm text-primary">
@@ -266,7 +267,7 @@ export default function HelpSupport() {
           <div className="grid gap-4 sm:grid-cols-3">
             {/* Email */}
             <a
-              href="mailto:support@monitorserver.in"
+              href="mailto:support@nodevigil.cloud"
               className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 hover:border-primary/40 hover:bg-primary/5 transition-all"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
@@ -274,7 +275,7 @@ export default function HelpSupport() {
               </div>
               <div>
                 <p className="font-medium text-foreground">Email Support</p>
-                <p className="text-sm text-muted-foreground mt-0.5">support@monitorserver.in</p>
+                <p className="text-sm text-muted-foreground mt-0.5">support@nodevigil.cloud</p>
               </div>
               <div className="flex items-center gap-1 text-sm text-primary mt-auto">
                 Send email <ExternalLink className="h-3.5 w-3.5" />
@@ -372,14 +373,17 @@ export default function HelpSupport() {
       {/* Footer */}
       <footer className="border-t border-border mt-12">
         <div className="mx-auto max-w-5xl px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Monitor Server. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} NodeVigil. All rights reserved.</p>
           <nav className="flex gap-4">
             <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
             <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
             <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-            <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
+            <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
           </nav>
+        </div>
+        <div className="mx-auto max-w-5xl px-4 pb-6">
+          <TestingNotice className="text-center sm:text-left" />
         </div>
       </footer>
     </div>

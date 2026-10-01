@@ -37,10 +37,10 @@
   </g>
 
   <!-- Title -->
-  <text x="80" y="248" fill="#fff" font-size="56" font-weight="800" font-family="system-ui, -apple-system, sans-serif" letter-spacing="-1.5">Monitor Server</text>
+  <text x="80" y="248" fill="#fff" font-size="56" font-weight="800" font-family="system-ui, -apple-system, sans-serif" letter-spacing="-1.5">NodeVigil</text>
 
   <!-- Subtitle -->
-  <text x="80" y="292" fill="#c7d2fe" font-size="22" font-weight="400" font-family="system-ui, -apple-system, sans-serif">Real-Time Server Monitoring Dashboard</text>
+  <text x="80" y="292" fill="#c7d2fe" font-size="22" font-weight="400" font-family="system-ui, -apple-system, sans-serif">AI-powered cloud monitoring &amp; auto-alerting</text>
 
   <!-- Feature pills -->
   <g transform="translate(80, 330)">
@@ -66,11 +66,11 @@
   </g>
 
   <!-- Description -->
-  <text x="80" y="420" fill="#e0e7ff" font-size="16" font-weight="400" font-family="system-ui, -apple-system, sans-serif" opacity="0.8">Open-source, self-hosted infrastructure monitoring</text>
-  <text x="80" y="446" fill="#e0e7ff" font-size="16" font-weight="400" font-family="system-ui, -apple-system, sans-serif" opacity="0.8">with real-time metrics and intelligent alerts.</text>
+  <text x="80" y="420" fill="#e0e7ff" font-size="16" font-weight="400" font-family="system-ui, -apple-system, sans-serif" opacity="0.8">Real-time monitoring and alerting available today.</text>
+  <text x="80" y="446" fill="#e0e7ff" font-size="16" font-weight="400" font-family="system-ui, -apple-system, sans-serif" opacity="0.8">AI anomaly detection and remediation are planned.</text>
 
   <!-- Domain -->
-  <text x="80" y="540" fill="#fff" font-size="20" font-weight="700" font-family="system-ui, -apple-system, sans-serif">monitorserver.in</text>
+  <text x="80" y="540" fill="#fff" font-size="20" font-weight="700" font-family="system-ui, -apple-system, sans-serif">nodevigil.cloud</text>
 
   <!-- ======= RIGHT COLUMN: Dashboard Mockup ======= -->
   <g transform="translate(680, 80)">

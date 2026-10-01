@@ -13,6 +13,7 @@ import {
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { useToast } from '@/hooks/use-toast';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { TestingNotice } from '@/components/TestingNotice';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -140,13 +141,15 @@ export default function Login() {
             </Link>
           </p>
 
+          <TestingNotice className="mt-4 text-center" />
+
           {/* About NodeVigil - below form */}
           <div className="mt-10 pt-8 border-t border-border">
             {/* Project overview */}
             <div className="mb-8">
               <h4 className="text-sm font-bold text-foreground mb-2">About NodeVigil</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                NodeVigil is a real-time server monitoring platform built with
+                NodeVigil is an AI-powered cloud monitoring and auto-alert platform in development; real-time monitoring is available today. Built with
                 Spring Boot 3 and React 18. Install a lightweight agent on any server and
                 get real-time CPU, memory, disk, and network metrics streamed to your dashboard every 5 seconds.
               </p>
