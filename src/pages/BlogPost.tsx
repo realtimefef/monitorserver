@@ -1,4 +1,5 @@
 import { Link, useParams, Navigate } from 'react-router-dom';
+import { TestingNotice } from '@/components/TestingNotice';
 import { ArrowLeft, Clock, User, Tag, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MonitorLogo } from '@/components/MonitorLogo';
@@ -19,14 +20,14 @@ interface BlogPostData {
 const posts: BlogPostData[] = [
   {
     slug: 'real-time-websocket-monitoring',
-    title: 'How Monitor Server Tracks Servers in Real-Time with WebSocket Streaming',
+    title: 'How NodeVigil Tracks Servers in Real-Time with WebSocket Streaming',
     excerpt: 'Deep dive into our real-time architecture — from lightweight shell agents to STOMP-over-WebSocket metric delivery that updates your dashboard in under a second.',
     date: 'March 15, 2026',
-    author: 'Gautam Kumar',
+    author: 'Davinosia Pahilanipa',
     category: 'Engineering',
     readTime: '8 min read',
     content: [
-      'At Monitor Server, we needed to solve a fundamental problem: how do you deliver server metrics to a dashboard in real-time without crushing the backend with HTTP polling? The answer was WebSocket streaming using the STOMP protocol over SockJS.',
+      'At NodeVigil, we needed to solve a fundamental problem: how do you deliver server metrics to a dashboard in real-time without crushing the backend with HTTP polling? The answer was WebSocket streaming using the STOMP protocol over SockJS.',
       '## The Architecture',
       'Our monitoring pipeline has three layers: **lightweight shell agents** (Bash/PowerShell) running on each server, a **Spring Boot 3.4 backend** handling metric ingestion via REST and broadcasting via WebSocket, and a **React frontend** that subscribes to per-server STOMP topics for instant updates.',
       'When an agent sends metrics via `POST /api/v1/metrics/ingest`, the backend validates the agent key, stores the data in PostgreSQL, and immediately broadcasts the update to all WebSocket subscribers watching that server. The entire round trip — from agent to dashboard — typically completes in under 200ms.',
@@ -47,7 +48,7 @@ const posts: BlogPostData[] = [
     title: 'Building GPU-Accelerated Monitoring with NVIDIA CUDA',
     excerpt: 'How we use NVIDIA GPUs to train AI models for anomaly detection, predictive capacity planning, and an intelligent chatbot that helps users diagnose server issues.',
     date: 'February 20, 2026',
-    author: 'Gautam Kumar',
+    author: 'Davinosia Pahilanipa',
     category: 'AI & ML',
     readTime: '10 min read',
     content: [
@@ -64,7 +65,7 @@ const posts: BlogPostData[] = [
       '## NVIDIA GPU Training Infrastructure',
       'NVIDIA GPUs give us the compute power to train models on large volumes of metric data. We use NVIDIA\'s DGX Cloud for distributed training, CUDA for parallel processing, and TensorRT for optimized inference. The result: an AI chatbot that can answer questions like "Why is my server slow?" with context-aware diagnoses.',
       '## What This Means for Users',
-      'When our AI features launch, Monitor Server will automatically learn your server\'s normal behavior and alert you when something unusual happens — before a traditional threshold alert would fire. No configuration required. The system learns and adapts on its own.',
+      'When our AI features launch, NodeVigil will automatically learn your server\'s normal behavior and alert you when something unusual happens — before a traditional threshold alert would fire. No configuration required. The system learns and adapts on its own.',
     ],
   },
   {
@@ -72,7 +73,7 @@ const posts: BlogPostData[] = [
     title: 'Our AI Roadmap: Auto-Solve Alerts and Intelligent Recommendations',
     excerpt: 'A look at the future of infrastructure monitoring — AI agents that automatically resolve common issues and recommend fixes before humans even notice a problem.',
     date: 'February 5, 2026',
-    author: 'Gautam Kumar',
+    author: 'Davinosia Pahilanipa',
     category: 'Product',
     readTime: '6 min read',
     content: [
@@ -86,19 +87,19 @@ const posts: BlogPostData[] = [
       '## How We\'re Building It',
       'Our AI stack leverages NVIDIA CUDA for real-time inference and AWS infrastructure for reliable delivery. Models are trained on anonymized metric patterns (never your actual data), fine-tuned per-server using federated learning, and served via NVIDIA TensorRT for sub-millisecond inference.',
       '## The Vision',
-      'Imagine a world where your monitoring tool doesn\'t just tell you something is broken — it fixes it, explains what happened, and suggests how to prevent it next time. That\'s what we\'re building at Monitor Server.',
+      'Imagine a world where your monitoring tool doesn\'t just tell you something is broken — it fixes it, explains what happened, and suggests how to prevent it next time. That\'s what we\'re building at NodeVigil.',
     ],
   },
   {
     slug: 'why-we-chose-aws',
     title: 'Why We Chose AWS for Our Cloud Infrastructure',
-    excerpt: 'From EC2 instances to RDS PostgreSQL, here is why AWS was the perfect cloud platform for Monitor Server — and how it powers our 99.9% uptime guarantee.',
+    excerpt: 'From EC2 instances to RDS PostgreSQL, here is why AWS was the perfect cloud platform for NodeVigil — and how it powers our 99.9% uptime guarantee.',
     date: 'January 15, 2026',
-    author: 'Gautam Kumar',
+    author: 'Davinosia Pahilanipa',
     category: 'Infrastructure',
     readTime: '7 min read',
     content: [
-      'When we started building Monitor Server, we evaluated every major cloud provider. We chose AWS because it offered the best combination of reliability, services, and developer tools for our scale.',
+      'When we started building NodeVigil, we evaluated every major cloud provider. We chose AWS because it offered the best combination of reliability, services, and developer tools for our scale.',
       '## AWS Services We Use',
       '**Amazon EC2** runs our Spring Boot backend and handles metric ingestion from thousands of agents simultaneously. Auto Scaling ensures we can handle traffic spikes without manual intervention.',
       '**Amazon RDS (PostgreSQL)** stores all metrics, user data, and alert configurations with automated backups, point-in-time recovery, and read replicas for query performance.',
@@ -119,11 +120,11 @@ const posts: BlogPostData[] = [
     title: 'From Spring Boot to Production: Building a Java 21 Monitoring Backend',
     excerpt: 'Technical deep-dive into our backend architecture — Spring Boot 3.4, Java 21, WebSocket STOMP, and how we handle thousands of metric ingestions per second.',
     date: 'December 28, 2025',
-    author: 'Gautam Kumar',
+    author: 'Davinosia Pahilanipa',
     category: 'Engineering',
     readTime: '12 min read',
     content: [
-      'Monitor Server\'s backend is built with Spring Boot 3.4 running on Java 21. This combination gives us virtual threads, pattern matching, record types, and the mature Spring ecosystem — a solid foundation for a high-throughput monitoring platform.',
+      'NodeVigil\'s backend is built with Spring Boot 3.4 running on Java 21. This combination gives us virtual threads, pattern matching, record types, and the mature Spring ecosystem — a solid foundation for a high-throughput monitoring platform.',
       '## Why Spring Boot?',
       'We evaluated Node.js, Go, and Rust for our backend. Spring Boot won because of its mature WebSocket support (STOMP), JPA/Hibernate for database operations, Spring Security for authentication, and a vast ecosystem of battle-tested libraries. Java 21\'s virtual threads eliminate the traditional "too many threads" concern.',
       '## API Architecture',
@@ -145,25 +146,25 @@ const posts: BlogPostData[] = [
     title: 'The 5-Minute Server Monitoring Setup: A Step-by-Step Guide',
     excerpt: 'Go from zero to full infrastructure observability in under five minutes. Install the agent, configure alerts, and start monitoring — no complex setup required.',
     date: 'December 15, 2025',
-    author: 'Gautam Kumar',
+    author: 'Davinosia Pahilanipa',
     category: 'Tutorial',
     readTime: '5 min read',
     content: [
-      'Getting started with Monitor Server takes less than five minutes. No complex configurations, no infrastructure to set up, no credit card required. Here\'s how.',
+      'Getting started with NodeVigil takes less than five minutes. No complex configurations, no infrastructure to set up, no credit card required. Here\'s how.',
       '## Step 1: Create Your Account (30 seconds)',
-      'Visit **monitorserver.in** and click **Get Started Free**. Enter your email and password. You\'ll receive a verification email — click the link to activate your account.',
+      'Visit **nodevigil.cloud** and click **Get Started Free**. Enter your email and password. You\'ll receive a verification email — click the link to activate your account.',
       '## Step 2: Add Your First Server (30 seconds)',
-      'From your dashboard, click **Add Server**. Give it a name (e.g., "Production Web Server") and an optional host address. Monitor Server generates a unique **Agent Key** — copy it.',
+      'From your dashboard, click **Add Server**. Give it a name (e.g., "Production Web Server") and an optional host address. NodeVigil generates a unique **Agent Key** — copy it.',
       '## Step 3: Install the Agent (2 minutes)',
-      'SSH into your server and run the appropriate installer:\n\n**Linux/macOS (Bash):**\n```bash\ncurl -sL https://monitorserver.in/agent/monitor-agent.sh -o monitor-agent.sh\nchmod +x monitor-agent.sh\n./monitor-agent.sh -u "https://api.monitorserver.in/api/v1" -k "YOUR_AGENT_KEY"\n```\n\n**Windows (PowerShell):**\n```powershell\nInvoke-WebRequest -Uri "https://monitorserver.in/agent/monitor-agent.ps1" -OutFile monitor-agent.ps1\n.\\monitor-agent.ps1 -ApiUrl "https://api.monitorserver.in/api/v1" -AgentKey "YOUR_AGENT_KEY"\n```',
+      'SSH into your server and run the appropriate installer:\n\n**Linux/macOS (Bash):**\n```bash\ncurl -sL https://nodevigil.cloud/agent/monitor-agent.sh -o monitor-agent.sh\nchmod +x monitor-agent.sh\n./monitor-agent.sh -u "https://api.nodevigil.cloud/api/v1" -k "YOUR_AGENT_KEY"\n```\n\n**Windows (PowerShell):**\n```powershell\nInvoke-WebRequest -Uri "https://nodevigil.cloud/agent/monitor-agent.ps1" -OutFile monitor-agent.ps1\n.\\monitor-agent.ps1 -ApiUrl "https://api.nodevigil.cloud/api/v1" -AgentKey "YOUR_AGENT_KEY"\n```',
       '## Step 4: See Metrics Flowing (Instant)',
       'Go back to your dashboard. Within seconds, you\'ll see live CPU, memory, disk, and network metrics streaming in real-time. The dashboard updates every 5 seconds with no page refresh required.',
       '## Step 5: Set Up Alerts (1 minute)',
       'Navigate to **Alert Rules** and create your first rule. Pick a metric (CPU, Memory, Disk, or Network), set a condition (e.g., "CPU > 80%"), choose a severity, and save. When the threshold is breached, you\'ll get an instant email notification.',
       '## What\'s Next?',
-      'Add more servers, set up webhooks for Slack/Discord notifications, configure scheduled reports, and explore the API for programmatic access. Monitor Server scales with you — from a single VPS to a fleet of hundreds.',
+      'Add more servers, set up webhooks for Slack/Discord notifications, configure scheduled reports, and explore the API for programmatic access. NodeVigil scales with you — from a single VPS to a fleet of hundreds.',
       '## Need Help?',
-      'Check our documentation at **monitorserver.in/docs**, or reach out at **support@monitorserver.in**. We typically respond within a few hours.',
+      'Check our documentation at **nodevigil.cloud/docs**, or reach out at **support@nodevigil.cloud**. We typically respond within a few hours.',
     ],
   },
 ];
@@ -191,7 +192,7 @@ export default function BlogPost() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/25">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight">Monitor Server</span>
+            <span className="font-display text-lg font-bold tracking-tight">NodeVigil</span>
           </Link>
           <ThemeToggle />
         </div>
@@ -288,15 +289,16 @@ export default function BlogPost() {
               <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-              <span>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a></span>
+              <span>&copy; {new Date().getFullYear()} NodeVigil by <span className="text-foreground">Davinosia Pahilanipa</span></span>
               <nav className="flex gap-6">
                 <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
                 <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
                 <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
+                <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
               </nav>
             </div>
           </div>
+          <TestingNotice className="mt-6 text-center sm:text-left" />
         </div>
       </footer>
     </div>

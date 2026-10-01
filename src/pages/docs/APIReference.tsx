@@ -117,7 +117,7 @@ export default function APIReference() {
         </div>
         <h1 className="font-display text-3xl font-bold text-foreground">API Reference</h1>
         <p className="text-muted-foreground">
-          Complete reference for the Monitor Server REST API. The backend is a custom Spring Boot
+          Complete reference for the NodeVigil REST API. The backend is a custom Spring Boot
           application. All endpoints use JSON. Authenticated endpoints require a Bearer token in the
           Authorization header.
         </p>

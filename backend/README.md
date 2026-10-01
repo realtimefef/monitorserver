@@ -1,6 +1,6 @@
-# Monitor Server — Backend
+# NodeVigil — Backend
 
-Spring Boot 3.4 REST API for the Monitor Server dashboard.
+Spring Boot 3.4 REST API for the NodeVigil dashboard.
 
 ## Requirements
 - Java 21+

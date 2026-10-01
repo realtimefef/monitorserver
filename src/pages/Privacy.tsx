@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { TestingNotice } from '@/components/TestingNotice';
 import { ArrowLeft } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -13,7 +14,7 @@ export default function Privacy() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/25">
               <MonitorLogo className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight">Monitor Server</span>
+            <span className="font-display text-lg font-bold tracking-tight">NodeVigil</span>
           </Link>
           <ThemeToggle />
         </div>
@@ -35,7 +36,7 @@ export default function Privacy() {
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mb-3">2. How We Use Your Data</h2>
-            <p>Your data is used to display real-time server metrics on your dashboard, trigger alert notifications based on your configured rules, and improve the reliability and performance of Monitor Server. We do not sell, rent, or share your personal data with third parties for marketing purposes.</p>
+            <p>Your data is used to display real-time server metrics on your dashboard, trigger alert notifications based on your configured rules, and improve the reliability and performance of NodeVigil. We do not sell, rent, or share your personal data with third parties for marketing purposes.</p>
           </section>
 
           <section>
@@ -79,16 +80,17 @@ export default function Privacy() {
               <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-8 object-contain opacity-60 hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-              <span>&copy; {new Date().getFullYear()} Monitor Server by <a href="https://www.linkedin.com/in/gautamkumarcloud/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">Gautam Kumar</a></span>
+              <span>&copy; {new Date().getFullYear()} NodeVigil by <span className="text-foreground">Davinosia Pahilanipa</span></span>
               <nav className="flex gap-6">
                 <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
                 <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
                 <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
                 <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-                <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
+                <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
               </nav>
             </div>
           </div>
+          <TestingNotice className="mt-6 text-center sm:text-left" />
         </div>
       </footer>
     </div>

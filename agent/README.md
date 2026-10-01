@@ -1,6 +1,6 @@
-# Monitor Server Monitoring Agent
+# NodeVigil Monitoring Agent
 
-Lightweight agent scripts that run on your servers to collect and send metrics to the Monitor Server dashboard.
+Lightweight agent scripts that run on your servers to collect and send metrics to the NodeVigil dashboard.
 
 ## Quick Start
 
@@ -34,7 +34,7 @@ Invoke-WebRequest -Uri "YOUR_API_URL/agent/monitor-agent.ps1" -OutFile monitor-a
 ```bash
 sudo tee /etc/systemd/system/monitor-agent.service << 'EOF'
 [Unit]
-Description=Monitor Server Agent
+Description=NodeVigil Agent
 After=network-online.target
 Wants=network-online.target
 

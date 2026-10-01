@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { TestingNotice } from '@/components/TestingNotice';
 import { ArrowLeft } from 'lucide-react';
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { Button } from '@/components/ui/button';
@@ -95,7 +96,7 @@ export default function Cookies() {
             <section className="space-y-3">
               <h2 className="font-display text-xl font-semibold">No Analytics or Tracking</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Monitor Server does not use analytics cookies, advertising cookies, or any third-party
+                NodeVigil does not use analytics cookies, advertising cookies, or any third-party
                 tracking. We do not sell your data.
               </p>
             </section>
@@ -104,8 +105,8 @@ export default function Cookies() {
               <h2 className="font-display text-xl font-semibold">Contact</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Questions about our cookie use? Contact us at{' '}
-                <a href="mailto:support@monitorserver.in" className="text-primary hover:underline">
-                  support@monitorserver.in
+                <a href="mailto:support@nodevigil.cloud" className="text-primary hover:underline">
+                  support@nodevigil.cloud
                 </a>.
               </p>
             </section>
@@ -115,12 +116,15 @@ export default function Cookies() {
 
       <footer className="border-t border-border mt-8">
         <div className="mx-auto max-w-4xl px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Monitor Server.</p>
+          <p>© {new Date().getFullYear()} NodeVigil.</p>
           <nav className="flex gap-4">
             <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-            <a href="mailto:support@monitorserver.in" className="hover:text-foreground transition-colors">support@monitorserver.in</a>
+            <a href="mailto:support@nodevigil.cloud" className="hover:text-foreground transition-colors">support@nodevigil.cloud</a>
           </nav>
+        </div>
+        <div className="mx-auto max-w-4xl px-4 pb-6">
+          <TestingNotice className="text-center sm:text-left" />
         </div>
       </footer>
     </div>

@@ -13,6 +13,7 @@ import {
 import { MonitorLogo } from '@/components/MonitorLogo';
 import { useToast } from '@/hooks/use-toast';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { TestingNotice } from '@/components/TestingNotice';
 
 const PW_RULES = [
   { key: 'len', test: (p: string) => p.length >= 8, label: '8 or more characters' },
@@ -352,13 +353,15 @@ export default function Register() {
             </Link>
           </p>
 
+          <TestingNotice className="mt-4 text-center" />
+
           {/* About NodeVigil - below form */}
           <div className="mt-10 pt-8 border-t border-border">
             {/* Project summary */}
             <div className="mb-6">
               <h4 className="text-sm font-bold text-foreground mb-2">About NodeVigil</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                A real-time server monitoring platform. The backend runs on Spring Boot 3 (Java 21)
+                An AI-powered cloud monitoring and auto-alert platform in development; real-time monitoring and threshold alerts are available today. The backend runs on Spring Boot 3 (Java 21)
                 with PostgreSQL, and the frontend is a React 18 TypeScript SPA. Install a Bash or PowerShell agent
                 on each server to stream 12 metric types every 5 seconds — then set threshold-based alert rules
                 and receive notifications when something needs attention.
