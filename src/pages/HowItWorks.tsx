@@ -360,6 +360,10 @@ export default function HowItWorks() {
             <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity" />
             <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity" />
             <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground">
+              Microsoft Azure
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-violet-500/10 text-violet-500 border border-violet-500/20">Planned</span>
+            </span>
           </motion.div>
           <p className="mt-8 text-xs text-muted-foreground max-w-xl mx-auto leading-relaxed">
             Planned integrations (not yet available): Azure AI Foundry, Azure gateway services, VM/vCPU workloads,
