@@ -126,7 +126,7 @@ export default function About() {
               <h3 className="font-semibold mb-2 text-foreground">AWS Cloud Platform</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Built on AWS cloud infrastructure for reliable, scalable server monitoring
-                backed by EC2, RDS PostgreSQL, and CloudWatch.
+                with 99.9% uptime backed by EC2, RDS PostgreSQL, and CloudWatch.
               </p>
             </div>
             <div className="rounded-xl border border-border bg-card p-6 sm:col-span-2 lg:col-span-1">

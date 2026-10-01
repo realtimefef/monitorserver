@@ -188,7 +188,7 @@ export default function FAQ() {
             ) : (
               <>
                 <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex"><Link to="/login">Log in</Link></Button>
-                <Button size="sm" className="shadow-lg shadow-primary/25" asChild><Link to="/register">Start Free</Link></Button>
+                <Button size="sm" className="shadow-lg shadow-primary/25" asChild><Link to="/contact">Request access</Link></Button>
               </>
             )}
           </div>

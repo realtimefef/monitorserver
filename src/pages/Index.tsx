@@ -9,7 +9,7 @@ import {
   Server, Bell, Shield, Zap, LineChart, ChevronRight,
   CheckCircle2, Cpu, HardDrive, Wifi, BarChart3, ArrowRight,
   Terminal, AlertTriangle, Eye, Layers, Lock, Gauge,
-  Clock, Menu, X, Play, Sparkles, Brain,
+  Clock, Menu, X, Play, Brain, Wrench,
   Cloud, Network, Container, Users,
   Rocket, Target, Building2, DollarSign, Database,
   Activity, Globe, Quote, Star, Minus,
@@ -41,14 +41,14 @@ const NAV_ITEMS = [
 ];
 
 const faqs = [
-  { q: 'What exactly does NodeVigil do?', a: 'NodeVigil is being built as an AI-powered cloud monitoring and auto-alert platform with policy-controlled AI remediation. Today it gives you a live window into every server you manage - CPU, memory, disk, and network updated every 5 seconds - plus threshold-based alerts. AI-assisted detection, correlation, summaries, and remediation are planned.' },
+  { q: 'What exactly does NodeVigil do?', a: 'NodeVigil is being built as an AI-powered cloud monitoring and auto-alert platform with policy-controlled AI remediation. Today it gives you a live window into every server you manage (CPU, memory, disk, and network, updated every 5 seconds) plus threshold-based alerts. AI-assisted detection, correlation, summaries, and remediation are planned.' },
   { q: 'What is available today and what is planned?', a: 'Available today: real-time metrics, threshold alert rules, email and webhook notifications (Slack, Discord, generic), scheduled reports, maintenance windows, and API keys. Planned: AI anomaly detection, alert correlation, incident summaries, policy-controlled remediation with human approval and audit logging, and the Azure and GPU integrations listed on this page.' },
   { q: 'Will AI change my infrastructure without asking?', a: 'No. Remediation is designed to be policy-controlled: you define what automation is allowed to do. Consequential changes require human approval, and every recommendation and action is written to an audit log. These controls are part of the planned design and are not live yet.' },
   { q: 'Do you guarantee uninterrupted access to AI models?', a: 'No. Production reliability of AI features depends on uninterrupted access to frontier models. We plan to support that with suitable capacity, monitoring, retries, and fallback strategies, but no cloud or model service can guarantee uninterrupted availability.' },
   { q: 'Which integrations are available?', a: 'Slack, Discord, and generic webhooks are available today. Azure AI Foundry, Azure gateway services, VM and vCPU workloads, supported GPU compute, and Azure Monitor / Log Analytics are planned integrations and are not generally available yet.' },
   { q: 'How do I get access?', a: 'This website is currently in testing and access is limited to selected partners. If you would like access, contact us at support@nodevigil.cloud.' },
   { q: 'Is there anything to install?', a: 'Just a small shell script (Bash or PowerShell). Copy it to your server, plug in the agent key from your dashboard, and metrics start flowing within seconds.' },
-  { q: 'How are alerts configured?', a: 'You create rules in the dashboard - pick a metric, set a threshold, choose a severity. When the value crosses that line, you get notified immediately.' },
+  { q: 'How are alerts configured?', a: 'You create rules in the dashboard: pick a metric, set a threshold, and choose a severity. When the value crosses that line, you get notified immediately.' },
   { q: 'What if I have dozens of servers?', a: 'NodeVigil is built for scale. Each server runs its own lightweight agent. The dashboard aggregates everything so you can see fleet-wide health at a glance.' },
   { q: 'Does the agent slow my servers down?', a: 'No. The agent reads kernel counters, uses well under one percent of a single core, and holds a footprint smaller than 5 KB on disk.' },
   { q: 'Is my data secure?', a: 'All data is stored securely in PostgreSQL with per-user isolation. Each user can only see their own servers and metrics. Auth is handled via secure JWT tokens.' },
@@ -127,7 +127,7 @@ export default function Index() {
                   <Link to="/login">Log in</Link>
                 </Button>
                 <Button size="sm" className="shadow-lg shadow-primary/25" asChild>
-                  <Link to="/register">Start Free</Link>
+                  <Link to="/contact">Request access</Link>
                 </Button>
               </>
             )}
@@ -171,17 +171,23 @@ export default function Index() {
       </header>
 
       {/* Announcement bar */}
-      <div className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 border-b border-primary/20 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-1.5 flex items-center justify-center gap-2 text-xs sm:text-sm">
-          <Sparkles className="h-3.5 w-3.5 text-primary shrink-0" />
-          <span className="font-semibold text-foreground">Limited partner testing</span>
-          <span className="text-muted-foreground">monitoring and alerts are live</span>
-          <span className="text-muted-foreground hidden sm:inline">- AI features are planned</span>
+      <div className="fixed top-16 left-0 right-0 z-40 border-b border-border/50 bg-muted/40 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs sm:text-[13px]">
+          <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
+            Limited partner testing
+          </span>
+          <span className="hidden text-muted-foreground sm:inline">
+            Monitoring and alerts are live. AI features are planned.
+          </span>
+          <Link to="/contact" className="inline-flex items-center gap-1 font-medium text-primary hover:underline">
+            Request access <ArrowRight className="h-3 w-3" />
+          </Link>
         </div>
       </div>
 
       {/* Hero */}
-      <section ref={heroRef} className="relative min-h-[100svh] flex items-center pt-24 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[100svh] flex items-center pt-36 pb-16 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <motion.div
             className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-primary/[0.05] rounded-full blur-[160px]"
@@ -211,90 +217,75 @@ export default function Index() {
         </div>
 
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="container mx-auto px-6 relative z-10">
-          <div className="max-w-4xl mx-auto text-center mb-16">
-            <motion.div
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-8 backdrop-blur-sm"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-              </span>
-              Live metrics today - AI in development
-            </motion.div>
-
+          <div className="max-w-5xl mx-auto text-center mb-16">
             <motion.h1
-              className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight"
+              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-[1.15] tracking-tight"
+              style={{ textWrap: 'balance' }}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
             >
               AI-powered cloud monitoring,
-              <br />
-              <span className="text-gradient-primary">auto-alerting, and remediation.</span>
+              <br className="hidden md:block" />{' '}
+              <span className="text-foreground/55">
+                <span className="whitespace-nowrap">auto-alerting,</span> and remediation.
+              </span>
             </motion.h1>
 
             <motion.p
-              className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed"
+              className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 }}
+              transition={{ delay: 0.2 }}
             >
               We are building an AI-powered cloud monitoring and auto-alert platform with automated AI
               remediation. Production reliability depends on uninterrupted access to frontier models, supported
               by suitable capacity, monitoring, retries, and fallback strategies.
             </motion.p>
-            <motion.p
-              className="text-sm md:text-base text-muted-foreground/90 max-w-xl mx-auto mb-10 leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <span className="font-medium text-foreground">Available today:</span> real-time server metrics,
-              threshold alerts, and notifications. <span className="font-medium text-foreground">Planned:</span>{' '}
-              AI anomaly detection, alert correlation, incident summaries, and policy-controlled remediation.
-            </motion.p>
 
             <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center mb-14"
+              className="flex flex-col sm:flex-row gap-3 justify-center mb-12"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45 }}
+              transition={{ delay: 0.3 }}
             >
-              <Button size="lg" className="h-13 px-8 text-base shadow-xl shadow-primary/20" asChild>
-                <Link to="/register">
-                  Get started - it is free
+              <Button size="lg" className="h-12 px-7 text-base shadow-lg shadow-primary/20" asChild>
+                <Link to="/contact">
+                  Request access
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="h-13 px-8 text-base" asChild>
+              <Button size="lg" variant="outline" className="h-12 px-7 text-base" asChild>
                 <Link to="/how-it-works">See how it works</Link>
               </Button>
             </motion.div>
 
-            <motion.div
-              className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
+            <motion.dl
+              className="mx-auto grid max-w-3xl divide-y divide-border overflow-hidden rounded-xl border border-border bg-card/60 text-left backdrop-blur-sm sm:grid-cols-2 sm:divide-x sm:divide-y-0"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
             >
-              {['Live metrics and alerts today', 'AI features in development', 'Human approval and audit logging by design'].map((t, i) => (
-                <span key={i} className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-primary" /> {t}
-                </span>
-              ))}
-            </motion.div>
-
-            <motion.div
-              className="mt-6 max-w-xl mx-auto"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-            >
-              <TestingNotice className="text-center" />
-            </motion.div>
+              <div className="p-4 sm:p-5">
+                <dt className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-500">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+                  Available today
+                </dt>
+                <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Real-time server metrics, threshold alerts, and email and webhook notifications.
+                </dd>
+              </div>
+              <div className="p-4 sm:p-5">
+                <dt className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-violet-500">
+                  <span className="h-1.5 w-1.5 rounded-full border border-violet-500" aria-hidden="true" />
+                  Planned
+                </dt>
+                <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  AI anomaly detection, alert correlation, incident summaries, and policy-controlled remediation
+                  with human approval.
+                </dd>
+              </div>
+            </motion.dl>
           </div>
 
           {/* Dashboard mockup */}
@@ -313,7 +304,7 @@ export default function Index() {
                   <div className="h-3 w-3 rounded-full bg-green-500/80" />
                 </div>
                 <div className="flex-1 text-center">
-                  <span className="text-xs text-muted-foreground font-mono">nodevigil - dashboard</span>
+                  <span className="text-xs text-muted-foreground font-mono">NodeVigil Dashboard</span>
                 </div>
               </div>
 
@@ -539,7 +530,7 @@ export default function Index() {
               How it all works
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              A lightweight agent, real-time pipelines, and threshold alerting today - with AI analysis planned.
+              A lightweight agent, real-time pipelines, and threshold alerting today, with AI analysis planned.
             </p>
           </motion.div>
 
@@ -621,7 +612,7 @@ export default function Index() {
                     transition={{ delay: 0.8 }}
                   >
                     <MonitorLogo className="h-5 w-5 text-emerald-400" />
-                    <span className="text-sm font-medium text-emerald-300">NodeVigil API - Ingesting</span>
+                    <span className="text-sm font-medium text-emerald-300">NodeVigil API · Ingesting</span>
                     <motion.div
                       className="h-2 w-2 rounded-full bg-emerald-400"
                       animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
@@ -720,7 +711,7 @@ export default function Index() {
               </h3>
               <p className="text-muted-foreground text-lg leading-relaxed mb-6 max-w-lg">
                 Once ingested, metrics are pushed to your dashboard instantly over WebSocket and STOMP. No polling,
-                no delays - your charts animate in real time.
+                no delays. Your charts animate in real time.
               </p>
               <ul className="space-y-3">
                 {['STOMP over WebSocket protocol', 'Per-server subscriptions', 'Automatic reconnection', 'Binary-efficient payloads'].map((item, i) => (
@@ -746,7 +737,7 @@ export default function Index() {
                 Threshold-based alerting engine
               </h3>
               <p className="text-muted-foreground text-lg leading-relaxed mb-6 max-w-lg">
-                Define rules for any metric - CPU, memory, disk, network. When values breach your thresholds,
+                Define rules for any metric: CPU, memory, disk, or network. When values breach your thresholds,
                 alerts fire instantly with configurable severity and cooldowns.
               </p>
               <ul className="space-y-3">
@@ -767,7 +758,7 @@ export default function Index() {
                 <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent pointer-events-none" />
                 <div className="relative">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-sm font-medium text-gray-300">CPU - prod-web-01</span>
+                    <span className="text-sm font-medium text-gray-300">CPU · prod-web-01</span>
                     <span className="text-[10px] text-gray-500 uppercase tracking-wider">Last 30 min</span>
                   </div>
 
@@ -802,7 +793,7 @@ export default function Index() {
                       <AlertTriangle className="h-4 w-4 text-white" />
                     </motion.div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-xs font-semibold text-red-300">CRITICAL - CPU above 80%</div>
+                      <div className="text-xs font-semibold text-red-300">CRITICAL · CPU above 80%</div>
                       <div className="text-[10px] text-gray-500">prod-web-01 - triggered 30s ago</div>
                     </div>
                     <span className="text-[10px] bg-red-500/30 text-red-300 font-medium px-2 py-0.5 rounded-full shrink-0">ACTIVE</span>
@@ -838,7 +829,7 @@ export default function Index() {
               { icon: HardDrive, title: 'Memory and Disk', desc: 'Track RAM consumption, swap usage, and disk space so you never get caught off guard.' },
               { icon: Wifi, title: 'Network Throughput', desc: 'See inbound and outbound traffic in real time. Spot anomalies before they impact users.' },
               { icon: Bell, title: 'Custom Alert Rules', desc: 'Set thresholds per server, per metric. Choose severity levels and get notified your way.' },
-              { icon: Eye, title: 'Live Dashboard', desc: 'Metrics update in real time over WebSocket - no refresh needed. See the pulse of your fleet.' },
+              { icon: Eye, title: 'Live Dashboard', desc: 'Metrics update in real time over WebSocket, with no refresh needed. See the pulse of your fleet.' },
               { icon: Lock, title: 'Secure by Design', desc: 'JWT authentication, per-user data isolation, and auto-expiring tokens keep your data yours.' },
               { icon: Clock, title: 'Historical Trends', desc: 'Compare today against last week. Spot slow regressions long before they become incidents.' },
               { icon: Database, title: 'Scheduled Reports', desc: 'Export fleet health summaries on a schedule and share them with the rest of your team.' },
@@ -904,7 +895,7 @@ export default function Index() {
               {
                 num: '3',
                 title: 'Watch metrics flow',
-                desc: 'CPU, RAM, disk, network - all streaming live. Set up alert rules and relax.',
+                desc: 'CPU, RAM, disk, and network, all streaming live. Set up alert rules and relax.',
                 icon: LineChart,
                 color: 'from-violet-500/20 to-violet-500/5',
               },
@@ -1180,8 +1171,8 @@ export default function Index() {
             {[
               { icon: Brain, title: 'AI-Assisted Anomaly Detection', desc: 'Learn each server\'s normal behaviour and flag unusual patterns before a static threshold is crossed.' },
               { icon: Workflow, title: 'Alert Correlation', desc: 'Group related alerts across servers and services into one incident, so on-call engineers see one problem instead of fifty notifications.' },
-              { icon: ScrollText, title: 'Incident Summaries', desc: 'Plain-language summaries of what changed, what is affected, and what was tried - ready for hand-off and review.' },
-              { icon: Sparkles, title: 'Policy-Controlled Remediation', desc: 'Automated fixes run only inside the policies you define. Anything consequential waits for human approval.' },
+              { icon: ScrollText, title: 'Incident Summaries', desc: 'Plain-language summaries of what changed, what is affected, and what was tried, ready for hand-off and review.' },
+              { icon: Wrench, title: 'Policy-Controlled Remediation', desc: 'Automated fixes run only inside the policies you define. Anything consequential waits for human approval.' },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -1265,7 +1256,7 @@ export default function Index() {
               transition={{ delay: 0.08 }}
             >
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-500 text-xs font-medium mb-4">
-                <Clock className="h-3 w-3" /> Planned - not yet available
+                <Clock className="h-3 w-3" /> Planned, not yet available
               </div>
               <ul className="space-y-2.5 text-sm text-foreground/80">
                 {[
@@ -1424,7 +1415,7 @@ export default function Index() {
                   ))}
                 </ul>
                 <Button className="w-full" variant="outline" asChild>
-                  <Link to="/register">Get Started Free</Link>
+                  <Link to="/contact">Request access</Link>
                 </Button>
               </div>
               <div className="rounded-2xl border-2 border-primary bg-card p-8 text-left relative">
@@ -1485,8 +1476,8 @@ export default function Index() {
                 ))}
               </div>
               <Button asChild className="shadow-lg shadow-primary/20">
-                <Link to="/register">
-                  Start monitoring free <ArrowRight className="ml-2 h-4 w-4" />
+                <Link to="/contact">
+                  Request access <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </motion.div>
@@ -1606,32 +1597,23 @@ export default function Index() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-8">
-              <Zap className="h-3 w-3" /> Ready in 5 minutes
-            </div>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Start monitoring<br />your servers today.
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-5 leading-tight tracking-tight">
+              Request access to NodeVigil.
             </h2>
-            <p className="text-muted-foreground text-lg mb-10 max-w-xl mx-auto">
-              Free forever. No credit card. Deploy the agent, see your metrics, sleep better at night.
+            <p className="text-muted-foreground text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+              NodeVigil is in limited partner testing. Contact us to request access, then deploy the agent and see
+              live metrics within minutes.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-              <Button size="lg" className="h-14 px-10 text-base shadow-xl shadow-primary/20" asChild>
-                <Link to="/register">
-                  Create free account
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button size="lg" className="h-12 px-7 text-base shadow-lg shadow-primary/20" asChild>
+                <Link to="/contact">
+                  Request access
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="h-14 px-10 text-base" asChild>
-                <Link to="/login">Sign in</Link>
+              <Button size="lg" variant="outline" className="h-12 px-7 text-base" asChild>
+                <Link to="/login">Log in</Link>
               </Button>
-            </div>
-            <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
-              {['No credit card required', 'Unlimited servers', 'Live metrics in minutes', '5-minute setup'].map((t, i) => (
-                <span key={i} className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-primary" /> {t}
-                </span>
-              ))}
             </div>
           </motion.div>
         </div>
@@ -1694,7 +1676,7 @@ export default function Index() {
               <h4 className="text-sm font-semibold mb-4 text-foreground">Account</h4>
               <nav className="flex flex-col gap-2.5 text-sm text-muted-foreground">
                 <Link to="/login" className="hover:text-foreground transition-colors">Sign In</Link>
-                <Link to="/register" className="hover:text-foreground transition-colors">Get Started</Link>
+                <Link to="/contact" className="hover:text-foreground transition-colors">Request access</Link>
                 <Link to="/forgot-password" className="hover:text-foreground transition-colors">Reset Password</Link>
               </nav>
             </div>

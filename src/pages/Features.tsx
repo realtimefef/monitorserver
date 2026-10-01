@@ -181,7 +181,7 @@ export default function Features() {
             ) : (
               <>
                 <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex"><Link to="/login">Log in</Link></Button>
-                <Button size="sm" className="shadow-lg shadow-primary/25" asChild><Link to="/register">Start Free</Link></Button>
+                <Button size="sm" className="shadow-lg shadow-primary/25" asChild><Link to="/contact">Request access</Link></Button>
               </>
             )}
           </div>
@@ -206,7 +206,7 @@ export default function Features() {
           </motion.p>
           <motion.div className="flex flex-col sm:flex-row gap-4 justify-center" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
             <Button size="lg" className="h-13 px-8 text-base shadow-xl shadow-primary/20" asChild>
-              <Link to="/register">Get started free <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Link to="/contact">Request access <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
             <Button size="lg" variant="outline" className="h-13 px-8 text-base" asChild>
               <Link to="/how-it-works">See how it works</Link>
@@ -310,14 +310,14 @@ export default function Features() {
             Ready to see it in action?
           </motion.h2>
           <motion.p className="text-muted-foreground text-lg mb-10 max-w-xl mx-auto" initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-            Free to use. No credit card needed. Set up in under five minutes.
+            Access is limited to selected partners during testing. Contact us to request access.
           </motion.p>
           <motion.div className="flex flex-col sm:flex-row gap-4 justify-center" initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
             <Button size="lg" className="h-13 px-8 text-base shadow-xl shadow-primary/20" asChild>
-              <Link to="/register">Create free account <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Link to="/contact">Request access <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
             <Button size="lg" variant="outline" className="h-13 px-8 text-base" asChild>
-              <Link to="/login">Sign in</Link>
+              <Link to="/login">Log in</Link>
             </Button>
           </motion.div>
         </div>
