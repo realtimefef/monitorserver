@@ -132,7 +132,7 @@ export default function HowItWorks() {
             ) : (
               <>
                 <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex"><Link to="/login">Log in</Link></Button>
-                <Button size="sm" className="shadow-lg shadow-primary/25" asChild><Link to="/register">Start Free</Link></Button>
+                <Button size="sm" className="shadow-lg shadow-primary/25" asChild><Link to="/contact">Request access</Link></Button>
               </>
             )}
           </div>
@@ -360,6 +360,10 @@ export default function HowItWorks() {
             <img src="/powered-by-aws.png" alt="Powered by AWS" className="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity" />
             <img src="/powered-by-nvidia.png" alt="NVIDIA GPU" className="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity" />
             <img src="/tensorrt-logo.png" alt="NVIDIA TensorRT" className="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground">
+              Microsoft Azure
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-violet-500/10 text-violet-500 border border-violet-500/20">Planned</span>
+            </span>
           </motion.div>
           <p className="mt-8 text-xs text-muted-foreground max-w-xl mx-auto leading-relaxed">
             Planned integrations (not yet available): Azure AI Foundry, Azure gateway services, VM/vCPU workloads,
@@ -375,14 +379,14 @@ export default function HowItWorks() {
         </div>
         <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center">
           <motion.h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-5" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            Start monitoring in minutes.
+            Set up in minutes.
           </motion.h2>
           <motion.p className="text-muted-foreground text-lg mb-10 max-w-lg mx-auto" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-            Free to use. No credit card. Deploy the agent and go.
+            Access is limited to selected partners during testing. Contact us to request access, then deploy the agent.
           </motion.p>
           <motion.div className="flex flex-col sm:flex-row gap-4 justify-center" initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <Button size="lg" className="h-13 px-8 text-base shadow-xl shadow-primary/20" asChild>
-              <Link to="/register">Create free account <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Link to="/contact">Request access <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
             <Button size="lg" variant="outline" className="h-13 px-8 text-base" asChild>
               <Link to="/features">Explore features</Link>

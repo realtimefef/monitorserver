@@ -93,7 +93,7 @@ const posts: BlogPostData[] = [
   {
     slug: 'why-we-chose-aws',
     title: 'Why We Chose AWS for Our Cloud Infrastructure',
-    excerpt: 'From EC2 instances to RDS PostgreSQL, here is why AWS was the perfect cloud platform for NodeVigil — and how it powers our 99.9% uptime guarantee.',
+    excerpt: 'From EC2 instances to RDS PostgreSQL, here is why AWS was the perfect cloud platform for NodeVigil — and how it supports our 99.9% uptime target.',
     date: 'January 15, 2026',
     author: 'Davinosia Pahilanipa',
     category: 'Infrastructure',
@@ -103,14 +103,14 @@ const posts: BlogPostData[] = [
       '## AWS Services We Use',
       '**Amazon EC2** runs our Spring Boot backend and handles metric ingestion from thousands of agents simultaneously. Auto Scaling ensures we can handle traffic spikes without manual intervention.',
       '**Amazon RDS (PostgreSQL)** stores all metrics, user data, and alert configurations with automated backups, point-in-time recovery, and read replicas for query performance.',
-      '**Amazon CloudWatch** monitors our own infrastructure — yes, we monitor the monitor. CPU utilization, database connections, API latency — all tracked to ensure we maintain our 99.9% uptime commitment.',
+      '**Amazon CloudWatch** monitors our own infrastructure — yes, we monitor the monitor. CPU utilization, database connections, API latency — all tracked to help us maintain our 99.9% uptime target.',
       '**AWS Certificate Manager** handles SSL/TLS certificates for all our domains, ensuring encrypted connections between agents, backends, and frontends.',
       '## Why AWS Cloud',
       'AWS provides us with battle-tested infrastructure at every layer. The breadth of managed services — compute, database, networking, security — means we spend time building monitoring features, not managing infrastructure. Pay-as-you-go pricing keeps costs aligned with actual usage.',
       '## Architecture Decisions',
       'We run our backend in containers, database on managed RDS, and static frontend on a CDN. This separation means we can scale each component independently. The backend can handle thousands of metric ingestions per second, while the frontend loads in under 2 seconds globally.',
-      '## 99.9% Uptime',
-      'Our uptime guarantee is backed by AWS\'s infrastructure SLA. Multi-AZ database deployment, health checks with automatic failover, and zero-downtime deployments ensure your monitoring dashboard is always available — especially when you need it most during an incident.',
+      '## Reliability',
+      'Our uptime target is supported by AWS\'s infrastructure SLA. Multi-AZ database deployment, health checks with automatic failover, and zero-downtime deployments help keep your monitoring dashboard available during an incident. No cloud service can promise uninterrupted availability, and NodeVigil does not either.',
       '## Looking Ahead',
       'As we grow, we plan to leverage more AWS services: SQS for asynchronous alert processing, Lambda for serverless webhook delivery, and SageMaker for distributed AI model training alongside our NVIDIA GPU infrastructure.',
     ],
@@ -225,6 +225,15 @@ export default function BlogPost() {
 
           <hr className="border-border my-8" />
 
+          {(post.category === 'AI & ML' || post.category === 'Product') && (
+            <div className="mb-8 rounded-lg border border-violet-500/20 bg-violet-500/5 p-4 text-sm text-muted-foreground leading-relaxed">
+              <span className="font-semibold text-foreground">Roadmap note:</span> AI-assisted anomaly detection,
+              alert correlation, incident summaries, and policy-controlled remediation are planned and not yet
+              available. See the <Link to="/docs/product-overview" className="text-primary hover:underline">product overview</Link> for
+              what is available today.
+            </div>
+          )}
+
           {/* Body */}
           <div className="prose prose-neutral dark:prose-invert max-w-none space-y-5">
             {post.content.map((block, i) => {
@@ -269,11 +278,11 @@ export default function BlogPost() {
 
           {/* CTA */}
           <div className="mt-12 rounded-2xl border border-border bg-card p-8 text-center">
-            <h3 className="text-lg font-bold mb-2">Ready to monitor your servers?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Get started free — no credit card required.</p>
-            <Link to="/register">
+            <h3 className="text-lg font-bold mb-2">Interested in NodeVigil?</h3>
+            <p className="text-sm text-muted-foreground mb-4">Access is limited to selected partners during testing.</p>
+            <Link to="/contact">
               <Button className="shadow-lg shadow-primary/20">
-                Get Started Free <ChevronRight className="h-4 w-4 ml-1" />
+                Request access <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             </Link>
           </div>
